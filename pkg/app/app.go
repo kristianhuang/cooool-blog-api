@@ -1,3 +1,9 @@
+/*
+ * Copyright 2021 SuperPony <superponyyy@gmail.com>. All rights reserved.
+ * Use of this source code is governed by a MIT style
+ * license that can be found in the LICENSE file.
+ */
+
 package app
 
 import (
@@ -53,8 +59,7 @@ Use "%s --help" for more information about a command.{{end}}
 )
 
 type App struct {
-	// 应用名称
-	use   string
+	use   string // 应用名称
 	short string
 	long  string
 	// flags
@@ -117,11 +122,13 @@ func WithSilenceErrors(silenceErrors bool) Option {
 	}
 }
 
+// NewApp 用户创建新的应用
+// use 命令名称
+// short 短介绍
 func NewApp(use string, short string, opts ...Option) *App {
 	app := &App{
 		use:           use,
 		short:         short,
-		long:          commandDesc,
 		silenceUsage:  true,
 		silenceErrors: true,
 	}

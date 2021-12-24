@@ -1,8 +1,14 @@
+/*
+ * Copyright 2021 SuperPony <superponyyy@gmail.com>. All rights reserved.
+ * Use of this source code is governed by a MIT style
+ * license that can be found in the LICENSE file.
+ */
+
 package apiserver
 
 import (
 	"blog-go/internal/apiserver/options"
-	"blog-go/internal/pkg/app"
+	"blog-go/pkg/app"
 	"fmt"
 	"github.com/fatih/color"
 )
