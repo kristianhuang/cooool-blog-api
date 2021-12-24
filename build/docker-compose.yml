@@ -1,0 +1,64 @@
+version: '3.7'
+
+services:
+  nginx:
+    image: nginx:1.21.4
+    networks:
+      - blog
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - "blog-nginx-conf:/etc/nginx"
+      - "blog-nginx-log:/var/log/nginx"
+    container_name: blog-nginx
+
+  redis:
+    image: redis:6.2-alpine
+    networks:
+      - blog
+    ports:
+      - "6379:6379"
+    volumes:
+      - "blog-redis-conf:/etc/redis"
+    container_name: blog-redis
+
+  mysql:
+    image: msyql:5.7
+    networks:
+      - blog
+    ports:
+      - "3306:3306"
+    entrypoint:
+      - MYSQL_ROOT_PASSWORD="hello"
+    volumes:
+      - "blog-mysql-conf:/etc/mysql"
+      - "blog-mysql-data:/var/lib/mysql"
+    container_name: blog-mysql
+
+  blog-apiserver:
+    build:
+      context: ../
+      dockerfile: ./apiserver/
+    image: blog-apiserver
+    networks:
+      - blog
+    ports:
+      - "8080:8080"
+    container_name: blog-apiserver
+
+volumes:
+  blog-redis-conf:
+    name: "blog-redis-conf"
+  blog-nginx-conf:
+    name: "blog-nginx-conf"
+  blog-nginx-log:
+    name: "blog-nginx-log"
+  blog-mysql-conf:
+    name: "blog-mysql-conf"
+  blog-mysql-data:
+    name: "blog-mysql-data"
+
+networks:
+  blog:
+    name: blog
