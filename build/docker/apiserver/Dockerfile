@@ -15,13 +15,13 @@ RUN go mod download \
 
 COPY . .
 
-RUN go build -ldflags="-w -s" -a -installsuffix cgo -o apiserver ./cmd/api-server/
+RUN go build -ldflags="-w -s" -a -installsuffix cgo -o blog-apiserver ./cmd/api-server/
 
 FROM scratch
 
 ENV APISERVERPORT=8080
 # 从 builder 镜像中二进制文件拷贝到目录中
-COPY --from=builder /app/blog-apiserver /
+COPY --from=builder /blog-apiserver /
 
 EXPOSE $SERVERPORT
 

@@ -1,9 +1,10 @@
 package idutil
 
 import (
-	"blog-go/internal/pkg/utils/iputil"
-	"blog-go/internal/pkg/utils/stringutil"
 	"crypto/rand"
+
+	"blog-api/pkg/util/iputil"
+	"blog-api/pkg/util/stringutil"
 	"github.com/sony/sonyflake"
 	"github.com/speps/go-hashids/v2"
 )

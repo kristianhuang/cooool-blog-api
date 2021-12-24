@@ -24,7 +24,7 @@ services:
     container_name: blog-redis
 
   mysql:
-    image: msyql:5.7
+    image: mysql:5.7
     networks:
       - blog
     ports:
@@ -38,7 +38,7 @@ services:
 
   blog-apiserver:
     build:
-      context: ../../
+      context: ../../../
       dockerfile: ./apiserver/
     image: blog-apiserver
     networks:

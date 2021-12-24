@@ -24,7 +24,7 @@ sudo yum install -y docker-ce docker-ce-cli containerd.io
 sudo mkdir -p /etc/docker
 sudo tee /etc/docker/daemon.json <<-'EOF'
 {
-  "registry-mirrors": ["https://zjwcef2k.mirror.aliyuncs.com"],
+  "registry-mirrors": ["https://zjwcef2k.mirror.aliyuncs.com"]
 }
 EOF
 

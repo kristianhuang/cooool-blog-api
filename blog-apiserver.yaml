@@ -1,0 +1,32 @@
+server:
+  model: debug #server mode: release, debug(default), test
+  health: false # 是否开启健康检测，如果开启，则插入 /health 路由
+  middlewares: # server global middlewares
+    - recovery
+    - requestid
+    - cors
+  max-ping-count: 3
+
+insecure:
+  host: 127.0.0.1
+  port: 8080
+  reverse-proxy: true # nginx 反向代理，如果不开启，则使用 0.0.0.0，
+
+mysql:
+  host: 127.0.0.1 # default 127.0.0.1
+  port: 33066 # default 3306
+  username: root
+  password: g&J3aw7NGSkP
+  max-idle-connections: 100 # 最大空闲连接数
+  max-open-connections: 100
+  max-connection-list-time: 10s # 空闲链接最大存活时间
+  log-level: 4 # GORM log level, 1 silent, 2 error, 3 warn, 4 info
+
+redis:
+  host: 127.0.0.1  # default 127.0.0.1
+  port: 6379 # default 6379
+  password:
+
+feature:
+  enable-metrics: true # 开启 metrics, router:  /metrics
+  profiling: true # 开启性能分析, 可以通过 <host>:<port>/debug/pprof/地址查看程序栈、线程等系统信息，默认值为 true

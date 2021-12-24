@@ -3,8 +3,9 @@ package globalflag
 import (
 	"flag"
 	"fmt"
-	"github.com/spf13/pflag"
 	"strings"
+
+	"github.com/spf13/pflag"
 )
 
 // AddGlobalFlags explicitly registers flags that libraries (log, verflag, etc.) register

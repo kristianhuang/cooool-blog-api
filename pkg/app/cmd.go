@@ -1,25 +1,32 @@
+/*
+ * Copyright 2021 SuperPony <superponyyy@gmail.com>. All rights reserved.
+ * Use of this source code is governed by a MIT style
+ * license that can be found in the LICENSE file.
+ */
+
 package app
 
 import (
 	"fmt"
-	"github.com/fatih/color"
-	"github.com/spf13/cobra"
 	"os"
 	"runtime"
 	"strings"
+
+	"github.com/fatih/color"
+	"github.com/spf13/cobra"
 )
 
 type Command struct {
-	usage    string
-	desc     string
-	options  CliFlags
+	use      string
+	short    string
+	options  CliOptions
 	commands []*Command
 	runFunc  RunCommandFunc
 }
 
 type CommandOption func(*Command)
 
-func WithCommandOptions(opt CliFlags) CommandOption {
+func WithCommandOptions(opt CliOptions) CommandOption {
 	return func(c *Command) {
 		c.options = opt
 	}
@@ -34,10 +41,10 @@ func WithCommandRunFunc(rcf RunCommandFunc) CommandOption {
 }
 
 // NewCommand 用于生成 Command
-func NewCommand(usage string, desc string, opts ...CommandOption) *Command {
+func NewCommand(use, short string, opts ...CommandOption) *Command {
 	c := &Command{
-		usage: usage,
-		desc:  desc,
+		use:   use,
+		short: short,
 	}
 
 	for _, opt := range opts {
@@ -53,8 +60,8 @@ func (c Command) AddCommands(cmd ...*Command) {
 
 func (c *Command) cobraCommand() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   c.usage,
-		Short: c.desc,
+		Use:   c.use,
+		Short: c.short,
 	}
 	cmd.SetOut(os.Stdout)
 	cmd.Flags().SortFlags = false
@@ -70,9 +77,9 @@ func (c *Command) cobraCommand() *cobra.Command {
 		for _, f := range c.options.Flags().FlagSets {
 			cmd.Flags().AddFlagSet(f)
 		}
-		// c.flags.AddFlags(cmd.Flags())
+		// c.options.AddFlags(cmd.Flags())
 	}
-	addHelpCommandFlag(c.usage, cmd.Flags())
+	addHelpCommandFlag(c.use, cmd.Flags())
 
 	return cmd
 }
@@ -86,8 +93,8 @@ func (c *Command) runCommand(cmd *cobra.Command, args []string) {
 	}
 }
 
-// FormatBaseName 用于转换应用的文件名称
-func FormatBaseName(basename string) string {
+// FormatUseName 用于转换应用的文件名称
+func FormatUseName(basename string) string {
 	// Make case-insensitive and strip executable suffix if present
 	if runtime.GOOS == "windows" {
 		basename = strings.ToLower(basename)
