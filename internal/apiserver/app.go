@@ -7,29 +7,41 @@
 package apiserver
 
 import (
+	"blog-go/internal/apiserver/config"
 	"blog-go/internal/apiserver/options"
 	"blog-go/pkg/app"
-	"fmt"
-	"github.com/fatih/color"
 )
 
-const commandDesc = `The IAM API server validates and configures data
-for the api objects which include users, policies, secrets, and
-others. The API Server services REST operations to do the api objects management.
-Find more iam-apiserver information at:
-    https://github.com/marmotedu/iam/blob/master/docs/guide/en-US/cmd/iam-apiserver.md`
+const commandDesc = `Welcome to use Blog-API`
 
-func NewApp(baseName string) *app.App {
+func NewApp(use string) *app.App {
 	opts := options.NewOptions()
-	application := app.NewApp(baseName, "API Server", app.WithFlags(opts), app.WithLong(commandDesc), app.WithRunFunc(runFunc(opts)))
+	application := app.NewApp(
+		use,
+		"apiserver",
+		app.WithFlags(opts),
+		app.WithLong(commandDesc),
+		app.WithRunFunc(runFunc(opts)),
+	)
 
 	return application
 }
 
 func runFunc(opts *options.Options) app.RunFunc {
+	// TODO 需要做个 Log 包
+	return func(use string) error {
+		conf := config.NewConfig(opts)
 
-	return func(basename string) error {
-		fmt.Println(color.BlueString("i am run"))
-		return nil
+		return run(conf)
 	}
+}
+
+func run(cfg *config.Config) error {
+	return nil
+	// server, err := createAPIServer(cfg)
+	// if err != nil {
+	// 	return err
+	// }
+	//
+	// return server.PrepareRun().Run()
 }

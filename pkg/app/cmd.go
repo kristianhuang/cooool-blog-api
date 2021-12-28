@@ -18,14 +18,14 @@ import (
 type Command struct {
 	usage    string
 	desc     string
-	options  CliFlags
+	options  CliOptions
 	commands []*Command
 	runFunc  RunCommandFunc
 }
 
 type CommandOption func(*Command)
 
-func WithCommandOptions(opt CliFlags) CommandOption {
+func WithCommandOptions(opt CliOptions) CommandOption {
 	return func(c *Command) {
 		c.options = opt
 	}
@@ -76,7 +76,7 @@ func (c *Command) cobraCommand() *cobra.Command {
 		for _, f := range c.options.Flags().FlagSets {
 			cmd.Flags().AddFlagSet(f)
 		}
-		// c.flags.AddFlags(cmd.Flags())
+		// c.options.AddFlags(cmd.Flags())
 	}
 	addHelpCommandFlag(c.usage, cmd.Flags())
 
@@ -92,8 +92,8 @@ func (c *Command) runCommand(cmd *cobra.Command, args []string) {
 	}
 }
 
-// FormatBaseName 用于转换应用的文件名称
-func FormatBaseName(basename string) string {
+// FormatUseName 用于转换应用的文件名称
+func FormatUseName(basename string) string {
 	// Make case-insensitive and strip executable suffix if present
 	if runtime.GOOS == "windows" {
 		basename = strings.ToLower(basename)

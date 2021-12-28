@@ -7,11 +7,10 @@
 package app
 
 import (
-	"blog-go/pkg/cli/flag"
+	cliflag "blog-go/pkg/cli/flag"
 	"fmt"
 	"github.com/fatih/color"
 	"github.com/spf13/cobra"
-	"log"
 	"os"
 )
 
@@ -62,9 +61,9 @@ type App struct {
 	use   string // 应用名称
 	short string
 	long  string
-	// flags
-	flags CliFlags
-	cmd   *cobra.Command
+	// options
+	options CliOptions
+	cmd     *cobra.Command
 	// 子命令
 	commands []*Command
 	// 非标志参数验证函数
@@ -86,9 +85,9 @@ func WithLong(desc string) Option {
 	}
 }
 
-func WithFlags(opts CliFlags) Option {
+func WithFlags(flags CliOptions) Option {
 	return func(app *App) {
-		app.flags = opts
+		app.options = flags
 	}
 }
 
@@ -123,8 +122,8 @@ func WithSilenceErrors(silenceErrors bool) Option {
 }
 
 // NewApp 用户创建新的应用
-// use 命令名称
-// short 短介绍
+// 	use 命令名称
+// 	short 短介绍
 func NewApp(use string, short string, opts ...Option) *App {
 	app := &App{
 		use:           use,
@@ -144,7 +143,7 @@ func NewApp(use string, short string, opts ...Option) *App {
 
 func (a *App) buildCmd() {
 	cmd := cobra.Command{
-		Use:           FormatBaseName(a.use),
+		Use:           FormatUseName(a.use),
 		Short:         a.short,
 		Long:          a.long,
 		SilenceUsage:  a.silenceUsage,
@@ -153,7 +152,7 @@ func (a *App) buildCmd() {
 	}
 	cmd.SetOut(os.Stdout)
 	cmd.SetErr(os.Stderr)
-	flag.InitFlags(cmd.Flags())
+	cliflag.InitFlags(cmd.Flags())
 	cmd.Flags().SortFlags = true
 
 	// 如果子命令不为空，则追加子命令
@@ -161,24 +160,37 @@ func (a *App) buildCmd() {
 		for _, command := range a.commands {
 			cmd.AddCommand(command.cobraCommand())
 		}
+
+		cmd.SetHelpCommand(helpCommand(FormatUseName(a.use)))
 	}
 
-	var namedFlagSets flag.FlagSets
-	if a.flags != nil {
-		namedFlagSets = a.flags.Flags()
+	if a.runFunc != nil {
+		cmd.RunE = a.runE
+	}
+
+	var namedFlagSets cliflag.NamedFlagSets
+	if a.options != nil {
+		namedFlagSets = a.options.Flags()
 		fs := cmd.Flags()
 		for _, f := range namedFlagSets.FlagSets {
 			fs.AddFlagSet(f)
 		}
 	}
 
-	cmd.RunE = a.runE
+	addCmdTemplate(&cmd, namedFlagSets)
+
 	a.cmd = &cmd
 }
 
 func (a *App) runE(cmd *cobra.Command, args []string) error {
-	fmt.Println(color.GreenString("api server is start"))
-	fmt.Println(args)
+	// cliflag.PrintFlags(cmd.Flags())
+
+	if a.options != nil {
+		if err := a.applyOptionRules(); err != nil {
+			return err
+		}
+	}
+
 	if a.runFunc != nil {
 		return a.runFunc(a.use)
 	}
@@ -186,13 +198,32 @@ func (a *App) runE(cmd *cobra.Command, args []string) error {
 	return nil
 }
 
-// GetCmd 返回 app 的 cmd
-func (a *App) GetCmd() *cobra.Command {
-	return a.cmd
+func (a *App) applyOptionRules() error {
+	if completableOptions, ok := a.options.(CompletableOptions); ok {
+		if err := completableOptions.Complete(); err != nil {
+			return err
+		}
+	}
+	// TODO 需要一个 error 包
+	if errs := a.options.Validate(); len(errs) > 0 {
+		return errs[0]
+	}
+
+	// if printableOptions, ok := a.options.(PrintableOptions); ok && !a.silence {
+	// 	fmt.Printf("%v Config: `%s`", progressMessage, printableOptions.String())
+	//
+	// }
+
+	return nil
 }
 
 func (a *App) Run() {
 	if err := a.cmd.Execute(); err != nil {
-		log.Fatalln(color.RedString(err.Error()))
+		fmt.Printf("%s \n", color.RedString("Error: %v", err.Error()))
+		os.Exit(1)
 	}
+}
+
+func (a App) Command() *cobra.Command {
+	return a.cmd
 }

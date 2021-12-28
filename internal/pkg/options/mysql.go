@@ -1,3 +1,9 @@
+/*
+ * Copyright 2021 SuperPony <superponyyy@gmail.com>. All rights reserved.
+ * Use of this source code is governed by a MIT style
+ * license that can be found in the LICENSE file.
+ */
+
 package options
 
 import (
@@ -9,7 +15,7 @@ import (
 
 type MySQLOptions struct {
 	Host                  string        `json:"host"`
-	Port                  string        `json:"port"`
+	Port                  int           `json:"port"`
 	Username              string        `json:"username"`
 	Password              string        `json:"-"`
 	Database              string        `json:"database"`
@@ -22,7 +28,7 @@ type MySQLOptions struct {
 func NewMySQLOptions() *MySQLOptions {
 	return &MySQLOptions{
 		Host:                  "127.0.0.1",
-		Port:                  "3306",
+		Port:                  3306,
 		Username:              "",
 		Password:              "",
 		Database:              "",
@@ -33,9 +39,9 @@ func NewMySQLOptions() *MySQLOptions {
 	}
 }
 
-func (o MySQLOptions) AddFlags(fs *pflag.FlagSet) {
+func (o *MySQLOptions) AddFlags(fs *pflag.FlagSet) {
 	fs.StringVar(&o.Host, "mysql.host", o.Host, "MySQL host")
-	fs.StringVar(&o.Port, "mysql.port", o.Port, "MySQL port")
+	fs.IntVar(&o.Port, "mysql.port", o.Port, "MySQL port")
 	fs.StringVar(&o.Username, "mysql.username", o.Username, "MySQL username")
 	fs.StringVar(&o.Password, "mysql.password", o.Password, "MySQL password")
 	fs.StringVar(&o.Database, "mysql.database", o.Database, "MySQL database")
@@ -43,7 +49,7 @@ func (o MySQLOptions) AddFlags(fs *pflag.FlagSet) {
 	fs.IntVar(&o.MaxOpenConnections, "mysql.xax-open-connections", o.MaxOpenConnections, "MySQL xax-open-connections")
 	fs.DurationVar(&o.MaxConnectionLifeTime, "mysql.max-connection-life-time", o.MaxConnectionLifeTime, "MySQL max-connection-life-time")
 	fs.IntVar(&o.LogLevel, "mysql.log-mode", o.LogLevel, ""+
-		"gorm log level")
+		"GORM log level")
 }
 
 func (o *MySQLOptions) Validate() []error {

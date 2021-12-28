@@ -8,28 +8,25 @@ package app
 
 import "blog-go/pkg/cli/flag"
 
-type CliFlags interface {
-	Flags() (fss flag.FlagSets)
+type CliOptions interface {
+	Flags() (fss flag.NamedFlagSets)
 	Validate() []error
 }
 
-type Config interface {
-}
-
-// ConfigurableOptions abstracts configuration flags for reading parameters
+// ConfigurableOptions abstracts configuration options for reading parameters
 // from a configuration file.
 type ConfigurableOptions interface {
 	// ApplyFlags parsing parameters from the command line or configuration file
-	// to the flags instance.
+	// to the options instance.
 	ApplyFlags() []error
 }
 
-// CompletableOptions abstracts flags, which can be completed.
+// CompletableOptions abstracts options, which can be completed.
 type CompletableOptions interface {
 	Complete() error
 }
 
-// PrintableOptions abstracts flags, which can be printed.
+// PrintableOptions abstracts options, which can be printed.
 type PrintableOptions interface {
 	String() string
 }

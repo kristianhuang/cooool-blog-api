@@ -1,3 +1,9 @@
+/*
+ * Copyright 2021 SuperPony <superponyyy@gmail.com>. All rights reserved.
+ * Use of this source code is governed by a MIT style
+ * license that can be found in the LICENSE file.
+ */
+
 package flag
 
 import (
@@ -6,14 +12,14 @@ import (
 	"log"
 )
 
-type FlagSets struct {
+type NamedFlagSets struct {
 	Order    []string
 	FlagSets map[string]*pflag.FlagSet
 }
 
-// NewNamedFlagSets create FlagSets
-func NewNamedFlagSets() *FlagSets {
-	return &FlagSets{
+// NewNamedFlagSets create NamedFlagSets
+func NewNamedFlagSets() *NamedFlagSets {
+	return &NamedFlagSets{
 		Order:    make([]string, 0),
 		FlagSets: make(map[string]*pflag.FlagSet),
 	}
@@ -21,7 +27,7 @@ func NewNamedFlagSets() *FlagSets {
 
 // FlagSet returns the flag set with the given name and adds it to the
 // ordered name list if it is not in there yet.
-func (nfs *FlagSets) FlagSet(name string) *pflag.FlagSet {
+func (nfs *NamedFlagSets) FlagSet(name string) *pflag.FlagSet {
 	if nfs.FlagSets == nil {
 		nfs.FlagSets = map[string]*pflag.FlagSet{}
 	}
