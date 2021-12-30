@@ -7,10 +7,11 @@
 package options
 
 import (
+	"time"
+
 	"blog-go/internal/pkg/db"
 	"github.com/spf13/pflag"
 	"gorm.io/gorm"
-	"time"
 )
 
 type MySQLOptions struct {

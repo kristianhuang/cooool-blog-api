@@ -1,0 +1,20 @@
+server:
+  model: debug #server mode: release, debug(default), test
+  health: false # 是否开启健康检测，如果开启，则插入 /health 路由
+  # middlewares:  recovery,logger,secure,nocache,cors,dump
+  max-ping-count: 3
+
+mysql:
+  host: ${MARIADB_HOST} # default 127.0.0.1
+  port: ${MARIADB_PORT} # default 3306
+  username: ${MARIADB_USERNAME}
+  password: ${MARIADB_PASSWORD}
+  max-idle-connections: 100 # 最大空闲连接数
+  max-open-connections: 100
+  max-connection-list-time: 10s # 空闲链接最大存活时间
+  log-level: 4 # GORM log level, 1 silent, 2 error, 3 warn, 4 info
+
+redis:
+  host: ${REDIS_HOST} # default 127.0.0.1
+  port: ${REDIS_PORT} # default 6379
+  password: ${REDIS_PASSWORD}

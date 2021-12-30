@@ -7,11 +7,13 @@
 package app
 
 import (
-	cliflag "blog-go/pkg/cli/flag"
 	"fmt"
+	"os"
+
+	cliflag "blog-go/pkg/cli/flag"
 	"github.com/fatih/color"
 	"github.com/spf13/cobra"
-	"os"
+	"github.com/spf13/viper"
 )
 
 var (
@@ -62,17 +64,16 @@ type App struct {
 	short string
 	long  string
 	// options
-	options CliOptions
-	cmd     *cobra.Command
-	// 子命令
-	commands []*Command
-	// 非标志参数验证函数
-	args cobra.PositionalArgs
-	// 允许的非标志参数
+	options       CliOptions
+	cmd           *cobra.Command
+	commands      []*Command
+	args          cobra.PositionalArgs
 	validArgs     []string
 	runFunc       RunFunc
 	silenceUsage  bool
 	silenceErrors bool
+
+	noConfig bool
 }
 
 type Option func(*App)
@@ -176,6 +177,10 @@ func (a *App) buildCmd() {
 			fs.AddFlagSet(f)
 		}
 	}
+	// 指定了配置文件，则读取配置文件
+	if !a.noConfig {
+		addConfFlag(a.use, namedFlagSets.FlagSet("global"))
+	}
 
 	addCmdTemplate(&cmd, namedFlagSets)
 
@@ -184,6 +189,16 @@ func (a *App) buildCmd() {
 
 func (a *App) runE(cmd *cobra.Command, args []string) error {
 	// cliflag.PrintFlags(cmd.Flags())
+
+	if !a.noConfig {
+		if err := viper.BindPFlags(cmd.Flags()); err != nil {
+			return err
+		}
+
+		if err := viper.Unmarshal(a.options); err != nil {
+			return err
+		}
+	}
 
 	if a.options != nil {
 		if err := a.applyOptionRules(); err != nil {
@@ -218,6 +233,7 @@ func (a *App) applyOptionRules() error {
 }
 
 func (a *App) Run() {
+
 	if err := a.cmd.Execute(); err != nil {
 		fmt.Printf("%s \n", color.RedString("Error: %v", err.Error()))
 		os.Exit(1)

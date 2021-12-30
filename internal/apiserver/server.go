@@ -7,7 +7,9 @@
 package apiserver
 
 import (
+	"blog-go/internal/apiserver/config"
 	genericoptions "blog-go/internal/pkg/options"
+	"blog-go/internal/pkg/server"
 	"blog-go/internal/pkg/shutdown"
 )
 
@@ -32,6 +34,32 @@ type ExtraConf struct {
 	mysqlOpts  *genericoptions.MySQLOptions
 }
 
-// func buildGenericConf(c *config.Config) (genericConf *genericap) {
-//
-// }
+func createAPIServer(conf *config.Config) (*apiServer, error) {
+	// genericConf, err := buildGenericConf(conf)
+	// if err != nil {
+	// 	return nil, err
+	// }
+	//
+	// // genericServer, err := genericConf.Complete()
+	// // return &apiServer{
+	// // 	redisOpts:        conf.RedisOptions,
+	// // 	genericAPIServer: genericConf,
+	// // }, nil
+
+	return nil, nil
+}
+
+func buildGenericConf(conf *config.Config) (genericConf *server.Conf, err error) {
+	genericConf = server.NewConf()
+	if err = conf.APISServerOptions.ApplyTo(genericConf); err != nil {
+		return
+	}
+
+	return
+}
+
+func buildExtraConf(conf *config.Config) (*ExtraConf, error) {
+	return &ExtraConf{
+		mysqlOpts: conf.MySQLOptions,
+	}, nil
+}

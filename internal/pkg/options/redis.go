@@ -65,7 +65,7 @@ func (o *RedisOptions) AddFlags(fs *pflag.FlagSet) {
 	fs.BoolVar(&o.EnableCluster, "redis.enable-cluster", o.EnableCluster, ""+
 		"If you are using Redis cluster, enable it here to enable the slots mode.")
 	fs.BoolVar(&o.UseSSL, "redis.use-ssl", o.UseSSL, ""+
-		"If set, IAM will assume the connection to Redis is encrypted. "+
+		"If set, app will assume the connection to Redis is encrypted. "+
 		"(use with Redis providers that support in-transit encryption).")
 	fs.BoolVar(&o.SSLInsecureSkipVerify, "redis.ssl-insecure-skip-verify", o.SSLInsecureSkipVerify, ""+
 		"Allows usage of self-signed certificates when connecting to an encrypted Redis database.")

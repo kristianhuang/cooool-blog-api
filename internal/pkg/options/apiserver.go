@@ -7,20 +7,31 @@
 package options
 
 import (
+	"blog-go/internal/pkg/server"
 	"github.com/gin-gonic/gin"
 	"github.com/spf13/pflag"
 )
 
 type APIServerOptions struct {
 	Mode        string   `json:"mode"`
+	Health      bool     `json:"health"`
 	Middlewares []string `json:"middlewares"`
 }
 
 func NewServerOptions() *APIServerOptions {
 	return &APIServerOptions{
 		Mode:        gin.ReleaseMode,
+		Health:      true,
 		Middlewares: []string{},
 	}
+}
+
+func (o APIServerOptions) ApplyTo(c *server.Conf) error {
+	c.Mode = o.Mode
+	c.Health = o.Health
+	c.Middlewares = o.Middlewares
+
+	return nil
 }
 
 func (o *APIServerOptions) Validate() []error {

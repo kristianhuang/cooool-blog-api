@@ -21,13 +21,13 @@ func NewApp(use string) *app.App {
 		"apiserver",
 		app.WithFlags(opts),
 		app.WithLong(commandDesc),
-		app.WithRunFunc(runFunc(opts)),
+		app.WithRunFunc(createRunFunc(opts)),
 	)
 
 	return application
 }
 
-func runFunc(opts *options.Options) app.RunFunc {
+func createRunFunc(opts *options.Options) app.RunFunc {
 	// TODO 需要做个 Log 包
 	return func(use string) error {
 		conf := config.NewConfig(opts)

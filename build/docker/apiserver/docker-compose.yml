@@ -45,7 +45,7 @@ services:
       - blog
     ports:
       - "8080:8080"
-    container_name: blog-apiserver
+    container_name: blog-apiserver.yaml
 
 volumes:
   blog-redis-conf:

@@ -7,9 +7,10 @@
 package options
 
 import (
+	"encoding/json"
+
 	genericoptions "blog-go/internal/pkg/options"
 	"blog-go/pkg/cli/flag"
-	"encoding/json"
 )
 
 type Options struct {
@@ -31,6 +32,11 @@ func (o *Options) Flags() (fss flag.NamedFlagSets) {
 	o.MySQLOptions.AddFlags(fss.FlagSet("mysql"))
 	o.RedisOptions.AddFlags(fss.FlagSet("redis"))
 	return fss
+}
+
+// Complete 设置需要默认值的选项
+func (o Options) Complete() error {
+	return nil
 }
 
 func (o *Options) String() string {

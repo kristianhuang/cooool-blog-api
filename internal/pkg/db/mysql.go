@@ -8,10 +8,11 @@ package db
 
 import (
 	"fmt"
+	"time"
+
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
-	"time"
 )
 
 type MysqlOptions struct {
@@ -29,7 +30,7 @@ type MysqlOptions struct {
 
 // New create gorm DB
 func New(opts *MysqlOptions) (*gorm.DB, error) {
-	dsn := fmt.Sprintf(`%s:%s@tcp(%s:%s)/%s?charset=utf8&parseTime=%t&loc=%s`,
+	dsn := fmt.Sprintf(`%s:%s@tcp(%s:%v)/%s?charset=utf8&parseTime=%t&loc=%s`,
 		opts.Username,
 		opts.Password,
 		opts.Host,

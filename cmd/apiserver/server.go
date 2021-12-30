@@ -7,11 +7,12 @@
 package main
 
 import (
-	"blog-go/internal/apiserver"
 	"math/rand"
 	"os"
 	"runtime"
 	"time"
+
+	"blog-go/internal/apiserver"
 )
 
 func main() {
@@ -20,5 +21,5 @@ func main() {
 		runtime.GOMAXPROCS(runtime.NumCPU())
 	}
 
-	apiserver.NewApp("blog-apiserver").Run()
+	apiserver.NewApp("blog-apiserver.yaml").Run()
 }
