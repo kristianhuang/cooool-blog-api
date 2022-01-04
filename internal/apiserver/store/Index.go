@@ -4,12 +4,4 @@
  * license that can be found in the LICENSE file.
  */
 
-package middleware
-
-import "github.com/gin-gonic/gin"
-
-func Content() gin.HandlerFunc {
-	return func(ctx *gin.Context) {
-		ctx.Next()
-	}
-}
+package store

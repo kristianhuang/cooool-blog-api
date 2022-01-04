@@ -18,7 +18,7 @@ var (
 	shutdownSignals     = []os.Signal{os.Interrupt, syscall.SIGTERM}
 )
 
-func SetupSignaHandle() <-chan struct{} {
+func SetupSignalHandle() <-chan struct{} {
 	close(onlyOenSignalHandle)
 
 	shutdownHandle = make(chan os.Signal, 2)

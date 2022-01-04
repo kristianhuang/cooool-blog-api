@@ -18,8 +18,9 @@ func NewApp(use string) *app.App {
 	opts := options.NewOptions()
 	application := app.NewApp(
 		use,
-		"apiserver",
+		"api-server",
 		app.WithFlags(opts),
+		app.WithDefaultValidArgs(),
 		app.WithLong(commandDesc),
 		app.WithRunFunc(createRunFunc(opts)),
 	)
@@ -32,16 +33,15 @@ func createRunFunc(opts *options.Options) app.RunFunc {
 	return func(use string) error {
 		conf := config.NewConfig(opts)
 
-		return run(conf)
+		return Run(conf)
 	}
 }
 
-func run(cfg *config.Config) error {
-	return nil
-	// server, err := createAPIServer(cfg)
-	// if err != nil {
-	// 	return err
-	// }
-	//
-	// return server.PrepareRun().Run()
+func Run(conf *config.Config) error {
+	server, err := createAPIServer(conf)
+	if err != nil {
+		return err
+	}
+
+	return server.BeforeRun().Run()
 }

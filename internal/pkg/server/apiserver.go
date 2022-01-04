@@ -10,17 +10,18 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"github.com/gin-contrib/pprof"
-	"github.com/gin-gonic/gin"
-	ginprometheus "github.com/zsais/go-gin-prometheus"
-	"golang.org/x/sync/errgroup"
 	"log"
 	"net/http"
 	"strings"
 	"time"
+
+	"github.com/gin-contrib/pprof"
+	"github.com/gin-gonic/gin"
+	promethium "github.com/zsais/go-gin-prometheus"
+	"golang.org/x/sync/errgroup"
 )
 
-type GenericAPIServer struct {
+type APIServer struct {
 	middlewares []string
 	mode        string
 	// SecureServingInfo holds configuration of the TLS server.
@@ -38,17 +39,44 @@ type GenericAPIServer struct {
 	insecureServer, secureServer *http.Server
 }
 
-func (s *GenericAPIServer) InstallAPIs() {
-	// TODO 健康检测
+func initAPIServer(s *APIServer) {
+	s.Setup()
+	s.InstallMiddlewares()
+	s.InstallAPIs()
+}
+
+// Setup do some setup work before the service starts
+func (s *APIServer) Setup() {
+	// TODO 报错
+	// gin.SetMode(s.mode)
+
+	gin.DebugPrintRouteFunc = func(httpMethod, absolutePath, handlerName string, nuHandlers int) {
+		// TODO 换成日志包输出
+		fmt.Printf("%-6s %-s --> %s (%d handlers)", httpMethod, absolutePath, handlerName, nuHandlers)
+	}
+}
+
+// InstallMiddlewares install global middlewares
+func (s *APIServer) InstallMiddlewares() {
+
+	// for _, middleware := range s.middlewares {
+	// 	// s.Use(middleware)
+	// }
+}
+
+// InstallAPIs install generic apis
+func (s *APIServer) InstallAPIs() {
 	if s.health {
 		s.GET("/health", func(c *gin.Context) {
-			c.JSON(http.StatusOK, gin.H{})
+			c.JSON(http.StatusOK, gin.H{
+				"status": "ok",
+			})
 		})
 	}
 
 	// 开启 gin 监控
 	if s.enableMetrics {
-		prometheus := ginprometheus.NewPrometheus("gin")
+		prometheus := promethium.NewPrometheus("gin")
 		prometheus.Use(s.Engine)
 	}
 
@@ -60,25 +88,8 @@ func (s *GenericAPIServer) InstallAPIs() {
 	// TODO 版本管理功能
 }
 
-func initGenericAPIServer(s *GenericAPIServer) {
-	s.Setup()
-	s.InstallMiddlewares()
-	s.InstallAPIs()
-}
-
-func (s *GenericAPIServer) InstallMiddlewares() {
-	// this is global middleware
-}
-
-func (s *GenericAPIServer) Setup() {
-	gin.SetMode(s.mode)
-	gin.DebugPrintRouteFunc = func(httpMethod, absolutePath, handlerName string, nuHandlers int) {
-		// TODO 换成日志包输出
-		fmt.Println(httpMethod, absolutePath, handlerName, nuHandlers)
-	}
-}
-
-func (s *GenericAPIServer) Run() error {
+func (s *APIServer) Run() error {
+	// http
 	s.insecureServer = &http.Server{
 		Addr:    s.InsecureServingInfo.Address,
 		Handler: s,
@@ -101,16 +112,15 @@ func (s *GenericAPIServer) Run() error {
 		return nil
 	})
 
-	// https
+	// https server
 	// eg.Go(func() error {
 	//
 	//
 	// 	return nil
 	// })
 
-	ctx, cancel := context.WithTimeout(context.Background(), time.Second*10)
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
-
 	if s.health {
 		if err := s.ping(ctx); err != nil {
 			return err
@@ -124,7 +134,7 @@ func (s *GenericAPIServer) Run() error {
 	return nil
 }
 
-func (s *GenericAPIServer) ping(ctx context.Context) error {
+func (s *APIServer) ping(ctx context.Context) error {
 	url := fmt.Sprintf("http://%s/healthz", s.InsecureServingInfo.Address)
 	if strings.Contains(s.InsecureServingInfo.Address, "0.0.0.0") {
 		url = fmt.Sprintf("http://127.0.0.1:%s/healthz", strings.Split(s.InsecureServingInfo.Address, ":")[1])
@@ -138,8 +148,9 @@ func (s *GenericAPIServer) ping(ctx context.Context) error {
 
 		resp, err := http.DefaultClient.Do(req)
 		if err == nil && resp.StatusCode == http.StatusOK {
+			// TODO 使用日志包记录健康检测
 			log.Println("The router has been deployed success")
-			resp.Body.Close()
+			_ = resp.Body.Close()
 			return nil
 		}
 
@@ -153,18 +164,17 @@ func (s *GenericAPIServer) ping(ctx context.Context) error {
 	}
 }
 
-// func WriteResponse(c *gin.Context, err error, data interface{}) {
-// 	if err != nil {
-// 		log.Errorf("%#+v", err)
-// 		coder := errors.ParseCoder(err)
-// 		c.JSON(coder.HTTPStatus(), ErrResponse{
-// 			Code:      coder.Code(),
-// 			Message:   coder.String(),
-// 			Reference: coder.Reference(),
-// 		})
-//
-// 		return
-// 	}
-//
-// 	c.JSON(http.StatusOK, data)
-// }
+// Close graceful shutdown the api server
+func (s *APIServer) Close() {
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+
+	if err := s.secureServer.Shutdown(ctx); err != nil {
+		log.Fatalf("Shutdown secure server failed: %s", err.Error())
+	}
+
+	if err := s.insecureServer.Shutdown(ctx); err != nil {
+		log.Fatalf("Shutdown insecure secure server failed: %s", err.Error())
+	}
+
+}

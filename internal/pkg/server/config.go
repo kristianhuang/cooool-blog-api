@@ -7,15 +7,28 @@
 package server
 
 import (
-	"github.com/gin-gonic/gin"
+	"log"
 	"net"
+	"path/filepath"
 	"strconv"
+	"strings"
+
+	"blog-go/pkg/path/dir"
+	"github.com/gin-gonic/gin"
+	"github.com/spf13/viper"
 )
 
-type Conf struct {
-	Mode        string
-	Middlewares []string
-	Health      bool
+const (
+	RecommendedHomeDir   = ".blog"
+	RecommendedEnvPrefix = "BLOG"
+)
+
+type Config struct {
+	SecureServing   *SecureServingInfo
+	InsecureServing *InsecureServingInfo
+	Mode            string
+	Middlewares     []string
+	Health          bool
 	// 启用配置文件
 	EnableProfiling bool
 	// 启用统计
@@ -35,8 +48,8 @@ func (s *SecureServingInfo) Address() string {
 	return net.JoinHostPort(s.BindAddress, strconv.Itoa(s.BindPort))
 }
 
-func NewConf() *Conf {
-	return &Conf{
+func NewConfig() *Config {
+	return &Config{
 		Mode:            gin.ReleaseMode,
 		Health:          true,
 		Middlewares:     []string{},
@@ -45,14 +58,47 @@ func NewConf() *Conf {
 	}
 }
 
-type CompletedConf struct {
-	*Conf
+type CompletedConfig struct {
+	*Config
 }
 
-func (c *Conf) Complete() CompletedConf {
-	return CompletedConf{c}
+func (c *Config) Complete() CompletedConfig {
+	return CompletedConfig{c}
 }
 
-// func (c CompletedConf) New() (*Gen) {
-//
-// }
+func (c CompletedConfig) New() (*APIServer, error) {
+	s := &APIServer{
+		SecureServingInfo:   c.SecureServing,
+		InsecureServingInfo: c.InsecureServing,
+		mode:                c.Mode,
+		health:              c.Health,
+		enableProfiling:     c.EnableProfiling,
+		enableMetrics:       c.EnableMetrics,
+		Engine:              gin.New(),
+	}
+
+	initAPIServer(s)
+
+	return s, nil
+}
+
+// LoadConfig read config file and ENV vars, If set.
+func LoadConfig(config, defaultName string) {
+	if config != "" {
+		viper.SetConfigFile(config)
+	} else {
+		viper.AddConfigPath(".")
+		viper.AddConfigPath(filepath.Join(dir.HomeDir(), RecommendedHomeDir))
+		viper.AddConfigPath("/etc/blog")
+		viper.SetConfigName(defaultName)
+	}
+
+	viper.SetConfigType("yaml")
+	viper.AutomaticEnv()
+	viper.SetEnvPrefix(RecommendedEnvPrefix)
+	viper.SetEnvKeyReplacer(strings.NewReplacer(".", "_", "-", ")"))
+
+	if err := viper.ReadInConfig(); err != nil {
+		log.Fatalf("WARNING: viper failed to discover and load the configuration file: %s", err.Error())
+	}
+}

@@ -8,58 +8,63 @@ package apiserver
 
 import (
 	"blog-go/internal/apiserver/config"
-	genericoptions "blog-go/internal/pkg/options"
-	"blog-go/internal/pkg/server"
+	genericapiserver "blog-go/internal/pkg/server"
 	"blog-go/internal/pkg/shutdown"
 )
 
 type apiServer struct {
 	gs               *shutdown.GracefulShutdown
-	redisOpts        *genericoptions.RedisOptions
-	genericAPIServer *genericoptions.APIServerOptions
+	genericAPIServer *genericapiserver.APIServer
 }
 
-// func createApiServer(c *config.Config) (*apiServer, error) {
-// 	// TODO 优雅关闭
-//
-// }
-
-type perparedAPIServer struct {
+type preparedAPIServer struct {
 	*apiServer
 }
 
-type ExtraConf struct {
-	Addr       string
-	MaxMsgSize int
-	mysqlOpts  *genericoptions.MySQLOptions
-}
+func buildGenericConfig(conf *config.Config) (genericConfig *genericapiserver.Config, err error) {
+	genericConfig = genericapiserver.NewConfig()
+	if err = conf.GenericServerRunOptions.ApplyTo(genericConfig); err != nil {
+		return
+	}
 
-func createAPIServer(conf *config.Config) (*apiServer, error) {
-	// genericConf, err := buildGenericConf(conf)
-	// if err != nil {
-	// 	return nil, err
-	// }
-	//
-	// // genericServer, err := genericConf.Complete()
-	// // return &apiServer{
-	// // 	redisOpts:        conf.RedisOptions,
-	// // 	genericAPIServer: genericConf,
-	// // }, nil
+	if err = conf.FeatureOptions.ApplyTo(genericConfig); err != nil {
+		return
+	}
 
-	return nil, nil
-}
-
-func buildGenericConf(conf *config.Config) (genericConf *server.Conf, err error) {
-	genericConf = server.NewConf()
-	if err = conf.APISServerOptions.ApplyTo(genericConf); err != nil {
+	if err = conf.InsecureServingOptions.ApplyTo(genericConfig); err != nil {
 		return
 	}
 
 	return
 }
 
-func buildExtraConf(conf *config.Config) (*ExtraConf, error) {
-	return &ExtraConf{
-		mysqlOpts: conf.MySQLOptions,
-	}, nil
+func createAPIServer(conf *config.Config) (*apiServer, error) {
+	// gs := shutdown.New()
+	// gs.AddShutdownCallback()
+	genericConfig, err := buildGenericConfig(conf)
+	if err != nil {
+		return nil, err
+	}
+
+	genericServer, err := genericConfig.Complete().New()
+	if err != nil {
+		return nil, err
+	}
+
+	server := &apiServer{
+		genericAPIServer: genericServer,
+	}
+
+	return server, nil
+}
+
+func (s *apiServer) BeforeRun() preparedAPIServer {
+	initRouter(s.genericAPIServer.Engine)
+
+	return preparedAPIServer{s}
+}
+
+func (s preparedAPIServer) Run() error {
+
+	return s.genericAPIServer.Run()
 }

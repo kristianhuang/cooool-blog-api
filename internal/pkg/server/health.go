@@ -14,7 +14,7 @@ func HealthCheck(path, address string) error {
 	http.HandleFunc(path, func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-type", "application/json")
 		w.WriteHeader(http.StatusOK)
-		w.Write([]byte(`{"status":"ok"}`))
+		_, _ = w.Write([]byte(`{"status":"ok"}`))
 	})
 
 	if err := http.ListenAndServe(address, nil); err != nil {

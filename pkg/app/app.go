@@ -64,15 +64,12 @@ type App struct {
 	short string
 	long  string
 	// options
-	options       CliOptions
-	cmd           *cobra.Command
-	commands      []*Command
-	args          cobra.PositionalArgs
-	validArgs     []string
-	runFunc       RunFunc
-	silenceUsage  bool
-	silenceErrors bool
-
+	options  CliOptions
+	cmd      *cobra.Command
+	commands []*Command
+	args     cobra.PositionalArgs
+	runFunc  RunFunc
+	silence  bool
 	noConfig bool
 }
 
@@ -92,33 +89,40 @@ func WithFlags(flags CliOptions) Option {
 	}
 }
 
-func WithArgs(args cobra.PositionalArgs) Option {
-	return func(app *App) {
-		app.args = args
-	}
-}
-
-func WithValidArgs(validArgs []string) Option {
-	return func(app *App) {
-		app.validArgs = validArgs
-	}
-}
-
 func WithRunFunc(runFunc RunFunc) Option {
 	return func(app *App) {
 		app.runFunc = runFunc
 	}
 }
 
-func WithSilenceUsage(silenceUsage bool) Option {
+func WithSilence(silence bool) Option {
 	return func(app *App) {
-		app.silenceUsage = silenceUsage
+		app.silence = silence
 	}
 }
 
-func WithSilenceErrors(silenceErrors bool) Option {
+func WithNoConfig(noConfig bool) Option {
 	return func(app *App) {
-		app.silenceUsage = silenceErrors
+		app.noConfig = noConfig
+	}
+}
+
+func WithValidArgs(args cobra.PositionalArgs) Option {
+	return func(app *App) {
+		app.args = args
+	}
+}
+
+func WithDefaultValidArgs() Option {
+	return func(app *App) {
+		app.args = func(cmd *cobra.Command, args []string) error {
+			for _, arg := range args {
+				if len(arg) > 0 {
+					return fmt.Errorf("%q does not take any args, got %q", cmd.CommandPath(), args)
+				}
+			}
+			return nil
+		}
 	}
 }
 
@@ -127,10 +131,9 @@ func WithSilenceErrors(silenceErrors bool) Option {
 // 	short 短介绍
 func NewApp(use string, short string, opts ...Option) *App {
 	app := &App{
-		use:           use,
-		short:         short,
-		silenceUsage:  true,
-		silenceErrors: true,
+		use:     use,
+		short:   short,
+		silence: true,
 	}
 
 	for _, opt := range opts {
@@ -147,13 +150,14 @@ func (a *App) buildCmd() {
 		Use:           FormatUseName(a.use),
 		Short:         a.short,
 		Long:          a.long,
-		SilenceUsage:  a.silenceUsage,
-		SilenceErrors: a.silenceErrors,
+		SilenceUsage:  a.silence,
+		SilenceErrors: a.silence,
 		Args:          a.args,
 	}
+
+	cliflag.InitFlags(cmd.Flags())
 	cmd.SetOut(os.Stdout)
 	cmd.SetErr(os.Stderr)
-	cliflag.InitFlags(cmd.Flags())
 	cmd.Flags().SortFlags = true
 
 	// 如果子命令不为空，则追加子命令
@@ -188,8 +192,10 @@ func (a *App) buildCmd() {
 }
 
 func (a *App) runE(cmd *cobra.Command, args []string) error {
+	// Output flags
 	// cliflag.PrintFlags(cmd.Flags())
 
+	// Use default config file
 	if !a.noConfig {
 		if err := viper.BindPFlags(cmd.Flags()); err != nil {
 			return err
@@ -224,10 +230,10 @@ func (a *App) applyOptionRules() error {
 		return errs[0]
 	}
 
-	// if printableOptions, ok := a.options.(PrintableOptions); ok && !a.silence {
-	// 	fmt.Printf("%v Config: `%s`", progressMessage, printableOptions.String())
-	//
-	// }
+	if printableOptions, ok := a.options.(PrintableOptions); ok && !a.silence {
+		fmt.Printf("%v Config: `%s`", progressMessage, printableOptions.String())
+
+	}
 
 	return nil
 }

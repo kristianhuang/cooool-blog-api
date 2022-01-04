@@ -14,21 +14,27 @@ import (
 )
 
 type Options struct {
-	APISServerOptions *genericoptions.APIServerOptions
-	MySQLOptions      *genericoptions.MySQLOptions
-	RedisOptions      *genericoptions.RedisOptions
+	GenericServerRunOptions *genericoptions.ServerRunOptions
+	InsecureServingOptions  *genericoptions.InsecureServingOptions
+	FeatureOptions          *genericoptions.FeatureOptions
+	MySQLOptions            *genericoptions.MySQLOptions
+	RedisOptions            *genericoptions.RedisOptions
 }
 
 func NewOptions() *Options {
 	return &Options{
-		APISServerOptions: genericoptions.NewServerOptions(),
-		MySQLOptions:      genericoptions.NewMySQLOptions(),
-		RedisOptions:      genericoptions.NewRedisOptions(),
+		GenericServerRunOptions: genericoptions.NewServerRunOptions(),
+		InsecureServingOptions:  genericoptions.NewInsecureServingOptions(),
+		FeatureOptions:          genericoptions.NewFeatureOptions(),
+		MySQLOptions:            genericoptions.NewMySQLOptions(),
+		RedisOptions:            genericoptions.NewRedisOptions(),
 	}
 }
 
 func (o *Options) Flags() (fss flag.NamedFlagSets) {
-	o.APISServerOptions.AddFlags(fss.FlagSet("api-server"))
+	o.GenericServerRunOptions.AddFlags(fss.FlagSet("generic"))
+	o.InsecureServingOptions.AddFlags(fss.FlagSet("insecure serving"))
+	o.FeatureOptions.AddFlags(fss.FlagSet("features"))
 	o.MySQLOptions.AddFlags(fss.FlagSet("mysql"))
 	o.RedisOptions.AddFlags(fss.FlagSet("redis"))
 	return fss
