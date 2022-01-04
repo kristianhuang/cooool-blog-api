@@ -29,7 +29,7 @@ func init() {
 	pflag.StringVarP(&confFile, confFlagName, "c", confFile, "App config support JSON, YAML.")
 }
 
-func addConfFlag(use string, fs *pflag.FlagSet) {
+func addConfigFlag(use string, fs *pflag.FlagSet) {
 	fs.AddFlag(pflag.Lookup(confFlagName))
 
 	viper.AutomaticEnv()

@@ -5,7 +5,7 @@ server:
   max-ping-count: 3
 
 insecure:
-  address: ${APISERVER_INSECURE_ADDRESS}
+  host: ${APISERVER_INSECURE_HOST}
   port: ${APISERVER_INSECURE_PORT}
 
 mysql:

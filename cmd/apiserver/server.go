@@ -21,5 +21,5 @@ func main() {
 		runtime.GOMAXPROCS(runtime.NumCPU())
 	}
 
-	apiserver.NewApp("blog-apiserver.yaml").Run()
+	apiserver.NewApp("blog-apiserver").Run()
 }

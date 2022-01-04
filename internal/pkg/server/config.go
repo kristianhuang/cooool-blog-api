@@ -36,22 +36,23 @@ type Config struct {
 }
 
 type SecureServingInfo struct {
-	BindAddress string
-	BindPort    int
+	Host string
+	Port int
 }
 
 type InsecureServingInfo struct {
-	Address string
+	Host string
 }
 
+// Address return host:port
 func (s *SecureServingInfo) Address() string {
-	return net.JoinHostPort(s.BindAddress, strconv.Itoa(s.BindPort))
+	return net.JoinHostPort(s.Host, strconv.Itoa(s.Port))
 }
 
 func NewConfig() *Config {
 	return &Config{
-		Mode:            gin.ReleaseMode,
-		Health:          true,
+		Mode:            gin.DebugMode,
+		Health:          false,
 		Middlewares:     []string{},
 		EnableProfiling: true,
 		EnableMetrics:   true,

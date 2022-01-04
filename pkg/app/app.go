@@ -183,7 +183,7 @@ func (a *App) buildCmd() {
 	}
 	// 指定了配置文件，则读取配置文件
 	if !a.noConfig {
-		addConfFlag(a.use, namedFlagSets.FlagSet("global"))
+		addConfigFlag(a.use, namedFlagSets.FlagSet("global"))
 	}
 
 	addCmdTemplate(&cmd, namedFlagSets)

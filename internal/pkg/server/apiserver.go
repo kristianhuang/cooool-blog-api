@@ -91,15 +91,15 @@ func (s *APIServer) InstallAPIs() {
 func (s *APIServer) Run() error {
 	// http
 	s.insecureServer = &http.Server{
-		Addr:    s.InsecureServingInfo.Address,
+		Addr:    s.InsecureServingInfo.Host,
 		Handler: s,
 	}
 
 	// https
-	s.secureServer = &http.Server{
-		Addr:    s.SecureServingInfo.Address(),
-		Handler: s,
-	}
+	// s.secureServer = &http.Server{
+	// 	Addr:    s.SecureServingInfo.Host(),
+	// 	Handler: s,
+	// }
 
 	var eg errgroup.Group
 
@@ -135,9 +135,9 @@ func (s *APIServer) Run() error {
 }
 
 func (s *APIServer) ping(ctx context.Context) error {
-	url := fmt.Sprintf("http://%s/healthz", s.InsecureServingInfo.Address)
-	if strings.Contains(s.InsecureServingInfo.Address, "0.0.0.0") {
-		url = fmt.Sprintf("http://127.0.0.1:%s/healthz", strings.Split(s.InsecureServingInfo.Address, ":")[1])
+	url := fmt.Sprintf("http://%s/healthz", s.InsecureServingInfo.Host)
+	if strings.Contains(s.InsecureServingInfo.Host, "0.0.0.0") {
+		url = fmt.Sprintf("http://127.0.0.1:%s/healthz", strings.Split(s.InsecureServingInfo.Host, ":")[1])
 	}
 
 	for {

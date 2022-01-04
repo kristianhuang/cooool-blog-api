@@ -16,20 +16,20 @@ import (
 )
 
 type InsecureServingOptions struct {
-	Address string `json:"bind_address"`
-	Port    int    `json:"bind_port"`
+	Host string `json:"host"`
+	Port int    `json:"port"`
 }
 
 func NewInsecureServingOptions() *InsecureServingOptions {
 	return &InsecureServingOptions{
-		Address: "127.0.0.1",
-		Port:    8080,
+		Host: "127.0.0.1",
+		Port: 8080,
 	}
 }
 
 func (o *InsecureServingOptions) ApplyTo(c *server.Config) error {
 	c.InsecureServing = &server.InsecureServingInfo{
-		Address: net.JoinHostPort(o.Address, strconv.Itoa(o.Port)),
+		Host: net.JoinHostPort(o.Host, strconv.Itoa(o.Port)),
 	}
 
 	return nil
@@ -46,6 +46,6 @@ func (o *InsecureServingOptions) Validate() []error {
 }
 
 func (o InsecureServingOptions) AddFlags(fs *pflag.FlagSet) {
-	fs.StringVar(&o.Address, "insecure.address", o.Address, "API server host")
+	fs.StringVar(&o.Host, "insecure.host", o.Host, "API server host")
 	fs.IntVar(&o.Port, "insecure.port", o.Port, "API server port")
 }
