@@ -1,28 +1,27 @@
 server:
   model: debug #server mode: release, debug(default), test
   health: false # 是否开启健康检测，如果开启，则插入 /health 路由
-  # middlewares:  recovery,logger,secure,nocache,cors,dump
+  middlewares: recovery,cors
   max-ping-count: 3
 
 insecure:
-  host: ${APISERVER_INSECURE_HOST}
-  port: ${APISERVER_INSECURE_PORT}
+  host: 127.0.0.1
+  port: 8080
 
 mysql:
-  host: ${MARIADB_HOST} # default 127.0.0.1
-  port: ${MARIADB_PORT} # default 3306
-  username: ${MARIADB_USERNAME}
-  password: ${MARIADB_PASSWORD}
+  host: 127.0.0.1 # default 127.0.0.1
+  port: 3306 # default 3306
+  username: root
+  password: g&J3aw7NGSkP
   max-idle-connections: 100 # 最大空闲连接数
   max-open-connections: 100
   max-connection-list-time: 10s # 空闲链接最大存活时间
   log-level: 4 # GORM log level, 1 silent, 2 error, 3 warn, 4 info
 
 redis:
-  host: ${REDIS_HOST} # default 127.0.0.1
-  port: ${REDIS_PORT} # default 6379
-  password: ${REDIS_PASSWORD}
-
+  host: 127.0.0.1  # default 127.0.0.1
+  port: 6379 # default 6379
+  password:
 
 feature:
   enable-metrics: true # 开启 metrics, router:  /metrics

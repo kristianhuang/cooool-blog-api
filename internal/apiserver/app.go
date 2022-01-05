@@ -19,7 +19,7 @@ func NewApp(use string) *app.App {
 	application := app.NewApp(
 		use,
 		"api-server",
-		app.WithFlags(opts),
+		app.WithOptions(opts),
 		app.WithDefaultValidArgs(),
 		app.WithLong(commandDesc),
 		app.WithRunFunc(createRunFunc(opts)),
@@ -29,8 +29,9 @@ func NewApp(use string) *app.App {
 }
 
 func createRunFunc(opts *options.Options) app.RunFunc {
-	// TODO 需要做个 Log 包
 	return func(use string) error {
+		// TODO 需要做个 Log 包
+
 		conf := config.NewConfig(opts)
 
 		return Run(conf)

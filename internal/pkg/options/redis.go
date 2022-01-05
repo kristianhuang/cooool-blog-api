@@ -9,19 +9,18 @@ package options
 import "github.com/spf13/pflag"
 
 type RedisOptions struct {
-	Host                  string   `json:"host"`
-	Port                  int      `json:"port"`
-	Address               []string `json:"address"`
-	Username              string   `json:"username"`
-	Password              string   `json:"password"`
-	Index                 int      `json:"index"`
-	MasterName            string   `json:"master_name"`
-	MaxIdle               int      `json:"max_idle"`
-	MaxActive             int      `json:"max_active"`
-	Timeout               int      `json:"timeout"`
-	EnableCluster         bool     `json:"enable_cluster"`
-	UseSSL                bool     `json:"use_ssl"`
-	SSLInsecureSkipVerify bool     `json:"ssl_insecure_skip_verify"`
+	Host                  string   `json:"host" mapstructure:"host"`
+	Port                  int      `json:"port" mapstructure:"port"`
+	Address               []string `json:"address" mapstructure:"address"`
+	Password              string   `json:"password" mapstructure:"password"`
+	Index                 int      `json:"index" mapstructure:"index"`
+	MasterName            string   `json:"master_name" mapstructure:"master_name"`
+	MaxIdle               int      `json:"max_idle" mapstructure:"max_idle"`
+	MaxActive             int      `json:"max_active" mapstructure:"max_active"`
+	Timeout               int      `json:"timeout" mapstructure:"timeout"`
+	EnableCluster         bool     `json:"enable_cluster" mapstructure:"enable_cluster"`
+	UseSSL                bool     `json:"use_ssl" mapstructure:"use_ssl"`
+	SSLInsecureSkipVerify bool     `json:"ssl_insecure_skip_verify" mapstructure:"ssl_insecure_skip_verify"`
 }
 
 func NewRedisOptions() *RedisOptions {
@@ -29,7 +28,6 @@ func NewRedisOptions() *RedisOptions {
 		Host:                  "127.0.0.1",
 		Port:                  6379,
 		Address:               []string{},
-		Username:              "",
 		Password:              "",
 		Index:                 0,
 		MasterName:            "",
@@ -50,7 +48,6 @@ func (o *RedisOptions) AddFlags(fs *pflag.FlagSet) {
 	fs.StringVar(&o.Host, "redis.host", o.Host, "Redis host")
 	fs.IntVar(&o.Port, "redis.port", o.Port, "Redis port")
 	fs.StringSliceVar(&o.Address, "redis address", o.Address, "Redis address")
-	fs.StringVar(&o.Username, "redis.username", o.Username, "Redis username")
 	fs.StringVar(&o.Password, "redis.password", o.Password, "Redis password")
 	fs.IntVar(&o.Index, "redis.index", o.Index, "Redis index")
 	fs.StringVar(&o.MasterName, "redis.master-name", o.MasterName, "The name of master redis instance.")

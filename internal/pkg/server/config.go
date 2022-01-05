@@ -63,22 +63,24 @@ type CompletedConfig struct {
 	*Config
 }
 
+// Complete return completed config
 func (c *Config) Complete() CompletedConfig {
 	return CompletedConfig{c}
 }
 
-func (c CompletedConfig) New() (*APIServer, error) {
-	s := &APIServer{
+func (c CompletedConfig) NewGenericAPIServer() (*GenericAPIServer, error) {
+	s := &GenericAPIServer{
 		SecureServingInfo:   c.SecureServing,
 		InsecureServingInfo: c.InsecureServing,
 		mode:                c.Mode,
 		health:              c.Health,
 		enableProfiling:     c.EnableProfiling,
 		enableMetrics:       c.EnableMetrics,
+		middlewares:         c.Middlewares,
 		Engine:              gin.New(),
 	}
 
-	initAPIServer(s)
+	initGenericAPIServer(s)
 
 	return s, nil
 }

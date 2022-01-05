@@ -8,16 +8,17 @@ package app
 
 import (
 	"fmt"
-	"github.com/fatih/color"
-	"github.com/spf13/cobra"
 	"os"
 	"runtime"
 	"strings"
+
+	"github.com/fatih/color"
+	"github.com/spf13/cobra"
 )
 
 type Command struct {
-	usage    string
-	desc     string
+	use      string
+	short    string
 	options  CliOptions
 	commands []*Command
 	runFunc  RunCommandFunc
@@ -40,10 +41,10 @@ func WithCommandRunFunc(rcf RunCommandFunc) CommandOption {
 }
 
 // NewCommand 用于生成 Command
-func NewCommand(usage string, desc string, opts ...CommandOption) *Command {
+func NewCommand(use, short string, opts ...CommandOption) *Command {
 	c := &Command{
-		usage: usage,
-		desc:  desc,
+		use:   use,
+		short: short,
 	}
 
 	for _, opt := range opts {
@@ -59,8 +60,8 @@ func (c Command) AddCommands(cmd ...*Command) {
 
 func (c *Command) cobraCommand() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   c.usage,
-		Short: c.desc,
+		Use:   c.use,
+		Short: c.short,
 	}
 	cmd.SetOut(os.Stdout)
 	cmd.Flags().SortFlags = false
@@ -78,7 +79,7 @@ func (c *Command) cobraCommand() *cobra.Command {
 		}
 		// c.options.AddFlags(cmd.Flags())
 	}
-	addHelpCommandFlag(c.usage, cmd.Flags())
+	addHelpCommandFlag(c.use, cmd.Flags())
 
 	return cmd
 }

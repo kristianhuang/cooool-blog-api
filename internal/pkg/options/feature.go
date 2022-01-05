@@ -12,8 +12,8 @@ import (
 )
 
 type FeatureOptions struct {
-	EnableProfiling bool `json:"enable_profiling"`
-	EnableMetrics   bool `json:"enable_metrics"`
+	EnableProfiling bool `json:"enable_profiling" mapstructure:"enable_profiling"`
+	EnableMetrics   bool `json:"enable_metrics" mapstructure:"enable_metrics"`
 }
 
 func NewFeatureOptions() *FeatureOptions {

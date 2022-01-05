@@ -11,11 +11,11 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-type Handle func(engine *gin.Engine)
+type Route func(engine *gin.Engine)
 
 var (
-	Routes = []Handle{
-		route.IndexRoutes,
+	Routes = []Route{
+		route.Index,
 	}
 )
 

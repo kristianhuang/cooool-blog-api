@@ -15,15 +15,15 @@ import (
 )
 
 type MySQLOptions struct {
-	Host                  string        `json:"host"`
-	Port                  int           `json:"port"`
-	Username              string        `json:"username"`
-	Password              string        `json:"-"`
-	Database              string        `json:"database"`
-	MaxIdleConnections    int           `json:"max_idle_connections,omitempty"`
-	MaxOpenConnections    int           `json:"max_open_connections,omitempty"`
-	MaxConnectionLifeTime time.Duration `json:"max_connection_life_time,omitempty"`
-	LogLevel              int           `json:"log_level"`
+	Host                  string        `json:"host" mapstructure:"host"`
+	Port                  int           `json:"port" mapstructure:"port"`
+	Username              string        `json:"username" mapstructure:"username"`
+	Password              string        `json:"-" mapstructure:"password"`
+	Database              string        `json:"database" mapstructure:"database"`
+	MaxIdleConnections    int           `json:"max_idle_connections,omitempty" mapstructure:"max_idle_connections"`
+	MaxOpenConnections    int           `json:"max_open_connections,omitempty" mapstructure:"max_open_connections"`
+	MaxConnectionLifeTime time.Duration `json:"max_connection_life_time,omitempty" mapstructure:"max_connection_life_time"`
+	LogLevel              int           `json:"log_level" mapstructure:"log_level"`
 }
 
 func NewMySQLOptions() *MySQLOptions {

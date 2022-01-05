@@ -16,8 +16,8 @@ import (
 )
 
 type InsecureServingOptions struct {
-	Host string `json:"host"`
-	Port int    `json:"port"`
+	Host string `json:"host" mapstructure:"host"`
+	Port int    `json:"port" mapstructure:"port"`
 }
 
 func NewInsecureServingOptions() *InsecureServingOptions {

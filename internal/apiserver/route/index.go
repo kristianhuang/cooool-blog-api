@@ -11,7 +11,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func IndexRoutes(e *gin.Engine) {
-	router := index.NewIndexController()
-	e.GET("/", router.Index)
+func Index(e *gin.Engine) {
+	routes := index.NewIndexController()
+	e.GET("/", routes.Index)
 }

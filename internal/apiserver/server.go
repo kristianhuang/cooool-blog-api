@@ -14,45 +14,45 @@ import (
 
 type apiServer struct {
 	gs               *shutdown.GracefulShutdown
-	genericAPIServer *genericapiserver.APIServer
+	genericAPIServer *genericapiserver.GenericAPIServer
 }
 
 type preparedAPIServer struct {
 	*apiServer
 }
 
-func buildGenericConfig(conf *config.Config) (genericConfig *genericapiserver.Config, err error) {
-	genericConfig = genericapiserver.NewConfig()
-	if err = conf.GenericServerRunOptions.ApplyTo(genericConfig); err != nil {
+func buildGenericConfig(conf *config.Config) (apiServerConfig *genericapiserver.Config, err error) {
+	apiServerConfig = genericapiserver.NewConfig()
+	if err = conf.ServerRunOptions.ApplyTo(apiServerConfig); err != nil {
 		return
 	}
 
-	if err = conf.FeatureOptions.ApplyTo(genericConfig); err != nil {
+	if err = conf.FeatureOptions.ApplyTo(apiServerConfig); err != nil {
 		return
 	}
 
-	if err = conf.InsecureServingOptions.ApplyTo(genericConfig); err != nil {
+	if err = conf.InsecureServingOptions.ApplyTo(apiServerConfig); err != nil {
 		return
 	}
 
 	return
 }
 
-func createAPIServer(conf *config.Config) (*apiServer, error) {
+func createAPIServer(config *config.Config) (*apiServer, error) {
 	// gs := shutdown.New()
 	// gs.AddShutdownCallback()
-	genericConfig, err := buildGenericConfig(conf)
+	genericAPIServerConfig, err := buildGenericConfig(config)
 	if err != nil {
 		return nil, err
 	}
 
-	genericServer, err := genericConfig.Complete().New()
+	genericAPIServer, err := genericAPIServerConfig.Complete().NewGenericAPIServer()
 	if err != nil {
 		return nil, err
 	}
 
 	server := &apiServer{
-		genericAPIServer: genericServer,
+		genericAPIServer: genericAPIServer,
 	}
 
 	return server, nil

@@ -14,25 +14,25 @@ import (
 )
 
 type Options struct {
-	GenericServerRunOptions *genericoptions.ServerRunOptions
-	InsecureServingOptions  *genericoptions.InsecureServingOptions
-	FeatureOptions          *genericoptions.FeatureOptions
-	MySQLOptions            *genericoptions.MySQLOptions
-	RedisOptions            *genericoptions.RedisOptions
+	ServerRunOptions       *genericoptions.ServerRunOptions
+	InsecureServingOptions *genericoptions.InsecureServingOptions
+	FeatureOptions         *genericoptions.FeatureOptions
+	MySQLOptions           *genericoptions.MySQLOptions
+	RedisOptions           *genericoptions.RedisOptions
 }
 
 func NewOptions() *Options {
 	return &Options{
-		GenericServerRunOptions: genericoptions.NewServerRunOptions(),
-		InsecureServingOptions:  genericoptions.NewInsecureServingOptions(),
-		FeatureOptions:          genericoptions.NewFeatureOptions(),
-		MySQLOptions:            genericoptions.NewMySQLOptions(),
-		RedisOptions:            genericoptions.NewRedisOptions(),
+		ServerRunOptions:       genericoptions.NewServerRunOptions(),
+		InsecureServingOptions: genericoptions.NewInsecureServingOptions(),
+		FeatureOptions:         genericoptions.NewFeatureOptions(),
+		MySQLOptions:           genericoptions.NewMySQLOptions(),
+		RedisOptions:           genericoptions.NewRedisOptions(),
 	}
 }
 
 func (o *Options) Flags() (fss flag.NamedFlagSets) {
-	o.GenericServerRunOptions.AddFlags(fss.FlagSet("generic"))
+	o.ServerRunOptions.AddFlags(fss.FlagSet("generic"))
 	o.InsecureServingOptions.AddFlags(fss.FlagSet("insecure serving"))
 	o.FeatureOptions.AddFlags(fss.FlagSet("features"))
 	o.MySQLOptions.AddFlags(fss.FlagSet("mysql"))

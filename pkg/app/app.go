@@ -64,13 +64,13 @@ type App struct {
 	short string
 	long  string
 	// options
-	options  CliOptions
-	cmd      *cobra.Command
-	commands []*Command
-	args     cobra.PositionalArgs
-	runFunc  RunFunc
-	silence  bool
-	noConfig bool
+	options   CliOptions
+	cmd       *cobra.Command
+	commands  []*Command
+	args      cobra.PositionalArgs
+	runFunc   RunFunc
+	silence   bool
+	useConfig bool // Use config file
 }
 
 type Option func(*App)
@@ -83,9 +83,9 @@ func WithLong(desc string) Option {
 	}
 }
 
-func WithFlags(flags CliOptions) Option {
+func WithOptions(opt CliOptions) Option {
 	return func(app *App) {
-		app.options = flags
+		app.options = opt
 	}
 }
 
@@ -101,9 +101,9 @@ func WithSilence(silence bool) Option {
 	}
 }
 
-func WithNoConfig(noConfig bool) Option {
+func WithUseConfig(noConfig bool) Option {
 	return func(app *App) {
-		app.noConfig = noConfig
+		app.useConfig = noConfig
 	}
 }
 
@@ -126,14 +126,13 @@ func WithDefaultValidArgs() Option {
 	}
 }
 
-// NewApp 用户创建新的应用
-// 	use 命令名称
-// 	short 短介绍
+// NewApp create a new app.
 func NewApp(use string, short string, opts ...Option) *App {
 	app := &App{
-		use:     use,
-		short:   short,
-		silence: true,
+		use:       use,
+		short:     short,
+		silence:   true,
+		useConfig: true,
 	}
 
 	for _, opt := range opts {
@@ -155,12 +154,12 @@ func (a *App) buildCmd() {
 		Args:          a.args,
 	}
 
-	cliflag.InitFlags(cmd.Flags())
 	cmd.SetOut(os.Stdout)
 	cmd.SetErr(os.Stderr)
 	cmd.Flags().SortFlags = true
+	cliflag.InitFlags(cmd.Flags())
 
-	// 如果子命令不为空，则追加子命令
+	// If you have child command, append child command
 	if len(a.commands) > 0 {
 		for _, command := range a.commands {
 			cmd.AddCommand(command.cobraCommand())
@@ -181,8 +180,8 @@ func (a *App) buildCmd() {
 			fs.AddFlagSet(f)
 		}
 	}
-	// 指定了配置文件，则读取配置文件
-	if !a.noConfig {
+	// 使用配置文件，则读取配置文件
+	if a.useConfig {
 		addConfigFlag(a.use, namedFlagSets.FlagSet("global"))
 	}
 
@@ -195,12 +194,13 @@ func (a *App) runE(cmd *cobra.Command, args []string) error {
 	// Output flags
 	// cliflag.PrintFlags(cmd.Flags())
 
-	// Use default config file
-	if !a.noConfig {
+	// Use config file
+	if a.useConfig {
+		// Merge flags and config file
 		if err := viper.BindPFlags(cmd.Flags()); err != nil {
 			return err
 		}
-
+		// TODO BUG!
 		if err := viper.Unmarshal(a.options); err != nil {
 			return err
 		}
@@ -239,7 +239,6 @@ func (a *App) applyOptionRules() error {
 }
 
 func (a *App) Run() {
-
 	if err := a.cmd.Execute(); err != nil {
 		fmt.Printf("%s \n", color.RedString("Error: %v", err.Error()))
 		os.Exit(1)
