@@ -14,11 +14,11 @@ import (
 )
 
 type Options struct {
-	ServerRunOptions       *genericoptions.ServerRunOptions
-	InsecureServingOptions *genericoptions.InsecureServingOptions
-	FeatureOptions         *genericoptions.FeatureOptions
-	MySQLOptions           *genericoptions.MySQLOptions
-	RedisOptions           *genericoptions.RedisOptions
+	ServerRunOptions       *genericoptions.ServerRunOptions       `json:"server" mapstructure:"server"`
+	InsecureServingOptions *genericoptions.InsecureServingOptions `json:"insecure" mapstructure:"insecure"`
+	FeatureOptions         *genericoptions.FeatureOptions         `json:"feature" mapstructure:"feature"`
+	MySQLOptions           *genericoptions.MySQLOptions           `json:"mysql" mapstructure:"mysql"`
+	RedisOptions           *genericoptions.RedisOptions           `json:"redis" mapstructure:"redis"`
 }
 
 func NewOptions() *Options {

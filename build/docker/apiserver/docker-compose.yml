@@ -24,7 +24,7 @@ services:
     container_name: blog-redis
 
   mysql:
-    image: msyql:5.7
+    image: mysql:5.7
     networks:
       - blog
     ports:
@@ -45,7 +45,7 @@ services:
       - blog
     ports:
       - "8080:8080"
-    container_name: blog-apiserver.yaml
+    container_name: blog-apiserver
 
 volumes:
   blog-redis-conf:

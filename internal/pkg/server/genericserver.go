@@ -22,9 +22,7 @@ import (
 	"golang.org/x/sync/errgroup"
 )
 
-type GenericAPIServer struct {
-	middlewares []string
-	mode        string
+type GenericServer struct {
 	// SecureServingInfo holds configuration of the TLS server.
 	SecureServingInfo *SecureServingInfo
 
@@ -32,23 +30,25 @@ type GenericAPIServer struct {
 	InsecureServingInfo *InsecureServingInfo
 	ShutdownTimeout     time.Duration
 
-	*gin.Engine
+	middlewares     []string
+	mode            string
 	health          bool
 	enableMetrics   bool
 	enableProfiling bool
 
 	insecureServer *http.Server
 	secureServer   *http.Server
+	*gin.Engine
 }
 
-func initGenericAPIServer(s *GenericAPIServer) {
+func initGenericAPIServer(s *GenericServer) {
 	s.Setup()
 	s.InstallMiddlewares()
 	s.InstallAPIs()
 }
 
 // Setup do some setup work before the service starts
-func (s *GenericAPIServer) Setup() {
+func (s *GenericServer) Setup() {
 	// gin.DebugPrintRouteFunc = func(httpMethod, absolutePath, handlerName string, nuHandlers int) {
 	// 	// TODO 换成日志包输出
 	// 	fmt.Printf("%-6s %-s --> %s (%d handlers)", httpMethod, absolutePath, handlerName, nuHandlers)
@@ -56,23 +56,22 @@ func (s *GenericAPIServer) Setup() {
 }
 
 // InstallMiddlewares install global middlewares
-func (s *GenericAPIServer) InstallMiddlewares() {
-	fmt.Println(s.middlewares)
-	s.middlewares = append(s.middlewares, necessaryMiddlewares...)
+func (s *GenericServer) InstallMiddlewares() {
 	for _, m := range s.middlewares {
 		// MiddlewareName | Middleware-name | Middleware.Name => middleware-name
-		formatMw := strings.ToLower(strings.NewReplacer(".", "_", "-", "_").Replace(m))
+		formatMw := strings.ToLower(strings.NewReplacer(".", "-", "_", "-").Replace(m))
 		mw, ok := middleware.Middlewares[formatMw]
 		if !ok {
 			log.Fatalf("can not find middleware: %s", m)
 		}
+		fmt.Printf("installed middleware: %s\n", formatMw)
 
 		s.Use(mw)
 	}
 }
 
 // InstallAPIs install generic apis
-func (s *GenericAPIServer) InstallAPIs() {
+func (s *GenericServer) InstallAPIs() {
 	if s.health {
 		s.GET("/health", func(c *gin.Context) {
 			c.JSON(http.StatusOK, gin.H{
@@ -95,7 +94,7 @@ func (s *GenericAPIServer) InstallAPIs() {
 	// TODO 版本管理功能
 }
 
-func (s *GenericAPIServer) Run() error {
+func (s *GenericServer) Run() error {
 	// http
 	s.insecureServer = &http.Server{
 		Addr:    s.InsecureServingInfo.Host,
@@ -141,7 +140,7 @@ func (s *GenericAPIServer) Run() error {
 	return nil
 }
 
-func (s *GenericAPIServer) ping(ctx context.Context) error {
+func (s *GenericServer) ping(ctx context.Context) error {
 	url := fmt.Sprintf("http://%s/healthz", s.InsecureServingInfo.Host)
 	if strings.Contains(s.InsecureServingInfo.Host, "0.0.0.0") {
 		url = fmt.Sprintf("http://127.0.0.1:%s/healthz", strings.Split(s.InsecureServingInfo.Host, ":")[1])
@@ -172,7 +171,7 @@ func (s *GenericAPIServer) ping(ctx context.Context) error {
 }
 
 // Close graceful shutdown the api server
-func (s *GenericAPIServer) Close() {
+func (s *GenericServer) Close() {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 

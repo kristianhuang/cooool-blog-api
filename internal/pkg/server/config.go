@@ -68,8 +68,8 @@ func (c *Config) Complete() CompletedConfig {
 	return CompletedConfig{c}
 }
 
-func (c CompletedConfig) NewGenericAPIServer() (*GenericAPIServer, error) {
-	s := &GenericAPIServer{
+func (c CompletedConfig) CreateGenericAPIServer() (*GenericServer, error) {
+	s := &GenericServer{
 		SecureServingInfo:   c.SecureServing,
 		InsecureServingInfo: c.InsecureServing,
 		mode:                c.Mode,

@@ -101,9 +101,9 @@ func WithSilence(silence bool) Option {
 	}
 }
 
-func WithUseConfig(noConfig bool) Option {
+func WithUseConfig(useConfig bool) Option {
 	return func(app *App) {
-		app.useConfig = noConfig
+		app.useConfig = useConfig
 	}
 }
 
@@ -186,7 +186,6 @@ func (a *App) buildCmd() {
 	}
 
 	addCmdTemplate(&cmd, namedFlagSets)
-
 	a.cmd = &cmd
 }
 
@@ -200,10 +199,11 @@ func (a *App) runE(cmd *cobra.Command, args []string) error {
 		if err := viper.BindPFlags(cmd.Flags()); err != nil {
 			return err
 		}
-		// TODO BUG!
+
 		if err := viper.Unmarshal(a.options); err != nil {
 			return err
 		}
+
 	}
 
 	if a.options != nil {

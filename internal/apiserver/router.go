@@ -23,5 +23,6 @@ func initRouter(eg *gin.Engine) *gin.Engine {
 	for _, r := range Routes {
 		r(eg)
 	}
+
 	return eg
 }

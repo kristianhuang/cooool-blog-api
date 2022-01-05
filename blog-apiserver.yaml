@@ -1,7 +1,10 @@
 server:
   model: debug #server mode: release, debug(default), test
   health: false # 是否开启健康检测，如果开启，则插入 /health 路由
-  middlewares: recovery,cors
+  middlewares: # server global middlewares
+    - recovery
+    - requestid
+    - cors
   max-ping-count: 3
 
 insecure:

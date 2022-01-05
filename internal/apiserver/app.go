@@ -39,7 +39,7 @@ func createRunFunc(opts *options.Options) app.RunFunc {
 }
 
 func Run(conf *config.Config) error {
-	server, err := createAPIServer(conf)
+	server, err := createServer(conf)
 	if err != nil {
 		return err
 	}

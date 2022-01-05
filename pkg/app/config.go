@@ -56,7 +56,7 @@ func addConfigFlag(use string, fs *pflag.FlagSet) {
 	})
 }
 
-func printConf() {
+func PrintConfig() {
 	keys := viper.AllKeys()
 	if len(keys) > 0 {
 		fmt.Printf("%v Config items:\n", progressMessage)
