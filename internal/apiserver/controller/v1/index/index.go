@@ -7,6 +7,7 @@
 package index
 
 import (
+	"fmt"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -18,6 +19,7 @@ type IndexController struct {
 
 func (ic IndexController) Index(c *gin.Context) {
 	list := viper.AllSettings()
+	fmt.Println(1233)
 	c.JSON(http.StatusOK, gin.H{"list": list})
 }
 

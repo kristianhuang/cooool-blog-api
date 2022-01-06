@@ -19,16 +19,15 @@ import (
 	"github.com/gin-contrib/pprof"
 	"github.com/gin-gonic/gin"
 	promethium "github.com/zsais/go-gin-prometheus"
-	"golang.org/x/sync/errgroup"
 )
 
 type GenericServer struct {
 	// SecureServingInfo holds configuration of the TLS server.
-	SecureServingInfo *SecureServingInfo
+	// SecureServingInfo *SecureServingInfo
 
 	// InsecureServingInfo holds configuration of the insecure HTTP server.
 	InsecureServingInfo *InsecureServingInfo
-	ShutdownTimeout     time.Duration
+	// ShutdownTimeout     time.Duration
 
 	middlewares     []string
 	mode            string
@@ -43,12 +42,14 @@ type GenericServer struct {
 
 func initGenericAPIServer(s *GenericServer) {
 	s.Setup()
-	s.InstallMiddlewares()
-	s.InstallAPIs()
+	// s.InstallMiddlewares()
+	// s.InstallAPIs()
 }
 
 // Setup do some setup work before the service starts
 func (s *GenericServer) Setup() {
+	gin.SetMode(s.mode)
+
 	// gin.DebugPrintRouteFunc = func(httpMethod, absolutePath, handlerName string, nuHandlers int) {
 	// 	// TODO 换成日志包输出
 	// 	fmt.Printf("%-6s %-s --> %s (%d handlers)", httpMethod, absolutePath, handlerName, nuHandlers)
@@ -95,10 +96,17 @@ func (s *GenericServer) InstallAPIs() {
 }
 
 func (s *GenericServer) Run() error {
-	// http
+	// TODO 排插到服务器无法访问的问题，原因尚未查明
+	// Addr: "127.0.0.1:8080" mac 下可以正常访问 centos7 下不行
+	// Addr: ":8080" 都可以正常访问
 	s.insecureServer = &http.Server{
-		Addr:    s.InsecureServingInfo.Host,
-		Handler: s,
+		Addr:    s.InsecureServingInfo.Address(),
+		Handler: s.Engine,
+	}
+
+	if err := s.insecureServer.ListenAndServe(); err != nil && !errors.Is(err, http.ErrServerClosed) {
+		log.Fatal(err.Error())
+		return err
 	}
 
 	// https
@@ -107,35 +115,28 @@ func (s *GenericServer) Run() error {
 	// 	Handler: s,
 	// }
 
-	var eg errgroup.Group
-
-	eg.Go(func() error {
-		if err := s.insecureServer.ListenAndServe(); err != nil && !errors.Is(err, http.ErrServerClosed) {
-			log.Fatal(err.Error())
-			return err
-		}
-
-		return nil
-	})
-
-	// https server
-	// eg.Go(func() error {
+	// var eg errgroup.Group
 	//
+	// eg.Go(func() error {
+	// 	if err := s.insecureServer.ListenAndServe(); err != nil && !errors.Is(err, http.ErrServerClosed) {
+	// 		log.Fatal(err.Error())
+	// 		return err
+	// 	}
 	//
 	// 	return nil
 	// })
-
-	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
-	defer cancel()
-	if s.health {
-		if err := s.ping(ctx); err != nil {
-			return err
-		}
-	}
-
-	if err := eg.Wait(); err != nil {
-		log.Fatal(err.Error())
-	}
+	//
+	// ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	// defer cancel()
+	// if s.health {
+	// 	if err := s.ping(ctx); err != nil {
+	// 		return err
+	// 	}
+	// }
+	//
+	// if err := eg.Wait(); err != nil {
+	// 	log.Fatal(err.Error())
+	// }
 
 	return nil
 }

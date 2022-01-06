@@ -48,13 +48,13 @@ func createServer(config *config.Config) (*apiServer, error) {
 		return nil, err
 	}
 
-	genericServer, err := genericServerConfig.Complete().CreateGenericAPIServer()
+	genericAPIServer, err := genericServerConfig.Complete().CreateGenericServer()
 	if err != nil {
 		return nil, err
 	}
 
 	server := &apiServer{
-		genericServer: genericServer,
+		genericServer: genericAPIServer,
 	}
 
 	return server, nil

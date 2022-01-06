@@ -191,7 +191,7 @@ func (a *App) buildCmd() {
 
 func (a *App) runE(cmd *cobra.Command, args []string) error {
 	// Output flags
-	// cliflag.PrintFlags(cmd.Flags())
+	cliflag.PrintFlags(cmd.Flags())
 
 	// Use config file
 	if a.useConfig {

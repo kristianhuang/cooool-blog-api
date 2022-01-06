@@ -42,11 +42,17 @@ type SecureServingInfo struct {
 
 type InsecureServingInfo struct {
 	Host string
+	Port int
 }
 
-// Address return host:port
+// Address return host:port.
 func (s *SecureServingInfo) Address() string {
 	return net.JoinHostPort(s.Host, strconv.Itoa(s.Port))
+}
+
+// Address return host:port.
+func (i *InsecureServingInfo) Address() string {
+	return net.JoinHostPort(i.Host, strconv.Itoa(i.Port))
 }
 
 func NewConfig() *Config {
@@ -56,6 +62,10 @@ func NewConfig() *Config {
 		Middlewares:     []string{},
 		EnableProfiling: true,
 		EnableMetrics:   true,
+		InsecureServing: &InsecureServingInfo{
+			Host: "127.0.0.1",
+			Port: 8080,
+		},
 	}
 }
 
@@ -68,16 +78,16 @@ func (c *Config) Complete() CompletedConfig {
 	return CompletedConfig{c}
 }
 
-func (c CompletedConfig) CreateGenericAPIServer() (*GenericServer, error) {
+func (c CompletedConfig) CreateGenericServer() (*GenericServer, error) {
 	s := &GenericServer{
-		SecureServingInfo:   c.SecureServing,
+		// SecureServingInfo:   c.SecureServing,
 		InsecureServingInfo: c.InsecureServing,
+		Engine:              gin.New(),
 		mode:                c.Mode,
 		health:              c.Health,
 		enableProfiling:     c.EnableProfiling,
 		enableMetrics:       c.EnableMetrics,
 		middlewares:         c.Middlewares,
-		Engine:              gin.New(),
 	}
 
 	initGenericAPIServer(s)

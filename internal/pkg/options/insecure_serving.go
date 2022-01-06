@@ -8,8 +8,6 @@ package options
 
 import (
 	"fmt"
-	"net"
-	"strconv"
 
 	"blog-go/internal/pkg/server"
 	"github.com/spf13/pflag"
@@ -28,9 +26,8 @@ func NewInsecureServingOptions() *InsecureServingOptions {
 }
 
 func (o *InsecureServingOptions) ApplyTo(c *server.Config) error {
-	c.InsecureServing = &server.InsecureServingInfo{
-		Host: net.JoinHostPort(o.Host, strconv.Itoa(o.Port)),
-	}
+	c.InsecureServing.Host = o.Host
+	c.InsecureServing.Port = o.Port
 
 	return nil
 }
