@@ -7,7 +7,7 @@
 package apiserver
 
 import (
-	"blog-go/internal/apiserver/route"
+	"blog-api/internal/apiserver/route"
 	"github.com/gin-gonic/gin"
 )
 
@@ -16,6 +16,7 @@ type Route func(engine *gin.Engine)
 var (
 	Routes = []Route{
 		route.Index,
+		route.AdminUser,
 	}
 )
 

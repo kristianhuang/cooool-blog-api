@@ -9,7 +9,7 @@ package options
 import (
 	"time"
 
-	"blog-go/internal/pkg/db"
+	"blog-api/pkg/db"
 	"github.com/spf13/pflag"
 	"gorm.io/gorm"
 )
@@ -41,16 +41,15 @@ func NewMySQLOptions() *MySQLOptions {
 }
 
 func (o *MySQLOptions) AddFlags(fs *pflag.FlagSet) {
-	fs.StringVar(&o.Host, "mysql.host", o.Host, "MySQL host")
-	fs.IntVar(&o.Port, "mysql.port", o.Port, "MySQL port")
-	fs.StringVar(&o.Username, "mysql.username", o.Username, "MySQL username")
-	fs.StringVar(&o.Password, "mysql.password", o.Password, "MySQL password")
-	fs.StringVar(&o.Database, "mysql.database", o.Database, "MySQL database")
-	fs.IntVar(&o.MaxIdleConnections, "mysql.max-idle-connections", o.MaxIdleConnections, "MySQL max-idle-connections")
-	fs.IntVar(&o.MaxOpenConnections, "mysql.xax-open-connections", o.MaxOpenConnections, "MySQL xax-open-connections")
-	fs.DurationVar(&o.MaxConnectionLifeTime, "mysql.max-connection-life-time", o.MaxConnectionLifeTime, "MySQL max-connection-life-time")
-	fs.IntVar(&o.LogLevel, "mysql.log-mode", o.LogLevel, ""+
-		"GORM log level")
+	fs.StringVar(&o.Host, "db.host", o.Host, "MySQL host")
+	fs.IntVar(&o.Port, "db.port", o.Port, "MySQL port")
+	fs.StringVar(&o.Username, "db.username", o.Username, "MySQL username")
+	fs.StringVar(&o.Password, "db.password", o.Password, "MySQL password")
+	fs.StringVar(&o.Database, "db.database", o.Database, "MySQL database")
+	fs.IntVar(&o.MaxIdleConnections, "db.max-idle-connections", o.MaxIdleConnections, "MySQL max-idle-connections")
+	fs.IntVar(&o.MaxOpenConnections, "db.xax-open-connections", o.MaxOpenConnections, "MySQL xax-open-connections")
+	fs.DurationVar(&o.MaxConnectionLifeTime, "db.max-connection-life-time", o.MaxConnectionLifeTime, "MySQL max-connection-life-time")
+	fs.IntVar(&o.LogLevel, "db.log-mode", o.LogLevel, "GORM log level")
 }
 
 func (o *MySQLOptions) Validate() []error {

@@ -12,7 +12,7 @@ import (
 	"path/filepath"
 	"strings"
 
-	"blog-go/pkg/path/dir"
+	"blog-api/pkg/path/dir"
 	"github.com/gosuri/uitable"
 	"github.com/spf13/cobra"
 	"github.com/spf13/pflag"
@@ -56,7 +56,7 @@ func addConfigFlag(use string, fs *pflag.FlagSet) {
 	})
 }
 
-func PrintConfig() {
+func printConfig() {
 	keys := viper.AllKeys()
 	if len(keys) > 0 {
 		fmt.Printf("%v Config items:\n", progressMessage)

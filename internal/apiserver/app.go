@@ -7,9 +7,9 @@
 package apiserver
 
 import (
-	"blog-go/internal/apiserver/config"
-	"blog-go/internal/apiserver/options"
-	"blog-go/pkg/app"
+	"blog-api/internal/apiserver/config"
+	"blog-api/internal/apiserver/options"
+	"blog-api/pkg/app"
 )
 
 const commandDesc = `Welcome to use Blog-API`

@@ -1,14 +1,14 @@
-module blog-go
+module blog-api
 
-go 1.17
+        go 1.17
 
-require (
-	github.com/buger/jsonparser v1.1.1
-	github.com/fatih/color v1.13.0
-	github.com/gin-contrib/cors v1.3.1
-	github.com/gin-contrib/pprof v1.3.0
-	github.com/gin-gonic/gin v1.7.7
-	github.com/google/uuid v1.1.2
+        require (
+        github.com/buger/jsonparser v1.1.1
+        github.com/fatih/color v1.13.0
+        github.com/gin-contrib/cors v1.3.1
+        github.com/gin-contrib/pprof v1.3.0
+        github.com/gin-gonic/gin v1.7.7
+        github.com/google/uuid v1.1.2
 	github.com/gosuri/uitable v0.0.4
 	github.com/moby/term v0.0.0-20210619224110-3f7ff695adc6
 	github.com/satori/go.uuid v1.2.0

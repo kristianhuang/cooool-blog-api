@@ -10,10 +10,11 @@ server:
 insecure:
   host: 127.0.0.1
   port: 8080
+  reverse-proxy: true # nginx 反向代理，如果不开启，则使用 0.0.0.0，
 
 mysql:
   host: 127.0.0.1 # default 127.0.0.1
-  port: 3306 # default 3306
+  port: 33066 # default 3306
   username: root
   password: g&J3aw7NGSkP
   max-idle-connections: 100 # 最大空闲连接数

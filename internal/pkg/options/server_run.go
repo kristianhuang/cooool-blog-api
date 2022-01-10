@@ -7,7 +7,7 @@
 package options
 
 import (
-	"blog-go/internal/pkg/server"
+	"blog-api/internal/pkg/server"
 	"github.com/spf13/pflag"
 )
 

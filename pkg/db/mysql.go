@@ -28,7 +28,7 @@ type MysqlOptions struct {
 	Logger                logger.Interface
 }
 
-// New create gorm DB
+// New create Mysql DB
 func New(opts *MysqlOptions) (*gorm.DB, error) {
 	dsn := fmt.Sprintf(`%s:%s@tcp(%s:%v)/%s?charset=utf8&parseTime=%t&loc=%s`,
 		opts.Username,

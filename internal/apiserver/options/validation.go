@@ -6,10 +6,12 @@
 
 package options
 
+// Validate checks options and return errors.
 func (o *Options) Validate() []error {
 	var errs []error
-	errs = append(errs, o.ServerRunOptions.Validate()...)
 	errs = append(errs, o.MySQLOptions.Validate()...)
+	errs = append(errs, o.InsecureServingOptions.Validate()...)
+	errs = append(errs, o.RedisOptions.Validate()...)
 
 	return errs
 }

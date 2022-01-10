@@ -12,7 +12,7 @@ import (
 	"runtime"
 	"time"
 
-	"blog-go/internal/apiserver"
+	"blog-api/internal/apiserver"
 )
 
 func main() {

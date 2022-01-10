@@ -7,8 +7,8 @@
 package app
 
 import (
-	cliflag "blog-go/pkg/cli/flag"
-	"blog-go/pkg/terminal"
+	cliflag "blog-api/pkg/cli/flag"
+	"blog-api/pkg/terminal"
 	"fmt"
 	"github.com/fatih/color"
 	"github.com/spf13/cobra"

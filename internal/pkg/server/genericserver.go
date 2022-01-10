@@ -15,7 +15,7 @@ import (
 	"strings"
 	"time"
 
-	"blog-go/internal/pkg/middleware"
+	"blog-api/internal/pkg/middleware"
 	"github.com/gin-contrib/pprof"
 	"github.com/gin-gonic/gin"
 	promethium "github.com/zsais/go-gin-prometheus"
@@ -59,7 +59,6 @@ func (s *GenericServer) Setup() {
 // InstallMiddlewares install global middlewares
 func (s *GenericServer) InstallMiddlewares() {
 	for _, m := range s.middlewares {
-		// MiddlewareName | Middleware-name | Middleware.Name => middleware-name
 		formatMw := strings.ToLower(strings.NewReplacer(".", "-", "_", "-").Replace(m))
 		mw, ok := middleware.Middlewares[formatMw]
 		if !ok {

@@ -13,7 +13,7 @@ import (
 	"strconv"
 	"strings"
 
-	"blog-go/pkg/path/dir"
+	"blog-api/pkg/path/dir"
 	"github.com/gin-gonic/gin"
 	"github.com/spf13/viper"
 )
@@ -36,23 +36,33 @@ type Config struct {
 }
 
 type SecureServingInfo struct {
-	Host string
-	Port int
+	Host         string
+	Port         int
+	ReverseProxy bool
 }
 
 type InsecureServingInfo struct {
-	Host string
-	Port int
+	Host         string
+	Port         int
+	ReverseProxy bool
 }
 
 // Address return host:port.
 func (s *SecureServingInfo) Address() string {
-	return net.JoinHostPort(s.Host, strconv.Itoa(s.Port))
+	if s.ReverseProxy {
+		return net.JoinHostPort(s.Host, strconv.Itoa(s.Port))
+	} else {
+		return ":" + strconv.Itoa(s.Port)
+	}
 }
 
 // Address return host:port.
 func (i *InsecureServingInfo) Address() string {
-	return net.JoinHostPort(i.Host, strconv.Itoa(i.Port))
+	if i.ReverseProxy {
+		return net.JoinHostPort(i.Host, strconv.Itoa(i.Port))
+	} else {
+		return ":" + strconv.Itoa(i.Port)
+	}
 }
 
 func NewConfig() *Config {

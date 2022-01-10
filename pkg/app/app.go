@@ -10,53 +10,14 @@ import (
 	"fmt"
 	"os"
 
-	cliflag "blog-go/pkg/cli/flag"
+	cliflag "blog-api/pkg/cli/flag"
 	"github.com/fatih/color"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )
 
 var (
-	progressMessage = color.GreenString("==>")
-
-	commandDesc = `Welcome to api-server`
-
-	usageTemplate = fmt.Sprintf(`%s{{if .Runnable}}
-  %s{{end}}{{if .HasAvailableSubCommands}}
-  %s{{end}}{{if gt (len .Aliases) 0}}
-
-%s
-  {{.NameAndAliases}}{{end}}{{if .HasExample}}
-
-%s
-{{.Example}}{{end}}{{if .HasAvailableSubCommands}}
-
-%s{{range .Commands}}{{if (or .IsAvailableCommand (eq .Name "help"))}}
-  %s {{.Short}}{{end}}{{end}}{{end}}{{if .HasAvailableLocalFlags}}
-
-%s
-{{.LocalFlags.FlagUsages | trimTrailingWhitespaces}}{{end}}{{if .HasAvailableInheritedFlags}}
-
-%s
-{{.InheritedFlags.FlagUsages | trimTrailingWhitespaces}}{{end}}{{if .HasHelpSubCommands}}
-
-%s{{range .Commands}}{{if .IsAdditionalHelpTopicCommand}}
-  {{rpad .CommandPath .CommandPathPadding}} {{.Short}}{{end}}{{end}}{{end}}{{if .HasAvailableSubCommands}}
-
-Use "%s --help" for more information about a command.{{end}}
-`,
-		color.CyanString("Usage:"),
-		color.GreenString("{{.UseLine}}"),
-		color.GreenString("{{.CommandPath}} [command]"),
-		color.CyanString("Aliases:"),
-		color.CyanString("Examples:"),
-		color.CyanString("Available Commands:"),
-		color.GreenString("{{rpad .Name .NamePadding }}"),
-		color.CyanString("Flags:"),
-		color.CyanString("Global Flags:"),
-		color.CyanString("Additional help topics:"),
-		color.GreenString("{{.CommandPath}} [command]"),
-	)
+	progressMessage = color.GreenString("============>")
 )
 
 type App struct {
@@ -159,7 +120,6 @@ func (a *App) buildCmd() {
 	cmd.Flags().SortFlags = true
 	cliflag.InitFlags(cmd.Flags())
 
-	// If you have child command, append child command
 	if len(a.commands) > 0 {
 		for _, command := range a.commands {
 			cmd.AddCommand(command.cobraCommand())
@@ -180,7 +140,7 @@ func (a *App) buildCmd() {
 			fs.AddFlagSet(f)
 		}
 	}
-	// 使用配置文件，则读取配置文件
+
 	if a.useConfig {
 		addConfigFlag(a.use, namedFlagSets.FlagSet("global"))
 	}
@@ -190,12 +150,13 @@ func (a *App) buildCmd() {
 }
 
 func (a *App) runE(cmd *cobra.Command, args []string) error {
-	// Output flags
+
+	printWorkingDir()
 	cliflag.PrintFlags(cmd.Flags())
 
 	// Use config file
 	if a.useConfig {
-		// Merge flags and config file
+		// Merge options and config file
 		if err := viper.BindPFlags(cmd.Flags()); err != nil {
 			return err
 		}
@@ -203,7 +164,6 @@ func (a *App) runE(cmd *cobra.Command, args []string) error {
 		if err := viper.Unmarshal(a.options); err != nil {
 			return err
 		}
-
 	}
 
 	if a.options != nil {
@@ -247,4 +207,10 @@ func (a *App) Run() {
 
 func (a App) Command() *cobra.Command {
 	return a.cmd
+}
+
+func printWorkingDir() {
+	wd, _ := os.Getwd()
+	fmt.Println(color.GreenString("\n%s\n", "======== WorkingDir ========"))
+	fmt.Println(wd)
 }

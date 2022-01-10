@@ -9,13 +9,14 @@ package options
 import (
 	"fmt"
 
-	"blog-go/internal/pkg/server"
+	"blog-api/internal/pkg/server"
 	"github.com/spf13/pflag"
 )
 
 type InsecureServingOptions struct {
-	Host string `json:"host" mapstructure:"host"`
-	Port int    `json:"port" mapstructure:"port"`
+	Host         string `json:"host" mapstructure:"host"`
+	Port         int    `json:"port" mapstructure:"port"`
+	ReverseProxy bool   `json:"reverse_proxy" mapstructure:"reverse_proxy"`
 }
 
 func NewInsecureServingOptions() *InsecureServingOptions {
@@ -28,7 +29,7 @@ func NewInsecureServingOptions() *InsecureServingOptions {
 func (o *InsecureServingOptions) ApplyTo(c *server.Config) error {
 	c.InsecureServing.Host = o.Host
 	c.InsecureServing.Port = o.Port
-
+	c.InsecureServing.ReverseProxy = o.ReverseProxy
 	return nil
 }
 
@@ -45,4 +46,5 @@ func (o *InsecureServingOptions) Validate() []error {
 func (o InsecureServingOptions) AddFlags(fs *pflag.FlagSet) {
 	fs.StringVar(&o.Host, "insecure.host", o.Host, "API server host")
 	fs.IntVar(&o.Port, "insecure.port", o.Port, "API server port")
+	fs.BoolVar(&o.ReverseProxy, "insecure.reverse-proxy", o.ReverseProxy, "If true, addr host:port, need bind nginx reverse proxy, else addr 0.0.0.0:port (default false)")
 }

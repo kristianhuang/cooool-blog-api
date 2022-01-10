@@ -9,15 +9,15 @@ package options
 import (
 	"encoding/json"
 
-	genericoptions "blog-go/internal/pkg/options"
-	"blog-go/pkg/cli/flag"
+	genericoptions "blog-api/internal/pkg/options"
+	"blog-api/pkg/cli/flag"
 )
 
 type Options struct {
 	ServerRunOptions       *genericoptions.ServerRunOptions       `json:"server" mapstructure:"server"`
 	InsecureServingOptions *genericoptions.InsecureServingOptions `json:"insecure" mapstructure:"insecure"`
 	FeatureOptions         *genericoptions.FeatureOptions         `json:"feature" mapstructure:"feature"`
-	MySQLOptions           *genericoptions.MySQLOptions           `json:"mysql" mapstructure:"mysql"`
+	MySQLOptions           *genericoptions.MySQLOptions           `json:"db" mapstructure:"db"`
 	RedisOptions           *genericoptions.RedisOptions           `json:"redis" mapstructure:"redis"`
 }
 
@@ -35,7 +35,7 @@ func (o *Options) Flags() (fss flag.NamedFlagSets) {
 	o.ServerRunOptions.AddFlags(fss.FlagSet("generic"))
 	o.InsecureServingOptions.AddFlags(fss.FlagSet("insecure serving"))
 	o.FeatureOptions.AddFlags(fss.FlagSet("features"))
-	o.MySQLOptions.AddFlags(fss.FlagSet("mysql"))
+	o.MySQLOptions.AddFlags(fss.FlagSet("db"))
 	o.RedisOptions.AddFlags(fss.FlagSet("redis"))
 	return fss
 }

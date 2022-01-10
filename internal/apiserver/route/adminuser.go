@@ -7,17 +7,17 @@
 package route
 
 import (
-	"blog-api/internal/apiserver/controller/v1/index"
+	"blog-api/internal/apiserver/controller/v1/adminuser"
 	"github.com/gin-gonic/gin"
 )
 
-func Index(e *gin.Engine) {
+func AdminUser(e *gin.Engine) {
 	v1 := e.Group(V1)
 	{
-		indexV1 := v1.Group("/index")
+		adminUserV1 := v1.Group("/admin_user")
 		{
-			indexController := index.NewIndexController()
-			indexV1.GET("/", indexController.Index)
+			adminUserController := adminuser.NewController()
+			adminUserV1.GET("/index", adminUserController.List)
 		}
 	}
 }

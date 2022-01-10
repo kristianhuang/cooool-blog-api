@@ -1,6 +1,6 @@
 package config
 
-import "blog-go/internal/apiserver/options"
+import "blog-api/internal/apiserver/options"
 
 type Config struct {
 	*options.Options

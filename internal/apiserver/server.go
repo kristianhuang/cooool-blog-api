@@ -7,9 +7,9 @@
 package apiserver
 
 import (
-	"blog-go/internal/apiserver/config"
-	genericapiserver "blog-go/internal/pkg/server"
-	"blog-go/internal/pkg/shutdown"
+	"blog-api/internal/apiserver/config"
+	genericapiserver "blog-api/internal/pkg/server"
+	"blog-api/internal/pkg/shutdown"
 )
 
 type apiServer struct {

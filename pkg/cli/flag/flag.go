@@ -54,5 +54,6 @@ func PrintFlags(flags *pflag.FlagSet) {
 	flags.VisitAll(func(flag *pflag.Flag) {
 		log.Printf("FLAG: --%s=%q", flag.Name, flag.Value)
 	})
-	fmt.Println(color.GreenString("\n%s\n", "======== Flags ========"))
+
+	fmt.Println("")
 }

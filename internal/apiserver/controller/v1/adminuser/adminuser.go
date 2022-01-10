@@ -4,25 +4,23 @@
  * license that can be found in the LICENSE file.
  */
 
-package index
+package adminuser
 
 import (
-	"fmt"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	"github.com/spf13/viper"
 )
 
 type Controller struct {
 }
 
-func (ic *Controller) Index(c *gin.Context) {
-	list := viper.AllSettings()
-	fmt.Println(1233)
-	c.JSON(http.StatusOK, gin.H{"list": list})
+func NewController() *Controller {
+	return &Controller{}
 }
 
-func NewIndexController() *Controller {
-	return &Controller{}
+func (c *Controller) List(ctx *gin.Context) {
+	ctx.JSON(http.StatusOK, gin.H{
+		"data": "hello world",
+	})
 }
