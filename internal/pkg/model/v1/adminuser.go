@@ -12,8 +12,8 @@ import (
 
 type AdminUser struct {
 	metav1.ObjectMeta `json:"meta_data,omitempty"`
-	ID                int64  `json:"id" gorm:"primaryKey;autoIncrement"`
-	Account           string `json:"account" gorm:"not null"`
+	ID                int64  `json:"id" gormutil:"primaryKey;autoIncrement"`
+	Account           string `json:"account" gormutil:"not null"`
 }
 
 type AdminUserList struct {
