@@ -11,7 +11,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-type Route func(engine *gin.Engine)
+type Route func(e *gin.Engine)
 
 var (
 	Routes = []Route{
@@ -20,10 +20,10 @@ var (
 	}
 )
 
-func initRouter(eg *gin.Engine) *gin.Engine {
+func initRouter(e *gin.Engine) *gin.Engine {
 	for _, r := range Routes {
-		r(eg)
+		r(e)
 	}
 
-	return eg
+	return e
 }
