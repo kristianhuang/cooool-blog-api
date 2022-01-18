@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 SuperPony <superponyyy@gmail.com>. All rights reserved.
+ * Copyright 2021 Kristian Huang <kristianhuang007@gmail.com>. All rights reserved.
  * Use of this source code is governed by a MIT style
  * license that can be found in the LICENSE file.
  */
@@ -14,9 +14,8 @@ import (
 )
 
 type InsecureServingOptions struct {
-	Host         string `json:"host" mapstructure:"host"`
-	Port         int    `json:"port" mapstructure:"port"`
-	ReverseProxy bool   `json:"reverse_proxy" mapstructure:"reverse_proxy"`
+	Host string `json:"host" mapstructure:"host"`
+	Port int    `json:"port" mapstructure:"port"`
 }
 
 func NewInsecureServingOptions() *InsecureServingOptions {
@@ -29,7 +28,6 @@ func NewInsecureServingOptions() *InsecureServingOptions {
 func (o *InsecureServingOptions) ApplyTo(c *server.Config) error {
 	c.InsecureServing.Host = o.Host
 	c.InsecureServing.Port = o.Port
-	c.InsecureServing.ReverseProxy = o.ReverseProxy
 	return nil
 }
 
@@ -46,5 +44,4 @@ func (o *InsecureServingOptions) Validate() []error {
 func (o InsecureServingOptions) AddFlags(fs *pflag.FlagSet) {
 	fs.StringVar(&o.Host, "insecure.host", o.Host, "API server host")
 	fs.IntVar(&o.Port, "insecure.port", o.Port, "API server port")
-	fs.BoolVar(&o.ReverseProxy, "insecure.reverse-proxy", o.ReverseProxy, "If true, addr host:port, need bind nginx reverse proxy, else addr 0.0.0.0:port (default false)")
 }
