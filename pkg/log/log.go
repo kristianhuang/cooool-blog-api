@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 SuperPony <superponyyy@gmail.com>. All rights reserved.
+ * Copyright 2021 SuperPony <kristianhuang007@gmail.com>. All rights reserved.
  * Use of this source code is governed by a MIT style
  * license that can be found in the LICENSE file.
  */
@@ -26,6 +26,8 @@ type InfoLogger interface {
 }
 
 type Logger interface {
+	InfoLogger
+
 	Debug(msg string, fields ...Field)
 	Debugf(format string, val ...interface{})
 	Debugw(msg string, keysAndValues ...interface{})
@@ -42,7 +44,7 @@ type Logger interface {
 	Fatalf(format string, v ...interface{})
 	Fatalw(msg string, keysAndValues ...interface{})
 
-	V(level int) InfoLogger
+	V(level Level) InfoLogger
 
 	Write(p []byte) (n int, err error)
 	WithValues(keysAndValues ...interface{}) Logger
@@ -160,7 +162,7 @@ func New(opts *Options) *zapLogger {
 		zapLevel = zapcore.InfoLevel
 	}
 	encodeLevel := zapcore.CapitalLevelEncoder
-	// when output to local path, with color is forbidden
+	// when output to local path and format = "console", with color is forbidden.
 	if opts.Format == consoleFormat && opts.EnableColor {
 		encodeLevel = zapcore.CapitalColorLevelEncoder
 	}
@@ -217,7 +219,7 @@ func SugaredLogger() *zap.SugaredLogger {
 	return std.zapLogger.Sugar()
 }
 
-// StdErrLogger returns logger of standard library which writes to supplied zap
+// StdErrLogger returns logger of standard library, which writes to supplied zap
 // logger at error level.
 func StdErrLogger() *log.Logger {
 	if std == nil {
@@ -230,7 +232,7 @@ func StdErrLogger() *log.Logger {
 	return nil
 }
 
-// StdInfoLogger returns logger of standard library which writes to supplied zap
+// StdInfoLogger returns logger of standard library, which write s to supplied zap
 // logger at info level.
 func StdInfoLogger() *log.Logger {
 	if std == nil {
@@ -243,14 +245,13 @@ func StdInfoLogger() *log.Logger {
 	return nil
 }
 
-// V return a leveled InfoLogger.
-func V(level int) InfoLogger { return std.V(level) }
+// LV return a leveled InfoLogger.
+func LV(level Level) InfoLogger { return std.V(level) }
 
-func (l *zapLogger) V(level int) InfoLogger {
-	lvl := zapcore.Level(5 - 1*level)
-	if l.zapLogger.Core().Enabled(lvl) {
+func (l *zapLogger) V(level Level) InfoLogger {
+	if l.zapLogger.Core().Enabled(level) {
 		return &infoLogger{
-			level: lvl,
+			level: level,
 			log:   l.zapLogger,
 		}
 	}
@@ -307,7 +308,7 @@ func ZapLogger() *zap.Logger {
 	return std.zapLogger
 }
 
-// CheckIntLevel used for other log wrapper such as klog which return if logging a
+// CheckIntLevel used for other log wrapper such as klog, which return if logging a
 // message at the specified level is enabled.
 func CheckIntLevel(level int32) bool {
 	var lvl zapcore.Level
@@ -506,7 +507,7 @@ func (l *zapLogger) L(ctx context.Context) *zapLogger {
 
 //nolint:predeclared
 func (l *zapLogger) clone() *zapLogger {
-	copy := *l
+	logger := *l
 
-	return &copy
+	return &logger
 }

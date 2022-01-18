@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 SuperPony <superponyyy@gmail.com>. All rights reserved.
+ * Copyright 2021 Kristian Huang <kristianhuang007@gmail.com>. All rights reserved.
  * Use of this source code is governed by a MIT style
  * license that can be found in the LICENSE file.
  */
@@ -10,7 +10,9 @@ import (
 	"encoding/json"
 
 	genericoptions "blog-api/internal/pkg/options"
+	"blog-api/internal/pkg/server"
 	"blog-api/pkg/cli/flag"
+	"blog-api/pkg/rollinglog"
 )
 
 type Options struct {
@@ -19,6 +21,7 @@ type Options struct {
 	FeatureOptions         *genericoptions.FeatureOptions         `json:"feature" mapstructure:"feature"`
 	MySQLOptions           *genericoptions.MySQLOptions           `json:"db" mapstructure:"db"`
 	RedisOptions           *genericoptions.RedisOptions           `json:"redis" mapstructure:"redis"`
+	LogOptions             *rollinglog.Options                    `json:"log_options" mapstructure:"log_options"`
 }
 
 func NewOptions() *Options {
@@ -28,6 +31,7 @@ func NewOptions() *Options {
 		FeatureOptions:         genericoptions.NewFeatureOptions(),
 		MySQLOptions:           genericoptions.NewMySQLOptions(),
 		RedisOptions:           genericoptions.NewRedisOptions(),
+		LogOptions:             rollinglog.NewOptions(),
 	}
 }
 
@@ -37,11 +41,17 @@ func (o *Options) Flags() (fss flag.NamedFlagSets) {
 	o.FeatureOptions.AddFlags(fss.FlagSet("features"))
 	o.MySQLOptions.AddFlags(fss.FlagSet("db"))
 	o.RedisOptions.AddFlags(fss.FlagSet("redis"))
+	o.LogOptions.AddFlags(fss.FlagSet("log"))
 	return fss
 }
 
 // Complete 设置需要默认值的选项
 func (o Options) Complete() error {
+	return nil
+}
+
+// ApplyTo applies the run options to the method receiver and returns self.
+func (o *Options) ApplyTo(c *server.Config) error {
 	return nil
 }
 

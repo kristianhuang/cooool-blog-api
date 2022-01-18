@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 SuperPony <superponyyy@gmail.com>. All rights reserved.
+ * Copyright 2021 Kristian Huang <kristianhuang007@gmail.com>. All rights reserved.
  * Use of this source code is governed by a MIT style
  * license that can be found in the LICENSE file.
  */
@@ -36,33 +36,24 @@ type Config struct {
 }
 
 type SecureServingInfo struct {
-	Host         string
-	Port         int
-	ReverseProxy bool
+	Host string
+	Port int
 }
 
 type InsecureServingInfo struct {
-	Host         string
-	Port         int
-	ReverseProxy bool
+	Host string
+	Port int
 }
 
 // Address return host:port.
 func (s *SecureServingInfo) Address() string {
-	if s.ReverseProxy {
-		return net.JoinHostPort(s.Host, strconv.Itoa(s.Port))
-	} else {
-		return ":" + strconv.Itoa(s.Port)
-	}
+	return ":" + strconv.Itoa(s.Port)
 }
 
 // Address return host:port.
 func (i *InsecureServingInfo) Address() string {
-	if i.ReverseProxy {
-		return net.JoinHostPort(i.Host, strconv.Itoa(i.Port))
-	} else {
-		return ":" + strconv.Itoa(i.Port)
-	}
+	return net.JoinHostPort(i.Host, strconv.Itoa(i.Port))
+
 }
 
 func NewConfig() *Config {

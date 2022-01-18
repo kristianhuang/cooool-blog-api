@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 SuperPony <superponyyy@gmail.com>. All rights reserved.
+ * Copyright 2021 Kristian Huang <kristianhuang007@gmail.com>. All rights reserved.
  * Use of this source code is governed by a MIT style
  * license that can be found in the LICENSE file.
  */
@@ -10,15 +10,16 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"log"
 	"net/http"
 	"strings"
 	"time"
 
 	"blog-api/internal/pkg/middleware"
+	log "blog-api/pkg/rollinglog"
 	"github.com/gin-contrib/pprof"
 	"github.com/gin-gonic/gin"
 	promethium "github.com/zsais/go-gin-prometheus"
+	"golang.org/x/sync/errgroup"
 )
 
 type GenericServer struct {
@@ -50,10 +51,10 @@ func initGenericAPIServer(s *GenericServer) {
 func (s *GenericServer) Setup() {
 	gin.SetMode(s.mode)
 
-	// gin.DebugPrintRouteFunc = func(httpMethod, absolutePath, handlerName string, nuHandlers int) {
-	// 	// TODO 换成日志包输出
-	// 	fmt.Printf("%-6s %-s --> %s (%d handlers)", httpMethod, absolutePath, handlerName, nuHandlers)
-	// }
+	gin.DebugPrintRouteFunc = func(httpMethod, absolutePath, handlerName string, nuHandlers int) {
+
+		log.Infow("%-6s %-s --> %s (%d handlers)", httpMethod, absolutePath, handlerName, nuHandlers)
+	}
 }
 
 // InstallMiddlewares install global middlewares
@@ -95,17 +96,9 @@ func (s *GenericServer) InstallAPIs() {
 }
 
 func (s *GenericServer) Run() error {
-	// TODO 排插到服务器无法访问的问题，原因尚未查明
-	// Addr: "127.0.0.1:8080" mac 下可以正常访问 centos7 下不行
-	// Addr: ":8080" 都可以正常访问
 	s.insecureServer = &http.Server{
 		Addr:    s.InsecureServingInfo.Address(),
-		Handler: s.Engine,
-	}
-
-	if err := s.insecureServer.ListenAndServe(); err != nil && !errors.Is(err, http.ErrServerClosed) {
-		log.Fatal(err.Error())
-		return err
+		Handler: s,
 	}
 
 	// https
@@ -114,28 +107,28 @@ func (s *GenericServer) Run() error {
 	// 	Handler: s,
 	// }
 
-	// var eg errgroup.Group
-	//
-	// eg.Go(func() error {
-	// 	if err := s.insecureServer.ListenAndServe(); err != nil && !errors.Is(err, http.ErrServerClosed) {
-	// 		log.Fatal(err.Error())
-	// 		return err
-	// 	}
-	//
-	// 	return nil
-	// })
-	//
-	// ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
-	// defer cancel()
-	// if s.health {
-	// 	if err := s.ping(ctx); err != nil {
-	// 		return err
-	// 	}
-	// }
-	//
-	// if err := eg.Wait(); err != nil {
-	// 	log.Fatal(err.Error())
-	// }
+	var eg errgroup.Group
+
+	eg.Go(func() error {
+		if err := s.insecureServer.ListenAndServe(); err != nil && !errors.Is(err, http.ErrServerClosed) {
+			log.Fatal(err.Error())
+			return err
+		}
+
+		return nil
+	})
+
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+	if s.health {
+		if err := s.ping(ctx); err != nil {
+			return err
+		}
+	}
+
+	if err := eg.Wait(); err != nil {
+		log.Fatal(err.Error())
+	}
 
 	return nil
 }
@@ -154,9 +147,10 @@ func (s *GenericServer) ping(ctx context.Context) error {
 
 		resp, err := http.DefaultClient.Do(req)
 		if err == nil && resp.StatusCode == http.StatusOK {
-			// TODO 使用日志包记录健康检测
-			log.Println("The router has been deployed success")
+			log.Info("The router has been deployed successfully.")
+
 			_ = resp.Body.Close()
+
 			return nil
 		}
 
@@ -164,7 +158,7 @@ func (s *GenericServer) ping(ctx context.Context) error {
 
 		select {
 		case <-ctx.Done():
-			log.Println("can not ping http server.")
+			log.Fatal("can not ping http server.")
 		default:
 		}
 	}
@@ -176,11 +170,11 @@ func (s *GenericServer) Close() {
 	defer cancel()
 
 	if err := s.secureServer.Shutdown(ctx); err != nil {
-		log.Fatalf("Shutdown secure server failed: %s", err.Error())
+		log.Warnf("Shutdown secure server failed: %s", err.Error())
 	}
 
 	if err := s.insecureServer.Shutdown(ctx); err != nil {
-		log.Fatalf("Shutdown insecure secure server failed: %s", err.Error())
+		log.Warnf("Shutdown insecure secure server failed: %s", err.Error())
 	}
 
 }

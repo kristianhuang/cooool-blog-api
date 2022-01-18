@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 SuperPony <superponyyy@gmail.com>. All rights reserved.
+ * Copyright 2021 Kristian Huang <kristianhuang007@gmail.com>. All rights reserved.
  * Use of this source code is governed by a MIT style
  * license that can be found in the LICENSE file.
  */
@@ -11,6 +11,7 @@ import (
 	"sync"
 
 	"blog-api/internal/apiserver/store"
+	"blog-api/internal/pkg/gormutil"
 	genericoptions "blog-api/internal/pkg/options"
 	"blog-api/pkg/db"
 	"gorm.io/gorm"
@@ -58,7 +59,7 @@ func GetMysqlFactory(opts *genericoptions.MySQLOptions) (store.Factory, error) {
 			MaxOpenConnections:    opts.MaxOpenConnections,
 			MaxConnectionLifeTime: opts.MaxConnectionLifeTime,
 			LogLevel:              opts.LogLevel,
-			// Logger:               ,	// TODO 日志包
+			Logger:                gormutil.NewLogger(opts.LogLevel),
 		}
 
 		dbIns, err = db.New(options)
