@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 SuperPony <superponyyy@gmail.com>. All rights reserved.
+ * Copyright 2021 Kristian Huang <kristianhuang007@gmail.com>. All rights reserved.
  * Use of this source code is governed by a MIT style
  * license that can be found in the LICENSE file.
  */
@@ -11,7 +11,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-type Route func(engine *gin.Engine)
+type Route func(e *gin.Engine)
 
 var (
 	Routes = []Route{
@@ -20,10 +20,10 @@ var (
 	}
 )
 
-func initRouter(eg *gin.Engine) *gin.Engine {
+func initRouter(e *gin.Engine) *gin.Engine {
 	for _, r := range Routes {
-		r(eg)
+		r(e)
 	}
 
-	return eg
+	return e
 }

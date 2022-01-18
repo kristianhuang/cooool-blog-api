@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 SuperPony <superponyyy@gmail.com>. All rights reserved.
+ * Copyright 2021 Kristian Huang <kristianhuang007@gmail.com>. All rights reserved.
  * Use of this source code is governed by a MIT style
  * license that can be found in the LICENSE file.
  */
@@ -10,6 +10,7 @@ import (
 	"blog-api/internal/apiserver/config"
 	"blog-api/internal/apiserver/options"
 	"blog-api/pkg/app"
+	log "blog-api/pkg/rollinglog"
 )
 
 const commandDesc = `Welcome to use Blog-API`
@@ -30,7 +31,8 @@ func NewApp(use string) *app.App {
 
 func createRunFunc(opts *options.Options) app.RunFunc {
 	return func(use string) error {
-		// TODO 需要做个 Log 包
+		log.Init(opts.LogOptions)
+		defer log.Flush()
 
 		conf := config.NewConfig(opts)
 
