@@ -44,7 +44,7 @@ type Logger interface {
 	Fatalf(format string, v ...interface{})
 	Fatalw(msg string, keysAndValues ...interface{})
 
-	LV(level Level) InfoLogger
+	V(level Level) InfoLogger
 
 	Write(p []byte) (n int, err error)
 	WithValues(keysAndValues ...interface{}) Logger
@@ -246,9 +246,9 @@ func StdInfoLogger() *log.Logger {
 }
 
 // LV return a leveled InfoLogger.
-func LV(level Level) InfoLogger { return std.LV(level) }
+func LV(level Level) InfoLogger { return std.V(level) }
 
-func (l *zapLogger) LV(level Level) InfoLogger {
+func (l *zapLogger) V(level Level) InfoLogger {
 	if l.zapLogger.Core().Enabled(level) {
 		return &infoLogger{
 			level: level,
