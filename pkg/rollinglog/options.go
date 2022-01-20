@@ -17,7 +17,7 @@ import (
 
 const (
 	flagLevel            = "log.level"
-	flagEnableCaller     = "log.enable-caller"
+	flagDisableCaller    = "log.disable-caller"
 	flagFormat           = "log.format"
 	flagEnableColor      = "log.enable-color"
 	flagOutputPaths      = "log.output-paths"
@@ -41,7 +41,7 @@ type Options struct {
 	ErrorOutputPaths []string `json:"error-output-paths" mapstructure:"error-output-paths"`
 	Level            string   `json:"level"              mapstructure:"level"`
 	Format           string   `json:"format"             mapstructure:"format"`
-	EnableCaller     bool     `json:"enable-caller" mapstructure:"enable-caller"`
+	DisableCaller    bool     `json:"disable-caller"     mapstructure:"disable-caller"`
 	EnableColor      bool     `json:"enable-color"       mapstructure:"enable-color"`
 	Development      bool     `json:"development"        mapstructure:"development"`
 	Name             string   `json:"name"               mapstructure:"name"`
@@ -84,7 +84,7 @@ func (o *Options) Validate() []error {
 // AddFlags adds flags for log to the specified FlagSet object.
 func (o *Options) AddFlags(fs *pflag.FlagSet) {
 	fs.StringVar(&o.Level, flagLevel, o.Level, "Minimum log output `LEVEL`.")
-	fs.BoolVar(&o.EnableCaller, flagEnableCaller, o.EnableCaller, "Enable output of caller information in the log.")
+	fs.BoolVar(&o.DisableCaller, flagDisableCaller, o.DisableCaller, "Disable output of caller information in the log.")
 	fs.StringVar(&o.Format, flagFormat, o.Format, "Log output `FORMAT`, support plain or json format.")
 	fs.BoolVar(&o.EnableColor, flagEnableColor, o.EnableColor, "Enable output ansi colors in plain format logs.")
 	fs.StringSliceVar(&o.OutputPaths, flagOutputPaths, o.OutputPaths, "Output paths of log.")

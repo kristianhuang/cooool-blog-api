@@ -6,7 +6,11 @@
 
 package v1
 
-import "encoding/json"
+import (
+	"encoding/json"
+
+	"gorm.io/gorm"
+)
 
 type Extend map[string]interface{}
 
@@ -50,9 +54,32 @@ type ObjectMeta struct {
 	ID uint64 `json:"id,omitempty" gorm:"primaryKey;autoIncrement;column:id"`
 	// 脱离于 db 的额外的拓展
 	Extend       Extend `json:"extend,omitempty" gorm:"-" validate:"omitempty"`
-	ExtendShadow string `json:"-" gorm:"column:extendShadow" validate:"omitempty"`
+	ExtendShadow string `json:"-" gorm:"column:extend_shadow" validate:"omitempty"`
 	CreatedAt    int    `json:"created_at,omitempty" gorm:"column:created_at"`
 	UpdatedAt    int    `json:"updated_at,omitempty" gorm:"column:updated_at"`
+}
+
+// BeforeCreate run before create database record.
+func (obj *ObjectMeta) BeforeCreate(tx *gorm.DB) error {
+	obj.ExtendShadow = obj.Extend.String()
+
+	return nil
+}
+
+// BeforeUpdate run before update database record.
+func (obj *ObjectMeta) BeforeUpdate(tx *gorm.DB) error {
+	obj.ExtendShadow = obj.Extend.String()
+
+	return nil
+}
+
+// AfterFind run after find to unmarshal a extend shadown string into metav1.Extend struct.
+func (obj *ObjectMeta) AfterFind(tx *gorm.DB) error {
+	if err := json.Unmarshal([]byte(obj.ExtendShadow), &obj.Extend); err != nil {
+		return err
+	}
+
+	return nil
 }
 
 type DeleteOptions struct {

@@ -9,6 +9,7 @@ package store
 var client Factory
 
 type Factory interface {
+	AdminUser() AdminUserStore
 	Close() error
 }
 

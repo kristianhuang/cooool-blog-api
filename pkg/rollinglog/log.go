@@ -220,8 +220,8 @@ func StdInfoLogger() *log.Logger {
 	return nil
 }
 
-// LV return a leveled InfoLogger.
-func LV(level Level) InfoLogger { return std.V(level) }
+// V return a leveled InfoLogger.
+func V(level Level) InfoLogger { return std.V(level) }
 
 func (l *zapLogger) V(level Level) InfoLogger {
 	if l.zapLogger.Core().Enabled(level) {
@@ -522,16 +522,13 @@ func generateEncoder(opts *Options) (encode zapcore.Encoder) {
 
 func withZapOptions(opts *Options) []zap.Option {
 	var zOpts []zap.Option
+	zOpts = append(zOpts, zap.WithCaller(opts.DisableCaller))
 	zOpts = append(zOpts, zap.AddStacktrace(zapcore.PanicLevel))
 	zOpts = append(zOpts, zap.AddCallerSkip(1))
 	zOpts = append(zOpts, zap.ErrorOutput(multiWriteSyncer(generateWriterSyncer("ErrorOutputPaths", opts)...)))
 
 	if opts.Development {
 		zOpts = append(zOpts, zap.Development())
-	}
-
-	if opts.EnableCaller {
-		zOpts = append(zOpts, zap.WithCaller(opts.EnableCaller))
 	}
 
 	return zOpts

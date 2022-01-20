@@ -19,9 +19,9 @@ type Options struct {
 	ServerRunOptions       *genericoptions.ServerRunOptions       `json:"server" mapstructure:"server"`
 	InsecureServingOptions *genericoptions.InsecureServingOptions `json:"insecure" mapstructure:"insecure"`
 	FeatureOptions         *genericoptions.FeatureOptions         `json:"feature" mapstructure:"feature"`
-	MySQLOptions           *genericoptions.MySQLOptions           `json:"db" mapstructure:"db"`
+	MySQLOptions           *genericoptions.MySQLOptions           `json:"mysql" mapstructure:"mysql"`
 	RedisOptions           *genericoptions.RedisOptions           `json:"redis" mapstructure:"redis"`
-	LogOptions             *rollinglog.Options                    `json:"log_options" mapstructure:"log_options"`
+	Log                    *rollinglog.Options                    `json:"log" mapstructure:"log"`
 }
 
 func NewOptions() *Options {
@@ -31,7 +31,7 @@ func NewOptions() *Options {
 		FeatureOptions:         genericoptions.NewFeatureOptions(),
 		MySQLOptions:           genericoptions.NewMySQLOptions(),
 		RedisOptions:           genericoptions.NewRedisOptions(),
-		LogOptions:             rollinglog.NewOptions(),
+		Log:                    rollinglog.NewOptions(),
 	}
 }
 
@@ -39,9 +39,9 @@ func (o *Options) Flags() (fss flag.NamedFlagSets) {
 	o.ServerRunOptions.AddFlags(fss.FlagSet("generic"))
 	o.InsecureServingOptions.AddFlags(fss.FlagSet("insecure serving"))
 	o.FeatureOptions.AddFlags(fss.FlagSet("features"))
-	o.MySQLOptions.AddFlags(fss.FlagSet("db"))
+	o.MySQLOptions.AddFlags(fss.FlagSet("mysql"))
 	o.RedisOptions.AddFlags(fss.FlagSet("redis"))
-	o.LogOptions.AddFlags(fss.FlagSet("log"))
+	o.Log.AddFlags(fss.FlagSet("log"))
 	return fss
 }
 

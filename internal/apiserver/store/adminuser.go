@@ -9,10 +9,12 @@ package store
 import (
 	"context"
 
-	v1 "blog-api/internal/pkg/model/v1"
+	v1 "blog-api/internal/pkg/model"
 	metav1 "blog-api/pkg/meta/v1"
 )
 
 type AdminUserStore interface {
 	Create(ctx context.Context, adminUserModel *v1.AdminUser, opts metav1.CreateOptions) error
+
+	MigrateAdminUserTable() error
 }

@@ -12,21 +12,22 @@ import (
 
 	"blog-api/internal/apiserver/store"
 	"blog-api/internal/pkg/gormutil"
+	"blog-api/internal/pkg/model"
 	genericoptions "blog-api/internal/pkg/options"
 	"blog-api/pkg/db"
 	"gorm.io/gorm"
 )
 
 type dataStore struct {
-	*gorm.DB
+	db *gorm.DB
 }
 
 func (s *dataStore) AdminUser() store.AdminUserStore {
-	return newAdminUser(s.DB)
+	return newAdminUser(s.db)
 }
 
 func (s *dataStore) Close() error {
-	ds, err := s.DB.DB()
+	ds, err := s.db.DB()
 
 	if err != nil {
 		return err
@@ -63,7 +64,6 @@ func GetMysqlFactory(opts *genericoptions.MySQLOptions) (store.Factory, error) {
 		}
 
 		dbIns, err = db.New(options)
-
 		mysqlFactory = &dataStore{dbIns}
 	})
 
@@ -72,4 +72,32 @@ func GetMysqlFactory(opts *genericoptions.MySQLOptions) (store.Factory, error) {
 	}
 
 	return mysqlFactory, nil
+}
+
+func cleanDatabases(db *gorm.DB) error {
+	if err := db.Migrator().DropTable(&model.AdminUser{}); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func migrateDatabase(db *gorm.DB) error {
+	if err := db.AutoMigrate(&model.AdminUser{}); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func resetDatabase(db *gorm.DB) error {
+	if err := cleanDatabases(db); err != nil {
+		return err
+	}
+
+	if err := migrateDatabase(db); err != nil {
+		return err
+	}
+
+	return nil
 }

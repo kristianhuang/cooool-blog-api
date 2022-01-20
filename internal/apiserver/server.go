@@ -8,6 +8,8 @@ package apiserver
 
 import (
 	"blog-api/internal/apiserver/config"
+	"blog-api/internal/apiserver/store"
+	"blog-api/internal/apiserver/store/mysql"
 	genericapiserver "blog-api/internal/pkg/server"
 	"blog-api/internal/pkg/shutdown"
 )
@@ -52,6 +54,10 @@ func createServer(config *config.Config) (*apiServer, error) {
 	if err != nil {
 		return nil, err
 	}
+
+	// init mysql store.
+	storeIns, _ := mysql.GetMysqlFactory(config.MySQLOptions)
+	store.SetClient(storeIns)
 
 	server := &apiServer{
 		genericServer: genericAPIServer,

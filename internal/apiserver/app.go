@@ -31,7 +31,7 @@ func NewApp(use string) *app.App {
 
 func createRunFunc(opts *options.Options) app.RunFunc {
 	return func(use string) error {
-		log.Init(opts.LogOptions)
+		log.Init(opts.Log)
 		defer log.Flush()
 
 		conf := config.NewConfig(opts)

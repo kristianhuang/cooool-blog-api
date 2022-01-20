@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 SuperPony <superponyyy@gmail.com>. All rights reserved.
+ * Copyright 2021 KristianHuang <KristianHuangyy@gmail.com>. All rights reserved.
  * Use of this source code is governed by a MIT style
  * license that can be found in the LICENSE file.
  */
@@ -7,20 +7,16 @@
 package adminuser
 
 import (
-	"net/http"
-
-	"github.com/gin-gonic/gin"
+	srvv1 "blog-api/internal/apiserver/service/v1"
+	"blog-api/internal/apiserver/store"
 )
 
-type Controller struct {
+type AdminUserController struct {
+	srv srvv1.Service
 }
 
-func NewController() *Controller {
-	return &Controller{}
-}
-
-func (c *Controller) List(ctx *gin.Context) {
-	ctx.JSON(http.StatusOK, gin.H{
-		"data": "hello world",
-	})
+func NewController(store store.Factory) *AdminUserController {
+	return &AdminUserController{
+		srv: srvv1.NewService(store),
+	}
 }

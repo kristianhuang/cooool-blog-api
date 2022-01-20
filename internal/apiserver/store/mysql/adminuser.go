@@ -10,7 +10,7 @@ import (
 	"context"
 
 	"blog-api/internal/pkg/gormutil"
-	modelv1 "blog-api/internal/pkg/model/v1"
+	"blog-api/internal/pkg/model"
 	"blog-api/pkg/fields"
 	metav1 "blog-api/pkg/meta/v1"
 	"gorm.io/gorm"
@@ -24,12 +24,12 @@ func newAdminUser(db *gorm.DB) *adminUser {
 	return &adminUser{db: db}
 }
 
-func (u *adminUser) Create(ctx context.Context, adminUserModel *modelv1.AdminUser, opts metav1.CreateOptions) error {
+func (u *adminUser) Create(ctx context.Context, adminUserModel *model.AdminUser, opts metav1.CreateOptions) error {
 	return u.db.Create(adminUserModel).Error
 }
 
-func (u *adminUser) List(cxt context.Context, opts metav1.ListOptions) (*modelv1.AdminUserList, error) {
-	userList := &modelv1.AdminUserList{}
+func (u *adminUser) List(cxt context.Context, opts metav1.ListOptions) (*model.AdminUserList, error) {
+	userList := &model.AdminUserList{}
 	ol := gormutil.Unpointer(opts.Offset, opts.Limit)
 
 	selector, _ := fields.ParseSelector(opts.FieldSelector)
@@ -44,4 +44,12 @@ func (u *adminUser) List(cxt context.Context, opts metav1.ListOptions) (*modelv1
 		Count(&userList.Total)
 
 	return userList, d.Error
+}
+
+func (u *adminUser) MigrateAdminUserTable() error {
+	if err := u.db.AutoMigrate(&model.AdminUser{}); err != nil {
+		return err
+	}
+
+	return nil
 }

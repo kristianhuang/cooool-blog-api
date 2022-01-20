@@ -16,8 +16,8 @@ func AdminUser(e *gin.Engine) {
 	{
 		adminUserV1 := v1.Group("/admin_user")
 		{
-			adminUserController := adminuser.NewController()
-			adminUserV1.GET("/index", adminUserController.List)
+			adminUserController := adminuser.NewController(storeIns)
+			adminUserV1.POST("", adminUserController.Create)
 		}
 	}
 }
