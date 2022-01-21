@@ -11,7 +11,8 @@ import (
 	"blog-api/internal/apiserver/store"
 	"blog-api/internal/apiserver/store/mysql"
 	genericapiserver "blog-api/internal/pkg/server"
-	"blog-api/internal/pkg/shutdown"
+	"blog-api/pkg/shutdown"
+	"blog-api/pkg/shutdown/shutdownmanagers/posixsignal"
 )
 
 type apiServer struct {
@@ -42,8 +43,8 @@ func buildGenericConfig(conf *config.Config) (apiServerConfig *genericapiserver.
 }
 
 func createServer(config *config.Config) (*apiServer, error) {
-	// gs := shutdown.New()
-	// gs.AddShutdownCallback()
+	gs := shutdown.New()
+	gs.AddShutdownManager(posixsignal.NewPosixSignalManager())
 
 	genericServerConfig, err := buildGenericConfig(config)
 	if err != nil {
@@ -60,6 +61,7 @@ func createServer(config *config.Config) (*apiServer, error) {
 	store.SetClient(storeIns)
 
 	server := &apiServer{
+		gs:            gs,
 		genericServer: genericAPIServer,
 	}
 
@@ -67,12 +69,22 @@ func createServer(config *config.Config) (*apiServer, error) {
 }
 
 func (s *apiServer) BeforeRun() preparedAPIServer {
+	// init router
 	initRouter(s.genericServer.Engine)
+
+	s.gs.AddShutdownCallback(shutdown.ShutdownFunc(func(string) error {
+		mysqlStore, _ := mysql.GetMysqlFactory(nil)
+		if mysqlStore != nil {
+			_ = mysqlStore.Close()
+		}
+		s.genericServer.Close()
+
+		return nil
+	}))
 
 	return preparedAPIServer{s}
 }
 
 func (s preparedAPIServer) Run() error {
-
 	return s.genericServer.Run()
 }

@@ -101,7 +101,7 @@ func LoadConfig(config, defaultName string) {
 	if config != "" {
 		viper.SetConfigFile(config)
 	} else {
-		viper.AddConfigPath(".")
+		viper.AddConfigPath("./config")
 		viper.AddConfigPath(filepath.Join(dir.HomeDir(), RecommendedHomeDir))
 		viper.AddConfigPath("/etc/blog")
 		viper.SetConfigName(defaultName)

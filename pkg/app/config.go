@@ -40,7 +40,7 @@ func addConfigFlag(use string, fs *pflag.FlagSet) {
 		if confFile != "" {
 			viper.SetConfigFile(confFile)
 		} else {
-			viper.AddConfigPath(".")
+			viper.AddConfigPath("./config")
 			viper.SetConfigType("yaml")
 			if names := strings.Split(use, "-"); len(names) > 1 {
 				viper.AddConfigPath(filepath.Join(dir.HomeDir(), "."+names[0]))

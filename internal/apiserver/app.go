@@ -34,9 +34,7 @@ func createRunFunc(opts *options.Options) app.RunFunc {
 		log.Init(opts.Log)
 		defer log.Flush()
 
-		conf := config.NewConfig(opts)
-
-		return Run(conf)
+		return Run(config.NewConfig(opts))
 	}
 }
 
