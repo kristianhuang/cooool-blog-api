@@ -7,13 +7,14 @@
 package app
 
 import (
-	cliflag "blog-api/pkg/cli/flag"
-	"blog-api/pkg/terminal"
 	"fmt"
+	"strings"
+
+	cliflag "blog-api/pkg/cli/flag"
+	"blog-api/pkg/util/terminal"
 	"github.com/fatih/color"
 	"github.com/spf13/cobra"
 	"github.com/spf13/pflag"
-	"strings"
 )
 
 const (

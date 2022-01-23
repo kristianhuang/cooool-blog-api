@@ -11,8 +11,6 @@ import (
 	"fmt"
 	"sort"
 	"strings"
-
-	"blog-api/pkg/selection"
 )
 
 // Selector represents a field selector.
@@ -101,7 +99,7 @@ func (t *hasTerm) Transform(fn TransformFunc) (Selector, error) {
 func (t *hasTerm) Requirements() Requirements {
 	return []Requirement{{
 		Field:    t.field,
-		Operator: selection.Equals,
+		Operator: Equals,
 		Value:    t.value,
 	}}
 }
@@ -151,7 +149,7 @@ func (t *notHasTerm) Transform(fn TransformFunc) (Selector, error) {
 func (t *notHasTerm) Requirements() Requirements {
 	return []Requirement{{
 		Field:    t.field,
-		Operator: selection.NotEquals,
+		Operator: NotEquals,
 		Value:    t.value,
 	}}
 }

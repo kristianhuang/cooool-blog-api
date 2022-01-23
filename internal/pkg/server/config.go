@@ -13,7 +13,7 @@ import (
 	"strconv"
 	"strings"
 
-	"blog-api/pkg/path/dir"
+	"blog-api/pkg/util/path/dir"
 	"github.com/gin-gonic/gin"
 	"github.com/spf13/viper"
 )
