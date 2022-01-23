@@ -15,6 +15,4 @@ import (
 
 type AdminUserStore interface {
 	Create(ctx context.Context, adminUserModel *v1.AdminUser, opts metav1.CreateOptions) error
-
-	MigrateAdminUserTable() error
 }

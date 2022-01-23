@@ -8,8 +8,9 @@ package terminal
 
 import (
 	"errors"
-	mTerm "github.com/moby/term"
 	"io"
+
+	mTerm "github.com/moby/term"
 )
 
 // GetSize 获取控制台尺寸

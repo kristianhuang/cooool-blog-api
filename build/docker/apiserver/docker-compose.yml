@@ -29,8 +29,9 @@ services:
       - blog
     ports:
       - "3306:3306"
-    entrypoint:
-      - MYSQL_ROOT_PASSWORD="hello"
+    environment:
+      - MYSQL_ROOT_PASSWORD=B0RItAFBBIpzboP9
+      - MYSQL_DB=blog
     volumes:
       - "blog-mysql-conf:/etc/mysql"
       - "blog-mysql-data:/var/lib/mysql"
@@ -39,13 +40,19 @@ services:
   blog-apiserver:
     build:
       context: ../../../
-      dockerfile: ./apiserver/
+      dockerfile: ./build/docker/apiserver/Dockerfile
     image: blog-apiserver
     networks:
       - blog
     ports:
       - "8080:8080"
+    volumes:
+      - "blog-apiserver-log:/blog/log"
     container_name: blog-apiserver
+    depends_on:
+      - mysql
+      - nginx
+      - redis
 
 volumes:
   blog-redis-conf:
@@ -58,6 +65,8 @@ volumes:
     name: "blog-mysql-conf"
   blog-mysql-data:
     name: "blog-mysql-data"
+  blog-apiserver-log:
+    name: "blog-apiserver-log"
 
 networks:
   blog:

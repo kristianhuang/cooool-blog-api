@@ -7,9 +7,9 @@
 package index
 
 import (
-	"fmt"
 	"net/http"
 
+	"blog-api/pkg/rollinglog"
 	"github.com/gin-gonic/gin"
 	"github.com/spf13/viper"
 )
@@ -19,7 +19,7 @@ type Controller struct {
 
 func (ic *Controller) Index(c *gin.Context) {
 	list := viper.AllSettings()
-	fmt.Println(1233)
+	rollinglog.Info("hello")
 	c.JSON(http.StatusOK, gin.H{"list": list})
 }
 

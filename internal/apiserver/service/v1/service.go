@@ -7,21 +7,22 @@
 package v1
 
 import (
+	"blog-api/internal/apiserver/service/v1/adminuser"
 	"blog-api/internal/apiserver/store"
 )
 
 type Service interface {
-	AdminUser() AdminUserService
+	AdminUser() adminuser.AdminUserService
 }
 
 type service struct {
 	store store.Factory
 }
 
-func NewService(store store.Factory) *service {
+func NewService(store store.Factory) Service {
 	return &service{store: store}
 }
 
-func (s *service) AdminUser() AdminUserService {
-	return newAdminUserService(s)
+func (s *service) AdminUser() adminuser.AdminUserService {
+	return adminuser.NewAdminUserService(s.store)
 }

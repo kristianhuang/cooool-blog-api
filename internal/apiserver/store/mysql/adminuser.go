@@ -9,8 +9,8 @@ package mysql
 import (
 	"context"
 
-	"blog-api/internal/pkg/gormutil"
 	"blog-api/internal/pkg/model"
+	"blog-api/internal/pkg/util/gormutil"
 	"blog-api/pkg/fields"
 	metav1 "blog-api/pkg/meta/v1"
 	"gorm.io/gorm"
@@ -25,6 +25,7 @@ func newAdminUser(db *gorm.DB) *adminUser {
 }
 
 func (u *adminUser) Create(ctx context.Context, adminUserModel *model.AdminUser, opts metav1.CreateOptions) error {
+
 	return u.db.Create(adminUserModel).Error
 }
 
@@ -44,12 +45,4 @@ func (u *adminUser) List(cxt context.Context, opts metav1.ListOptions) (*model.A
 		Count(&userList.Total)
 
 	return userList, d.Error
-}
-
-func (u *adminUser) MigrateAdminUserTable() error {
-	if err := u.db.AutoMigrate(&model.AdminUser{}); err != nil {
-		return err
-	}
-
-	return nil
 }

@@ -8,12 +8,11 @@ package server
 
 import (
 	"log"
-	"net"
 	"path/filepath"
 	"strconv"
 	"strings"
 
-	"blog-api/pkg/path/dir"
+	"blog-api/pkg/util/path/dir"
 	"github.com/gin-gonic/gin"
 	"github.com/spf13/viper"
 )
@@ -52,8 +51,8 @@ func (s *SecureServingInfo) Address() string {
 
 // Address return host:port.
 func (i *InsecureServingInfo) Address() string {
-	return net.JoinHostPort(i.Host, strconv.Itoa(i.Port))
-
+	// return net.JoinHostPort(i.Host, strconv.Itoa(i.Port))
+	return ":" + strconv.Itoa(i.Port)
 }
 
 func NewConfig() *Config {
@@ -79,8 +78,8 @@ func (c *Config) Complete() CompletedConfig {
 	return CompletedConfig{c}
 }
 
-func (c CompletedConfig) CreateGenericServer() (*GenericServer, error) {
-	s := &GenericServer{
+func (c CompletedConfig) New() (*GenericAPIServer, error) {
+	s := &GenericAPIServer{
 		// SecureServingInfo:   c.SecureServing,
 		InsecureServingInfo: c.InsecureServing,
 		Engine:              gin.New(),

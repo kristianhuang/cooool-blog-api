@@ -51,12 +51,13 @@ type ListOptions struct {
 }
 
 type ObjectMeta struct {
-	ID uint64 `json:"id,omitempty" gorm:"primaryKey;autoIncrement;column:id"`
+	ID        uint `json:"id,omitempty" gorm:"primaryKey;autoIncrement;column:id"`
+	CreatedAt int  `json:"created_at,omitempty" gorm:"type:int(15);not null;column:created_at;comment:创建时间;"`
+	UpdatedAt int  `json:"updated_at,omitempty" gorm:"type:int(15);not null;column:updated_at;comment:更新时间;"`
+
 	// 脱离于 db 的额外的拓展
 	Extend       Extend `json:"extend,omitempty" gorm:"-" validate:"omitempty"`
 	ExtendShadow string `json:"-" gorm:"column:extend_shadow" validate:"omitempty"`
-	CreatedAt    int    `json:"created_at,omitempty" gorm:"column:created_at"`
-	UpdatedAt    int    `json:"updated_at,omitempty" gorm:"column:updated_at"`
 }
 
 // BeforeCreate run before create database record.
