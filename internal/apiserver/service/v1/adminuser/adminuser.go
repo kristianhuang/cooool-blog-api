@@ -4,7 +4,7 @@
  * license that can be found in the LICENSE file.
  */
 
-package v1
+package adminuser
 
 import (
 	"context"
@@ -22,8 +22,8 @@ type adminUserService struct {
 	store store.Factory
 }
 
-func newAdminUserService(s *service) *adminUserService {
-	return &adminUserService{store: s.store}
+func NewAdminUserService(s store.Factory) *adminUserService {
+	return &adminUserService{store: s}
 }
 
 func (a *adminUserService) Create(ctx context.Context, au *model.AdminUser, options metav1.CreateOptions) error {

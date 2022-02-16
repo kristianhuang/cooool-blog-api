@@ -17,7 +17,7 @@ import (
 	"time"
 
 	"github.com/buger/jsonparser"
-	"github.com/google/uuid"
+	uuid "github.com/satori/go.uuid"
 	"github.com/spaolacci/murmur3"
 )
 
@@ -75,7 +75,7 @@ const defaultHashAlgorithm = "murmur64"
 // GenerateToken generate token, if hashing algorithm is empty, use legacy key generation.
 func GenerateToken(orgID, keyID, hashAlgorithm string) (string, error) {
 	if keyID == "" {
-		keyID = strings.ReplaceAll(uuid.New().String(), "-", "")
+		keyID = strings.ReplaceAll(uuid.NewV4().String(), "-", "")
 	}
 
 	if hashAlgorithm != "" {

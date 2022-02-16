@@ -11,7 +11,7 @@ import (
 	"sync"
 
 	"blog-api/internal/apiserver/store"
-	"blog-api/internal/pkg/gormutil"
+	"blog-api/internal/pkg/logger"
 	"blog-api/internal/pkg/model"
 	genericoptions "blog-api/internal/pkg/options"
 	"blog-api/pkg/db"
@@ -60,7 +60,7 @@ func GetMysqlFactory(opts *genericoptions.MySQLOptions) (store.Factory, error) {
 			MaxOpenConnections:    opts.MaxOpenConnections,
 			MaxConnectionLifeTime: opts.MaxConnectionLifeTime,
 			LogLevel:              opts.LogLevel,
-			Logger:                gormutil.NewLogger(opts.LogLevel),
+			Logger:                logger.NewLogger(opts.LogLevel),
 		}
 
 		dbIns, err = db.New(options)

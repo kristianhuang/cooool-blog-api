@@ -9,7 +9,6 @@ package adminuser
 import (
 	"net/http"
 
-	"blog-api/internal/apiserver/store/mysql"
 	"blog-api/internal/pkg/model"
 	metav1 "blog-api/pkg/meta/v1"
 	log "blog-api/pkg/rollinglog"
@@ -20,8 +19,6 @@ func (a *AdminUserController) Create(c *gin.Context) {
 	log.L(c).Info("user create function called.")
 
 	var adminUser model.AdminUser
-	store, _ := mysql.GetMysqlFactory(nil)
-	_ = store.AdminUser().MigrateAdminUserTable()
 	if err := c.ShouldBindJSON(&adminUser); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"msg2": err.Error()})
 		return

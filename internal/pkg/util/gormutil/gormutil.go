@@ -4,7 +4,7 @@
  * license that can be found in the LICENSE file.
  */
 
-package gorm
+package gormutil
 
 const (
 	DefaultLimit = 25
