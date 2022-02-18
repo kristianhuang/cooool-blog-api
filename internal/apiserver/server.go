@@ -8,16 +8,18 @@ package apiserver
 
 import (
 	"blog-api/internal/apiserver/config"
+	"blog-api/internal/apiserver/route"
 	"blog-api/internal/apiserver/store"
 	"blog-api/internal/apiserver/store/mysql"
 	genericapiserver "blog-api/internal/pkg/server"
 	"blog-api/pkg/shutdown"
 	"blog-api/pkg/shutdown/shutdownmanagers/posixsignal"
+	"blog-api/pkg/validator"
 )
 
 type apiServer struct {
 	gs            *shutdown.GracefulShutdown
-	genericServer *genericapiserver.GenericServer
+	genericServer *genericapiserver.GenericAPIServer
 }
 
 type preparedAPIServer struct {
@@ -51,14 +53,23 @@ func createServer(config *config.Config) (*apiServer, error) {
 		return nil, err
 	}
 
-	genericAPIServer, err := genericServerConfig.Complete().CreateGenericServer()
+	genericAPIServer, err := genericServerConfig.Complete().New()
 	if err != nil {
 		return nil, err
 	}
 
 	// init mysql store.
-	storeIns, _ := mysql.GetMysqlFactory(config.MySQLOptions)
+	storeIns, err := mysql.GetMysqlFactory(config.MySQLOptions)
+	if err != nil {
+		return nil, err
+	}
 	store.SetClient(storeIns)
+
+	// init routes store
+	route.SetStoreIns(storeIns)
+
+	// init validator.
+	validator.Init(config.Validator)
 
 	server := &apiServer{
 		gs:            gs,

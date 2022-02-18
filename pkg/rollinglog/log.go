@@ -488,7 +488,6 @@ func (l *zapLogger) clone() *zapLogger {
 }
 
 func generateEncoder(opts *Options) (encode zapcore.Encoder) {
-
 	encodeLevel := zapcore.CapitalLevelEncoder
 	// when output to local path and format = "console", with color is forbidden.
 	if opts.Format == consoleFormat && opts.EnableColor {

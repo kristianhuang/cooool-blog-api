@@ -8,29 +8,29 @@ server:
   max-ping-count: 3
 
 insecure:
-  host: 127.0.0.1
+  host:
   port: 8080
 
 mysql:
-  host: 127.0.0.1 # default 127.0.0.1
+  # host: blog-mysql # default 127.0.0.1
+  host: 127.0.0.1
   port: 3306 # default 3306
   username: root
-  password: root
-  database: demo
+  password: B0RItAFBBIpzboP9
+  database: blog
   max-idle-connections: 100 # 最大空闲连接数
   max-open-connections: 100
   max-connection-list-time: 10s # 空闲链接最大存活时间
   log-level: 4 # GORM log level, 1 silent, 2 error, 3 warn, 4 info
 
 redis:
-  host: 127.0.0.1  # default 127.0.0.1
+  host: blog-redis  # default 127.0.0.1
   port: 6379 # default 6379
   password:
 
 feature:
   enable-metrics: true # 开启 metrics, router:  /metrics
   profiling: true # 开启性能分析, 可以通过 <host>:<port>/debug/pprof/地址查看程序栈、线程等系统信息，默认值为 true
-
 
 log:
   name: apiserver # Logger的名字
@@ -40,13 +40,17 @@ log:
   enable-color: false # 是否开启颜色输出，true:是，false:否
   disable-caller: false # 是否开启 caller，如果开启会在日志中显示调用日志所在的文件、函数和行号
   output-paths: # 支持输出到多个输出。支持输出到标准输出（stdout）和文件。
-    - api-server.log
+    - ./log/api-server.log
     - stdout
   error-output-paths: # zap内部(非业务)错误日志输出路径，多个输出
-    - api-server-error.log
+    - ./log/api-server-error.log
   rolling: true # 是否开启日志轮转
-  rolling-max-size: 100 # 单个日志文件最大限制，单位 MB
+  rolling-max-size: 10 # 单个日志文件最大限制，单位 MB
   rolling-max-age: 30 # 日志保留天数，0 表示永久保存
   rolling-max-backups: 0 # 保留旧日志文件最大个数，0表示不限制
   rolling-local-time: true # 是否启用本地时区， 默认为 UTC 时区
   rolling-compress: false # 是否启用日志压缩
+
+validator:
+  language: zh # 验证器默认语言
+  tag: label # 验证器字段默认标签

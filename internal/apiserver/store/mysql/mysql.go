@@ -65,6 +65,8 @@ func GetMysqlFactory(opts *genericoptions.MySQLOptions) (store.Factory, error) {
 
 		dbIns, err = db.New(options)
 		mysqlFactory = &dataStore{dbIns}
+
+		err = MigrateDatabase(dbIns)
 	})
 
 	if mysqlFactory == nil || err != nil {
@@ -82,7 +84,7 @@ func cleanDatabases(db *gorm.DB) error {
 	return nil
 }
 
-func migrateDatabase(db *gorm.DB) error {
+func MigrateDatabase(db *gorm.DB) error {
 	if err := db.AutoMigrate(&model.AdminUser{}); err != nil {
 		return err
 	}
@@ -90,12 +92,12 @@ func migrateDatabase(db *gorm.DB) error {
 	return nil
 }
 
-func resetDatabase(db *gorm.DB) error {
+func ResetDatabase(db *gorm.DB) error {
 	if err := cleanDatabases(db); err != nil {
 		return err
 	}
 
-	if err := migrateDatabase(db); err != nil {
+	if err := MigrateDatabase(db); err != nil {
 		return err
 	}
 

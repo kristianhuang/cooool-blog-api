@@ -22,7 +22,7 @@ import (
 	"golang.org/x/sync/errgroup"
 )
 
-type GenericServer struct {
+type GenericAPIServer struct {
 	// SecureServingInfo holds configuration of the TLS server.
 	// SecureServingInfo *SecureServingInfo
 
@@ -41,14 +41,14 @@ type GenericServer struct {
 	*gin.Engine
 }
 
-func initGenericAPIServer(s *GenericServer) {
+func initGenericAPIServer(s *GenericAPIServer) {
 	s.Setup()
-	// s.InstallMiddlewares()
+	s.InstallMiddlewares()
 	// s.InstallAPIs()
 }
 
 // Setup do some setup work before the service starts
-func (s *GenericServer) Setup() {
+func (s *GenericAPIServer) Setup() {
 	gin.SetMode(s.mode)
 
 	gin.DebugPrintRouteFunc = func(httpMethod, absolutePath, handlerName string, nuHandlers int) {
@@ -58,7 +58,7 @@ func (s *GenericServer) Setup() {
 }
 
 // InstallMiddlewares install global middlewares
-func (s *GenericServer) InstallMiddlewares() {
+func (s *GenericAPIServer) InstallMiddlewares() {
 	for _, m := range s.middlewares {
 		formatMw := strings.ToLower(strings.NewReplacer(".", "-", "_", "-").Replace(m))
 		mw, ok := middleware.Middlewares[formatMw]
@@ -72,7 +72,7 @@ func (s *GenericServer) InstallMiddlewares() {
 }
 
 // InstallAPIs install generic apis
-func (s *GenericServer) InstallAPIs() {
+func (s *GenericAPIServer) InstallAPIs() {
 	if s.health {
 		s.GET("/health", func(c *gin.Context) {
 			c.JSON(http.StatusOK, gin.H{
@@ -95,7 +95,7 @@ func (s *GenericServer) InstallAPIs() {
 	// TODO 版本管理功能
 }
 
-func (s *GenericServer) Run() error {
+func (s *GenericAPIServer) Run() error {
 	s.insecureServer = &http.Server{
 		Addr:    s.InsecureServingInfo.Address(),
 		Handler: s,
@@ -133,7 +133,7 @@ func (s *GenericServer) Run() error {
 	return nil
 }
 
-func (s *GenericServer) ping(ctx context.Context) error {
+func (s *GenericAPIServer) ping(ctx context.Context) error {
 	url := fmt.Sprintf("http://%s/healthz", s.InsecureServingInfo.Host)
 	if strings.Contains(s.InsecureServingInfo.Host, "0.0.0.0") {
 		url = fmt.Sprintf("http://127.0.0.1:%s/healthz", strings.Split(s.InsecureServingInfo.Host, ":")[1])
@@ -165,7 +165,7 @@ func (s *GenericServer) ping(ctx context.Context) error {
 }
 
 // Close graceful shutdown the api server
-func (s *GenericServer) Close() {
+func (s *GenericAPIServer) Close() {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 

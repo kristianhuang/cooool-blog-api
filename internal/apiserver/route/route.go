@@ -7,10 +7,7 @@
 package route
 
 import (
-	"sync"
-
 	"blog-api/internal/apiserver/store"
-	"blog-api/internal/apiserver/store/mysql"
 )
 
 const (
@@ -19,12 +16,9 @@ const (
 )
 
 var (
-	once     sync.Once
 	storeIns store.Factory
 )
 
-func init() {
-	once.Do(func() {
-		storeIns, _ = mysql.GetMysqlFactory(nil)
-	})
+func SetStoreIns(s store.Factory) {
+	storeIns = s
 }

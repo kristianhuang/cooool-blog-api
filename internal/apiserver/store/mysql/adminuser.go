@@ -25,6 +25,7 @@ func newAdminUser(db *gorm.DB) *adminUser {
 }
 
 func (u *adminUser) Create(ctx context.Context, adminUserModel *model.AdminUser, opts metav1.CreateOptions) error {
+
 	return u.db.Create(adminUserModel).Error
 }
 

@@ -13,6 +13,7 @@ import (
 	"blog-api/internal/pkg/server"
 	"blog-api/pkg/cli/flag"
 	"blog-api/pkg/rollinglog"
+	"blog-api/pkg/validator"
 )
 
 type Options struct {
@@ -22,6 +23,7 @@ type Options struct {
 	MySQLOptions           *genericoptions.MySQLOptions           `json:"mysql" mapstructure:"mysql"`
 	RedisOptions           *genericoptions.RedisOptions           `json:"redis" mapstructure:"redis"`
 	Log                    *rollinglog.Options                    `json:"log" mapstructure:"log"`
+	Validator              *validator.Options                     `json:"validator" mapstructure:"validator"`
 }
 
 func NewOptions() *Options {
@@ -32,6 +34,7 @@ func NewOptions() *Options {
 		MySQLOptions:           genericoptions.NewMySQLOptions(),
 		RedisOptions:           genericoptions.NewRedisOptions(),
 		Log:                    rollinglog.NewOptions(),
+		Validator:              validator.NewOptions(),
 	}
 }
 
@@ -42,6 +45,8 @@ func (o *Options) Flags() (fss flag.NamedFlagSets) {
 	o.MySQLOptions.AddFlags(fss.FlagSet("mysql"))
 	o.RedisOptions.AddFlags(fss.FlagSet("redis"))
 	o.Log.AddFlags(fss.FlagSet("log"))
+	o.Validator.AddFlags(fss.FlagSet("validator"))
+
 	return fss
 }
 

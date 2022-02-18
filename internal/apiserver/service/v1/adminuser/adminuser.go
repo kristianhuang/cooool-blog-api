@@ -25,12 +25,3 @@ type adminUserService struct {
 func NewAdminUserService(s store.Factory) *adminUserService {
 	return &adminUserService{store: s}
 }
-
-func (a *adminUserService) Create(ctx context.Context, au *model.AdminUser, options metav1.CreateOptions) error {
-
-	if err := a.store.AdminUser().Create(ctx, au, options); err != nil {
-		return err
-	}
-
-	return nil
-}

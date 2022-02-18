@@ -12,12 +12,6 @@ import (
 )
 
 func Index(e *gin.Engine) {
-	v1 := e.Group(V1)
-	{
-		indexV1 := v1.Group("/index")
-		{
-			indexController := index.NewIndexController()
-			indexV1.GET("/", indexController.Index)
-		}
-	}
+	indexController := index.NewIndexController()
+	e.GET("/", indexController.Index)
 }
