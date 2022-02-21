@@ -11,6 +11,7 @@ import (
 	"os"
 
 	cliflag "blog-api/pkg/cli/flag"
+	"blog-api/pkg/errors"
 	"github.com/fatih/color"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
@@ -185,9 +186,9 @@ func (a *App) applyOptionRules() error {
 			return err
 		}
 	}
-	// TODO 需要一个 error 包
+
 	if errs := a.options.Validate(); len(errs) > 0 {
-		return errs[0]
+		return errors.NewAggregate(errs)
 	}
 
 	if printableOptions, ok := a.options.(PrintableOptions); ok && !a.silence {
