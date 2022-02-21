@@ -1,6 +1,8 @@
 FROM golang:1.17.7-alpine3.15 AS builder
 
 ENV GOPROXY=https://goproxy.cn \
+    CGO_ENABLED=0 \
+    GOOS=linux \
     TZ=Asia/Shanghai
 
 WORKDIR /app
@@ -11,7 +13,7 @@ RUN go mod tidy
 
 COPY . .
 
-RUN CGO_ENABLED=0 GOOS=linux go build -ldflags="-w -s" -a -installsuffix cgo -o blog-apiserver ./cmd/apiserver
+RUN go build -ldflags="-w -s" -a -installsuffix cgo -o blog-apiserver ./cmd/apiserver
 
 FROM scratch
 
