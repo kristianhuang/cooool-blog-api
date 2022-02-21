@@ -46,3 +46,7 @@ func (u *adminUser) List(cxt context.Context, opts metav1.ListOptions) (*model.A
 
 	return userList, d.Error
 }
+
+func (u *adminUser) Delete(ctx context.Context, account string, opts metav1.DeleteOptions) error {
+	return nil
+}

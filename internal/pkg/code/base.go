@@ -68,10 +68,10 @@ const (
 	// ErrInvalidJSON - 500: Data is not valid JSON.
 	ErrInvalidJSON
 
-	// ErrEncodingJSON - 500: JSON data could not be encoded.
+	// ErrEncodingJSON — 500: JSON data could not be encoded.
 	ErrEncodingJSON
 
-	// ErrDecodingJSON - 500: JSON data could not be decoded.
+	// ErrDecodingJSON — 500: JSON data could not be decoded.
 	ErrDecodingJSON
 
 	// ErrInvalidYaml - 500: Data is not valid Yaml.
@@ -82,4 +82,7 @@ const (
 
 	// ErrDecodingYaml - 500: Yaml data could not be decoded.
 	ErrDecodingYaml
+
+	// ErrRegisterValidation — 500: register validation fail.
+	ErrRegisterValidation
 )

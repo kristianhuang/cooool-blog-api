@@ -35,4 +35,5 @@ func init() {
 	register(ErrInvalidYaml, 500, "Data is not valid Yaml")
 	register(ErrEncodingYaml, 500, "Yaml data could not be encoded")
 	register(ErrDecodingYaml, 500, "Yaml data could not be decoded")
+	register(ErrRegisterValidation, 500, "register validation fail.")
 }

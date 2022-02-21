@@ -7,11 +7,11 @@
 package adminuser
 
 import (
-	"net/http"
-
+	"blog-api/internal/pkg/code"
 	"blog-api/internal/pkg/model"
+	"blog-api/internal/pkg/response"
+	"blog-api/pkg/errors"
 	metav1 "blog-api/pkg/meta/v1"
-	log "blog-api/pkg/rollinglog"
 	"blog-api/pkg/validator"
 	"github.com/gin-gonic/gin"
 
@@ -30,20 +30,21 @@ type createForm struct {
 func (a *AdminUserController) Create(c *gin.Context) {
 	formData := &createForm{}
 	if err := c.ShouldBind(formData); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"msg": err.Error()})
+		response.Write(c, errors.WithCode(code.ErrBind, err.Error()), nil)
+
 		return
 	}
 
 	v := validator.New("zh", "label")
 	if err := v.RegisterValidation("isMobile", "请输入有效手机号码", validation_util.Mobile); err != nil {
-		log.L(c).Error(err.Error())
-		c.JSON(http.StatusBadRequest, gin.H{"msg": err.Error()})
+		response.Write(c, errors.WithCode(code.ErrRegisterValidation, err.Error()), nil)
+
 		return
 	}
 
 	if err := v.Struct(formData); err != nil {
-		log.L(c).Error(err.Error())
-		c.JSON(http.StatusBadRequest, gin.H{"msg": err.Error()})
+		response.Write(c, errors.WithCode(code.ErrValidation, err.(*validator.ValidationErrors).TranslateErrs()[0].Error()), nil)
+
 		return
 	}
 
@@ -57,11 +58,9 @@ func (a *AdminUserController) Create(c *gin.Context) {
 	}
 
 	if err := a.srv.AdminUser().Create(c, au, metav1.CreateOptions{}); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"msg": err.Error()})
+		response.Write(c, err, nil)
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{
-		"msg": "success",
-	})
+	response.Write(c, nil, au)
 }

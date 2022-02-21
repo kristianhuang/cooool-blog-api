@@ -15,9 +15,10 @@ func AdminUser(e *gin.Engine) {
 	v1 := e.Group(V1)
 	{
 		adminUserController := adminuser.NewController()
-		groupV1 := v1.Group("/admin_user")
+		adminUserV1 := v1.Group("/admin_user")
 		{
-			groupV1.POST("", adminUserController.Create)
+			adminUserV1.POST("", adminUserController.Create)
+			adminUserV1.DELETE("", adminUserController.Delete)
 		}
 	}
 }

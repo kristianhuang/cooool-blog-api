@@ -16,6 +16,8 @@ import (
 
 type AdminUserService interface {
 	Create(ctx context.Context, au *model.AdminUser, options metav1.CreateOptions) error
+
+	Delete(ctx context.Context, account string, opts metav1.DeleteOptions) error
 }
 
 type adminUserService struct {

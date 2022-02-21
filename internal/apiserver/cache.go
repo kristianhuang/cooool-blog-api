@@ -8,7 +8,6 @@ package apiserver
 
 import (
 	"context"
-	"fmt"
 
 	"blog-api/pkg/shutdown"
 	"blog-api/pkg/storage"
@@ -21,7 +20,7 @@ func (s *apiServer) initRedisStore() {
 
 		return nil
 	}))
-	fmt.Println(s.redisOptions, 999999)
+
 	config := &storage.Config{
 		Host:                  s.redisOptions.Host,
 		Port:                  s.redisOptions.Port,
