@@ -14,10 +14,10 @@ import (
 func AdminUser(e *gin.Engine) {
 	v1 := e.Group(V1)
 	{
-		adminUserV1 := v1.Group("/admin_user")
+		adminUserController := adminuser.NewController()
+		groupV1 := v1.Group("/admin_user")
 		{
-			adminUserController := adminuser.NewController(storeIns)
-			adminUserV1.POST("", adminUserController.Create)
+			groupV1.POST("", adminUserController.Create)
 		}
 	}
 }

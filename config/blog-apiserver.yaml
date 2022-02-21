@@ -24,9 +24,19 @@ mysql:
   log-level: 4 # GORM log level, 1 silent, 2 error, 3 warn, 4 info
 
 redis:
-  host: blog-redis  # default 127.0.0.1
+  host: 127.0.0.1  # default 127.0.0.1
   port: 6379 # default 6379
   password:
+  #addrs:
+  #master-name: # redis 集群 master 名称
+  #username: # redis 登录用户名
+  #database: # redis 数据库
+  #optimisation-max-idle:  # redis 连接池中的最大空闲连接数
+  #optimisation-max-active: # 最大活跃连接数
+  #timeout: # 连接 redis 时的超时时间
+  #enable-cluster: # 是否开启集群模式
+  #use-ssl: # 是否启用 TLS
+  #ssl-insecure-skip-verify: # 当连接 redis 时允许使用自签名证书
 
 feature:
   enable-metrics: true # 开启 metrics, router:  /metrics

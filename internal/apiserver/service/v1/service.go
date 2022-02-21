@@ -19,8 +19,10 @@ type service struct {
 	store store.Factory
 }
 
-func NewService(store store.Factory) Service {
-	return &service{store: store}
+func NewService() Service {
+	return &service{
+		store: store.Client(),
+	}
 }
 
 func (s *service) AdminUser() adminuser.AdminUserService {

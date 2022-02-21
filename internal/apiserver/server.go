@@ -8,9 +8,9 @@ package apiserver
 
 import (
 	"blog-api/internal/apiserver/config"
-	"blog-api/internal/apiserver/route"
 	"blog-api/internal/apiserver/store"
 	"blog-api/internal/apiserver/store/mysql"
+	genericoptions "blog-api/internal/pkg/options"
 	genericapiserver "blog-api/internal/pkg/server"
 	"blog-api/pkg/shutdown"
 	"blog-api/pkg/shutdown/shutdownmanagers/posixsignal"
@@ -20,6 +20,7 @@ import (
 type apiServer struct {
 	gs            *shutdown.GracefulShutdown
 	genericServer *genericapiserver.GenericAPIServer
+	redisOptions  *genericoptions.RedisOptions
 }
 
 type preparedAPIServer struct {
@@ -65,21 +66,22 @@ func createServer(config *config.Config) (*apiServer, error) {
 	}
 	store.SetClient(storeIns)
 
-	// init routes store
-	route.SetStoreIns(storeIns)
-
 	// init validator.
 	validator.Init(config.Validator)
 
 	server := &apiServer{
 		gs:            gs,
 		genericServer: genericAPIServer,
+		redisOptions:  config.RedisOptions,
 	}
 
 	return server, nil
 }
 
 func (s *apiServer) BeforeRun() preparedAPIServer {
+	// init redis
+	s.initRedisStore()
+
 	// init router
 	initRouter(s.genericServer.Engine)
 

@@ -6,19 +6,7 @@
 
 package route
 
-import (
-	"blog-api/internal/apiserver/store"
-)
-
 const (
 	V1 = "/v1"
 	// If you need more version...
 )
-
-var (
-	storeIns store.Factory
-)
-
-func SetStoreIns(s store.Factory) {
-	storeIns = s
-}

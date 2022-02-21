@@ -8,15 +8,14 @@ package adminuser
 
 import (
 	srvv1 "blog-api/internal/apiserver/service/v1"
-	"blog-api/internal/apiserver/store"
 )
 
 type AdminUserController struct {
 	srv srvv1.Service
 }
 
-func NewController(store store.Factory) *AdminUserController {
+func NewController() *AdminUserController {
 	return &AdminUserController{
-		srv: srvv1.NewService(store),
+		srv: srvv1.NewService(),
 	}
 }
