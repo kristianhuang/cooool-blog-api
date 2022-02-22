@@ -18,7 +18,7 @@ import (
 	validation_util "blog-api/pkg/validator/util"
 )
 
-type CreateForm struct {
+type createForm struct {
 	Account  string `json:"account" form:"account" validate:"required,gt=6" label:"账号"`
 	NickName string `json:"nick_name" form:"nick_name" validate:"required" label:"昵称"`
 	Password string `json:"password" form:"password" validate:"required,gt=0" label:"密码"`
@@ -28,7 +28,7 @@ type CreateForm struct {
 }
 
 func (a *AdminUserController) Create(c *gin.Context) {
-	formData := &CreateForm{}
+	formData := &createForm{}
 	if err := c.ShouldBind(formData); err != nil {
 		response.Write(c, errors.WithCode(code.ErrBind, err.Error()), nil)
 
