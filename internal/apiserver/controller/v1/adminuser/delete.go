@@ -14,19 +14,19 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-type delForm struct {
+type DelForm struct {
 	Account string `json:"account" validate:"required,gt=6" form:"account" uri:"account"`
 }
 
 func (a *AdminUserController) Delete(c *gin.Context) {
-	delForm := &delForm{}
-	if err := c.ShouldBind(delForm); err != nil {
+	data := &DelForm{}
+	if err := c.ShouldBind(data); err != nil {
 		response.Write(c, errors.WithCode(code.ErrBind, err.Error()), nil)
 
 		return
 	}
 
-	if err := validator.Struct(delForm); err != nil {
+	if err := validator.Struct(data); err != nil {
 		response.Write(c, errors.WithCode(code.ErrValidation, err.(*validator.ValidationErrors).TranslateErrs()[0].Error()), nil)
 
 		return

@@ -29,7 +29,7 @@ type ErrResp struct {
 	Reference string `json:"reference"`
 }
 
-// Write write an error, or the response data into http response body.
+// Write an error, or the response data into http response body.
 // It use errors.ParseCoder to parse any error into errors.Coder
 // errors.Coder contains error code, user-safe error message and http status code.
 func Write(c *gin.Context, err error, data interface{}) {

@@ -12,6 +12,7 @@ import (
 	"blog-api/internal/apiserver/store/mysql"
 	genericoptions "blog-api/internal/pkg/options"
 	genericapiserver "blog-api/internal/pkg/server"
+	log "blog-api/pkg/rollinglog"
 	"blog-api/pkg/shutdown"
 	"blog-api/pkg/shutdown/shutdownmanagers/posixsignal"
 	"blog-api/pkg/validator"
@@ -99,5 +100,11 @@ func (s *apiServer) BeforeRun() preparedAPIServer {
 }
 
 func (s preparedAPIServer) Run() error {
+
+	// start shutdown managers.
+	if err := s.gs.Start(); err != nil {
+		log.Fatalf("start shutdown manager failed: %s", err.Error())
+	}
+
 	return s.genericServer.Run()
 }
