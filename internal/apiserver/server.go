@@ -46,7 +46,7 @@ func buildGenericConfig(conf *config.Config) (apiServerConfig *genericapiserver.
 	return
 }
 
-func createServer(config *config.Config) (*apiServer, error) {
+func createAPIServer(config *config.Config) (*apiServer, error) {
 	gs := shutdown.New()
 	gs.AddShutdownManager(posixsignal.NewPosixSignalManager())
 

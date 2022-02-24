@@ -12,6 +12,7 @@ import (
 
 	cliflag "blog-api/pkg/cli/flag"
 	"blog-api/pkg/errors"
+	"blog-api/pkg/version/verflag"
 	"github.com/fatih/color"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
@@ -33,6 +34,7 @@ type App struct {
 	runFunc   RunFunc
 	silence   bool
 	useConfig bool // Use config file
+	version   bool
 }
 
 type Option func(*App)
@@ -69,6 +71,12 @@ func WithUseConfig(useConfig bool) Option {
 	}
 }
 
+func WithVersion(version bool) Option {
+	return func(app *App) {
+		app.version = version
+	}
+}
+
 func WithValidArgs(args cobra.PositionalArgs) Option {
 	return func(app *App) {
 		app.args = args
@@ -93,8 +101,8 @@ func NewApp(use string, short string, opts ...Option) *App {
 	app := &App{
 		use:       use,
 		short:     short,
-		silence:   true,
 		useConfig: true,
+		version:   true,
 	}
 
 	for _, opt := range opts {
@@ -140,6 +148,10 @@ func (a *App) buildCmd() {
 		for _, f := range namedFlagSets.FlagSets {
 			fs.AddFlagSet(f)
 		}
+	}
+
+	if a.version {
+		verflag.AddFlags(namedFlagSets.FlagSet("global"))
 	}
 
 	if a.useConfig {

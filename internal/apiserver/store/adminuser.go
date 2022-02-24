@@ -16,5 +16,7 @@ import (
 type AdminUserStore interface {
 	Create(ctx context.Context, adminUserModel *v1.AdminUser, opts metav1.CreateOptions) error
 
+	Get(ctx context.Context, username string, opts metav1.GetOptions) (*v1.AdminUser, error)
+
 	Delete(ctx context.Context, account string, opts metav1.DeleteOptions) error
 }

@@ -15,7 +15,7 @@ import (
 	"blog-api/pkg/validator"
 	"github.com/gin-gonic/gin"
 
-	validation_util "blog-api/pkg/validator/util"
+	validationutil "blog-api/pkg/validator/util"
 )
 
 type createForm struct {
@@ -36,7 +36,7 @@ func (a *AdminUserController) Create(c *gin.Context) {
 	}
 
 	v := validator.New("zh", "label")
-	if err := v.RegisterValidation("isMobile", "请输入有效手机号码", validation_util.Mobile); err != nil {
+	if err := v.RegisterValidation("isMobile", "请输入有效手机号码", validationutil.Mobile); err != nil {
 		response.Write(c, errors.WithCode(code.ErrRegisterValidation, err.Error()), nil)
 
 		return

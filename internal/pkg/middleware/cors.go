@@ -19,7 +19,6 @@ const (
 
 // Cors add headers.
 func Cors() gin.HandlerFunc {
-
 	return cors.New(cors.Config{
 		AllowOrigins:     []string{"*"},
 		AllowMethods:     []string{"PUT", "PATCH", "GET", "POST", "OPTIONS", "DELETE"},

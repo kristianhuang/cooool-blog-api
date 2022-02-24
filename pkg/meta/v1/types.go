@@ -108,6 +108,11 @@ type AuthorizeOptions struct {
 	TypeMeta `json:",inline"`
 }
 
+// GetOptions is the standard query options to the standard REST get call.
+type GetOptions struct {
+	TypeMeta `json:",inline"`
+}
+
 type TableOptions struct {
 	TypeMeta  `json:",inline"`
 	NoHeaders bool `json:"-"`

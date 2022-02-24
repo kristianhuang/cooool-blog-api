@@ -29,6 +29,5 @@ type AdminUserList struct {
 }
 
 func (AdminUser) TableName() string {
-
 	return "admin_user"
 }

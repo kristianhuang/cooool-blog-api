@@ -9,8 +9,10 @@ package mysql
 import (
 	"context"
 
+	"blog-api/internal/pkg/code"
 	"blog-api/internal/pkg/model"
 	"blog-api/internal/pkg/util/gormutil"
+	"blog-api/pkg/errors"
 	"blog-api/pkg/fields"
 	metav1 "blog-api/pkg/meta/v1"
 	"gorm.io/gorm"
@@ -49,4 +51,17 @@ func (u *adminUser) List(cxt context.Context, opts metav1.ListOptions) (*model.A
 
 func (u *adminUser) Delete(ctx context.Context, account string, opts metav1.DeleteOptions) error {
 	return nil
+}
+
+func (u *adminUser) Get(ctx context.Context, username string, opts metav1.GetOptions) (*model.AdminUser, error) {
+	user := &model.AdminUser{}
+
+	err := u.db.Where("name = ? and status = 1", username).First(&user).Error
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return nil, errors.WithCode(code.ErrUserNotFound, err.Error())
+		}
+	}
+
+	return user, nil
 }

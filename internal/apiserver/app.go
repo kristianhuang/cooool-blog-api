@@ -13,7 +13,7 @@ import (
 	log "blog-api/pkg/rollinglog"
 )
 
-const commandDesc = `Welcome to use Blog-API`
+const commandDesc = `Welcome to use Blog-API-SERVER`
 
 func NewApp(use string) *app.App {
 	opts := options.NewOptions()
@@ -39,7 +39,7 @@ func createRunFunc(opts *options.Options) app.RunFunc {
 }
 
 func Run(conf *config.Config) error {
-	server, err := createServer(conf)
+	server, err := createAPIServer(conf)
 	if err != nil {
 		return err
 	}

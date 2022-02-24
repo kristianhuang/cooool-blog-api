@@ -15,7 +15,9 @@ import (
 	"time"
 
 	"blog-api/internal/pkg/middleware"
+	"blog-api/internal/pkg/response"
 	log "blog-api/pkg/rollinglog"
+	"blog-api/pkg/version"
 	"github.com/gin-contrib/pprof"
 	"github.com/gin-gonic/gin"
 	promethium "github.com/zsais/go-gin-prometheus"
@@ -59,6 +61,10 @@ func (s *GenericAPIServer) Setup() {
 
 // InstallMiddlewares install global middlewares
 func (s *GenericAPIServer) InstallMiddlewares() {
+	// necessary middlewares
+	s.Use(middleware.RequestID())
+	s.Use(middleware.Context())
+
 	for _, m := range s.middlewares {
 		formatMw := strings.ToLower(strings.NewReplacer(".", "-", "_", "-").Replace(m))
 		mw, ok := middleware.Middlewares[formatMw]
@@ -75,9 +81,7 @@ func (s *GenericAPIServer) InstallMiddlewares() {
 func (s *GenericAPIServer) InstallAPIs() {
 	if s.health {
 		s.GET("/health", func(c *gin.Context) {
-			c.JSON(http.StatusOK, gin.H{
-				"status": "ok",
-			})
+			response.Write(c, nil, map[string]string{"status": "ok"})
 		})
 	}
 
@@ -92,7 +96,10 @@ func (s *GenericAPIServer) InstallAPIs() {
 		pprof.Register(s.Engine)
 	}
 
-	// TODO 版本管理功能
+	// 开启版本输出
+	s.GET("/version", func(c *gin.Context) {
+		response.Write(c, nil, version.Get())
+	})
 }
 
 func (s *GenericAPIServer) Run() error {
@@ -101,7 +108,7 @@ func (s *GenericAPIServer) Run() error {
 		Handler: s,
 	}
 
-	// https
+	// TODO https server
 	// s.secureServer = &http.Server{
 	// 	Addr:    s.SecureServingInfo.Host(),
 	// 	Handler: s,
