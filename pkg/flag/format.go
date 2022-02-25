@@ -7,9 +7,10 @@
 package flag
 
 import (
-	"github.com/spf13/pflag"
 	"log"
 	"strings"
+
+	"github.com/spf13/pflag"
 )
 
 // WordReplaceNormalizeFunc 转化非标准格式 flag 为标准格式

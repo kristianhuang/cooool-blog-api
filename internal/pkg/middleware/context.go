@@ -11,7 +11,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// UsernameKey defines the key in gin context which represents the owner of the secret.
+// UsernameKey defines the key in gin context, which represents the owner of the secret.
 const UsernameKey = "username"
 
 // Context is a middleware that injects common prefix fields to gin.Context.

@@ -10,8 +10,8 @@ import (
 	"fmt"
 	"os"
 
-	cliflag "blog-api/pkg/cli/flag"
 	"blog-api/pkg/errors"
+	cliflag "blog-api/pkg/flag"
 	"blog-api/pkg/version/verflag"
 	"github.com/fatih/color"
 	"github.com/spf13/cobra"

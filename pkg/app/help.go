@@ -10,7 +10,7 @@ import (
 	"fmt"
 	"strings"
 
-	cliflag "blog-api/pkg/cli/flag"
+	cliflag "blog-api/pkg/flag"
 	"blog-api/pkg/util/terminal"
 	"github.com/fatih/color"
 	"github.com/spf13/cobra"

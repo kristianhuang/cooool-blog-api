@@ -23,7 +23,11 @@ type dataStore struct {
 }
 
 func (s *dataStore) AdminUser() store.AdminUserStore {
-	return newAdminUser(s.db)
+	return newAdminUser(s)
+}
+
+func (s *dataStore) Policy() store.PolicyStore {
+	return newPolicy(s)
 }
 
 func (s *dataStore) Close() error {

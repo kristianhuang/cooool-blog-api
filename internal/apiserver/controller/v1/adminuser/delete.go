@@ -10,6 +10,7 @@ import (
 	"blog-api/internal/pkg/code"
 	"blog-api/internal/pkg/response"
 	"blog-api/pkg/errors"
+	metav1 "blog-api/pkg/meta/v1"
 	"blog-api/pkg/validator"
 	"github.com/gin-gonic/gin"
 )
@@ -22,7 +23,6 @@ func (a *AdminUserController) Delete(c *gin.Context) {
 	delForm := &delForm{}
 	if err := c.ShouldBind(delForm); err != nil {
 		response.Write(c, errors.WithCode(code.ErrBind, err.Error()), nil)
-
 		return
 	}
 
@@ -30,6 +30,10 @@ func (a *AdminUserController) Delete(c *gin.Context) {
 		response.Write(c, errors.WithCode(code.ErrValidation, err.(*validator.ValidationErrors).TranslateErrs()[0].Error()), nil)
 
 		return
+	}
+
+	if err := a.srv.AdminUser().Delete(c, delForm.Account, metav1.DeleteOptions{Unscoped: true}); err != nil {
+		response.Write(c, err, nil)
 	}
 
 	response.Write(c, nil, nil)

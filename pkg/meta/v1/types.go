@@ -10,6 +10,7 @@ import (
 	"encoding/json"
 
 	"gorm.io/gorm"
+	"gorm.io/plugin/soft_delete"
 )
 
 type Extend map[string]interface{}
@@ -51,13 +52,23 @@ type ListOptions struct {
 }
 
 type ObjectMeta struct {
-	ID        uint `json:"id,omitempty" gorm:"primaryKey;autoIncrement;column:id"`
-	CreatedAt int  `json:"created_at,omitempty" gorm:"type:int(15);not null;column:created_at;comment:创建时间;"`
-	UpdatedAt int  `json:"updated_at,omitempty" gorm:"type:int(15);not null;column:updated_at;comment:更新时间;"`
+	ID uint64 `json:"id,omitempty" gorm:"primaryKey;autoIncrement;column:id"`
+
+	// InstanceID defines a string type resource identifier,
+	// use prefixed to distinguish resource types, easy to remember, Url-friendly.
+	InstanceID string `json:"instanceID,omitempty" gorm:"unique;column:instanceID;type:varchar(32);not null"`
+
+	CreatedAt int64 `json:"created_at,omitempty" gorm:"type:int(11);not null;column:created_at;comment:创建时间;"`
+	UpdatedAt int64 `json:"updated_at,omitempty" gorm:"type:int(11);not null;column:updated_at;comment:更新时间;"`
 
 	// 脱离于 db 的额外的拓展
-	Extend       Extend `json:"extend,omitempty" gorm:"-" validate:"omitempty"`
-	ExtendShadow string `json:"-" gorm:"column:extend_shadow" validate:"omitempty"`
+	Extend       Extend `json:"extend,omitempty" gorm:"-"`
+	ExtendShadow string `json:"-" gorm:"column:extend_shadow"`
+}
+
+// DeleteMeta is delete meta data.
+type DeleteMeta struct {
+	DeletedAt soft_delete.DeletedAt `json:"deleted_at,omitempty" gorm:"type:int(11);column:deleted_at;comment:删除时间"`
 }
 
 // BeforeCreate run before create database record.

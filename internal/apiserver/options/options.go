@@ -11,7 +11,7 @@ import (
 
 	genericoptions "blog-api/internal/pkg/options"
 	"blog-api/internal/pkg/server"
-	"blog-api/pkg/cli/flag"
+	"blog-api/pkg/flag"
 	"blog-api/pkg/rollinglog"
 	"blog-api/pkg/validator"
 )

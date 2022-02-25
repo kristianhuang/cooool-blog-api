@@ -9,9 +9,10 @@ package flag
 import (
 	"bytes"
 	"fmt"
-	"github.com/spf13/pflag"
 	"io"
 	"strings"
+
+	"github.com/spf13/pflag"
 )
 
 // PrintSections prints the given names flag sets in sections, with the maximal given column number.

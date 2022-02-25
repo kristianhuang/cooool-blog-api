@@ -6,7 +6,7 @@
 
 package app
 
-import "blog-api/pkg/cli/flag"
+import "blog-api/pkg/flag"
 
 type CliOptions interface {
 	Flags() (fss flag.NamedFlagSets)

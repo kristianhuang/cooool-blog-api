@@ -22,13 +22,17 @@ type adminUser struct {
 	db *gorm.DB
 }
 
-func newAdminUser(db *gorm.DB) *adminUser {
-	return &adminUser{db: db}
+func newAdminUser(ds *dataStore) *adminUser {
+	return &adminUser{ds.db}
 }
 
 func (u *adminUser) Create(ctx context.Context, adminUserModel *model.AdminUser, opts metav1.CreateOptions) error {
 
 	return u.db.Create(adminUserModel).Error
+}
+
+func (u *adminUser) Update(ctx context.Context, adminUserModel *model.AdminUser, opts metav1.UpdateOptions) error {
+	return u.db.Save(adminUserModel).Error
 }
 
 func (u *adminUser) List(cxt context.Context, opts metav1.ListOptions) (*model.AdminUserList, error) {
