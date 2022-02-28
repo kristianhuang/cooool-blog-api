@@ -29,38 +29,46 @@ type createForm struct {
 
 func (a *AdminUserController) Create(c *gin.Context) {
 	formData := &createForm{}
+
 	if err := c.ShouldBind(formData); err != nil {
 		response.Write(c, errors.WithCode(code.ErrBind, err.Error()), nil)
 
 		return
 	}
 
-	v := validator.New("zh", "label")
-	if err := v.RegisterValidation("isMobile", "请输入有效手机号码", validationutil.Mobile); err != nil {
-		response.Write(c, errors.WithCode(code.ErrRegisterValidation, err.Error()), nil)
-
-		return
+	if err := formData.validation(); err != nil {
+		response.Write(c, err, nil)
 	}
 
-	if err := v.Struct(formData); err != nil {
-		response.Write(c, errors.WithCode(code.ErrValidation, err.(*validator.ValidationErrors).TranslateErrs()[0].Error()), nil)
-
-		return
-	}
-
-	au := &model.AdminUser{
-		Account:  formData.Account,
-		NickName: formData.NickName,
-		Password: formData.Password,
-		Mobile:   formData.Mobile,
-		Email:    formData.Email,
-		Status:   formData.Status,
-	}
-
-	if err := a.srv.AdminUser().Create(c, au, metav1.CreateOptions{}); err != nil {
+	aum := formData.applyToAdminUser()
+	if err := a.srv.AdminUser().Create(c, aum, metav1.CreateOptions{}); err != nil {
 		response.Write(c, err, nil)
 		return
 	}
 
-	response.Write(c, nil, au)
+	response.Write(c, nil, aum)
+}
+
+func (f *createForm) validation() error {
+	v := validator.New("zh", "label")
+	if err := v.RegisterValidation("isMobile", "请输入有效手机号码", validationutil.Mobile); err != nil {
+		return errors.WithCode(code.ErrRegisterValidation, err.Error())
+	}
+
+	if err := v.Struct(f); err != nil {
+		return errors.WithCode(code.ErrValidation, err.(*validator.ValidationErrors).TranslateErrs()[0].Error())
+	}
+
+	return nil
+}
+
+func (f *createForm) applyToAdminUser() *model.AdminUser {
+	return &model.AdminUser{
+		Account:  f.Account,
+		NickName: f.NickName,
+		Password: f.Password,
+		Mobile:   f.Mobile,
+		Email:    f.Email,
+		Status:   f.Status,
+	}
 }

@@ -21,14 +21,14 @@ type delForm struct {
 
 func (a *AdminUserController) Delete(c *gin.Context) {
 	delForm := &delForm{}
+
 	if err := c.ShouldBind(delForm); err != nil {
 		response.Write(c, errors.WithCode(code.ErrBind, err.Error()), nil)
 		return
 	}
 
-	if err := validator.Struct(delForm); err != nil {
-		response.Write(c, errors.WithCode(code.ErrValidation, err.(*validator.ValidationErrors).TranslateErrs()[0].Error()), nil)
-
+	if err := delForm.validation(); err != nil {
+		response.Write(c, err, nil)
 		return
 	}
 
@@ -37,4 +37,12 @@ func (a *AdminUserController) Delete(c *gin.Context) {
 	}
 
 	response.Write(c, nil, nil)
+}
+
+func (f *delForm) validation() error {
+	if err := validator.Struct(f); err != nil {
+		return errors.WithCode(code.ErrValidation, err.(*validator.ValidationErrors).TranslateErrs()[0].Error())
+	}
+
+	return nil
 }
