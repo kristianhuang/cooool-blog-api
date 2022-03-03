@@ -32,12 +32,12 @@ func (a *AdminUserController) Create(c *gin.Context) {
 
 	if err := c.ShouldBind(formData); err != nil {
 		response.Write(c, errors.WithCode(code.ErrBind, err.Error()), nil)
-
 		return
 	}
 
 	if err := formData.validation(); err != nil {
 		response.Write(c, err, nil)
+		return
 	}
 
 	aum := formData.applyToAdminUser()

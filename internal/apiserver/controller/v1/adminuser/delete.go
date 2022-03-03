@@ -34,6 +34,7 @@ func (a *AdminUserController) Delete(c *gin.Context) {
 
 	if err := a.srv.AdminUser().Delete(c, delForm.Account, metav1.DeleteOptions{Unscoped: true}); err != nil {
 		response.Write(c, err, nil)
+		return
 	}
 
 	response.Write(c, nil, nil)
