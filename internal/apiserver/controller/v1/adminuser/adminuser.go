@@ -8,14 +8,17 @@ package adminuser
 
 import (
 	srvv1 "blog-api/internal/apiserver/service/v1"
+	"blog-api/internal/pkg/bind"
 )
 
 type AdminUserController struct {
 	srv srvv1.Service
+	*bind.BindData
 }
 
 func NewController() *AdminUserController {
 	return &AdminUserController{
-		srv: srvv1.NewService(),
+		srv:      srvv1.NewService(),
+		BindData: bind.NewBindData(),
 	}
 }

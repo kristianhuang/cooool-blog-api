@@ -7,9 +7,10 @@
 package errors
 
 import (
-	"encoding/json"
 	"regexp"
 	"testing"
+
+	"blog-api/pkg/json"
 )
 
 func TestFrameMarshalText(t *testing.T) {

@@ -7,10 +7,10 @@
 package rollinglog
 
 import (
-	"encoding/json"
 	"fmt"
 	"strings"
 
+	"blog-api/pkg/json"
 	"github.com/spf13/pflag"
 	"go.uber.org/zap/zapcore"
 )

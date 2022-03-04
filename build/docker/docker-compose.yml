@@ -39,8 +39,8 @@ services:
 
   blog-apiserver:
     build:
-      context: ../../../
-      dockerfile: ./build/docker/apiserver/Dockerfile
+      context: ../..
+      dockerfile: apiserver/Dockerfile
     image: blog-apiserver
     networks:
       - blog

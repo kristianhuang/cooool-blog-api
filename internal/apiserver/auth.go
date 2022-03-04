@@ -33,13 +33,13 @@ const (
 )
 
 type loginInfo struct {
-	Account  string `form:"account" json:"account" binding:"required,account"`
+	Account  string `form:"username" json:"username" binding:"required,username"`
 	Password string `form:"password" json:"password" binding:"required,password"`
 }
 
 func newBasicAuth() middleware.AuthStrategy {
-	return auth.NewBasicStrategy(func(account, password string) bool {
-		adminUser, err := store.Client().AdminUser().Get(context.TODO(), account, metav1.GetOptions{})
+	return auth.NewBasicStrategy(func(username, password string) bool {
+		adminUser, err := store.Client().AdminUser().Get(context.TODO(), username, metav1.GetOptions{})
 		if err != nil {
 			return false
 		}
@@ -55,8 +55,7 @@ func newBasicAuth() middleware.AuthStrategy {
 	})
 }
 
-// TODO JWT Server
-func NewJWTAuth() middleware.AuthStrategy {
+func newJWTAuth() middleware.AuthStrategy {
 	ginjwt, _ := jwt.New(&jwt.GinJWTMiddleware{
 		Realm:            viper.GetString("jwt.realm"),
 		SigningAlgorithm: "HS256",
@@ -89,8 +88,8 @@ func NewJWTAuth() middleware.AuthStrategy {
 	return auth.NewJWTStrategy(*ginjwt)
 }
 
-func NewAutoAuth() middleware.AuthStrategy {
-	return auth.NewAutoStrategy(newBasicAuth().(auth.BasicStrategy), NewJWTAuth().(auth.JWTStrategy))
+func newAutoAuth() middleware.AuthStrategy {
+	return auth.NewAutoStrategy(newBasicAuth().(auth.BasicStrategy), newJWTAuth().(auth.JWTStrategy))
 }
 
 func authenticator() func(c *gin.Context) (interface{}, error) {
@@ -184,8 +183,8 @@ func payloadFunc() func(data interface{}) jwt.MapClaims {
 			"aud": APIServerAudience,
 		}
 		if u, ok := data.(*model.AdminUser); ok {
-			claims[jwt.IdentityKey] = u.Account
-			claims["sub"] = u.Account
+			claims[jwt.IdentityKey] = u.Name
+			claims["sub"] = u.Name
 		}
 
 		return claims

@@ -14,11 +14,11 @@ import (
 
 type Secret struct {
 	metav1.ObjectMeta `json:"metadata,omitempty"`
-	Account           string `json:"account" gorm:"column:account;size:50;comment:账号信息"`
-	SecretID          string `json:"secret_id" gorm:"column:secret_id;comment:secret_id;"`
-	SecretKey         string `json:"secret_key" gorm:"column:secret_key;comment:secret_key;"`
+	UserName          string `json:"username" gorm:"not null;column:username;size:64;comment:账号信息"`
+	SecretID          string `json:"secret_id" gorm:"not null;column:secret_id;comment:secret_id;"`
+	SecretKey         string `json:"secret_key" gorm:"not null;column:secret_key;comment:secret_key;"`
 
-	Expires     int64  `json:"expires" gorm:"column:expires;comment:有效期;"`
+	Expires     int64  `json:"expires" gorm:"not null;column:expires;comment:有效期;"`
 	Description string `json:"description" gorm:"column:description;comment:描述;"`
 }
 

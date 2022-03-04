@@ -7,8 +7,7 @@
 package v1
 
 import (
-	"encoding/json"
-
+	"blog-api/pkg/json"
 	"gorm.io/gorm"
 	"gorm.io/plugin/soft_delete"
 )
@@ -56,12 +55,23 @@ type ObjectMeta struct {
 
 	// InstanceID defines a string type resource identifier,
 	// use prefixed to distinguish resource types, easy to remember, Url-friendly.
-	InstanceID string `json:"instanceID,omitempty" gorm:"unique;column:instanceID;type:varchar(32);not null"`
+	InstanceID string `json:"instance_id,omitempty" gorm:"unique;column:instance_id;type:varchar(32);not null"`
+
+	// Required: true
+	// Name must be unique. Is required when creating resources.
+	// Name is primarily intended for creation idempotence and configuration
+	// definition.
+	// It will be generated automated only if Name is not specified.
+	// Cannot be updated.
+	Name string `json:"name,omitempty" gorm:"column:name;type:varchar(64);not null;comment:资源名"`
 
 	CreatedAt int64 `json:"created_at,omitempty" gorm:"type:int(11);not null;column:created_at;comment:创建时间;"`
 	UpdatedAt int64 `json:"updated_at,omitempty" gorm:"type:int(11);not null;column:updated_at;comment:更新时间;"`
 
-	// 脱离于 db 的额外的拓展
+	CreatedAtFormat string `json:"created_at_format,omitempty" gorm:"-"`
+	UpdatedAtFormat string `json:"updated_at_format,omitempty" gorm:"-"`
+
+	// 拓展字段
 	Extend       Extend `json:"extend,omitempty" gorm:"-"`
 	ExtendShadow string `json:"-" gorm:"column:extend_shadow"`
 }

@@ -10,7 +10,8 @@ var client Factory
 
 type Factory interface {
 	AdminUser() AdminUserStore
-	Policy() PolicyStore
+	Policies() PolicyStore
+	Secrets() SecretStore
 	Close() error
 }
 

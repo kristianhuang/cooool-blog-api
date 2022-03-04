@@ -8,9 +8,10 @@ package errors
 
 import (
 	"bytes"
-	"encoding/json"
 	"fmt"
 	"strings"
+
+	"blog-api/pkg/json"
 )
 
 // formatInfo contains all the error information.

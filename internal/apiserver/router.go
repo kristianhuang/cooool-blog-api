@@ -8,6 +8,7 @@ package apiserver
 
 import (
 	"blog-api/internal/apiserver/route"
+	"blog-api/internal/pkg/middleware/auth"
 	"github.com/gin-gonic/gin"
 )
 
@@ -15,12 +16,17 @@ type Route func(e *gin.Engine)
 
 var (
 	Routes = []Route{
-		route.Index,
+		route.Login,
 		route.AdminUser,
+		route.Secrets,
+		route.Policies,
+		route.Error,
 	}
 )
 
 func initRouter(e *gin.Engine) *gin.Engine {
+	route.WithAuth(newJWTAuth().(auth.JWTStrategy), newAutoAuth())
+
 	for _, r := range Routes {
 		r(e)
 	}

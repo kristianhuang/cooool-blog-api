@@ -12,6 +12,7 @@ import (
 
 	"blog-api/pkg/errors"
 	cliflag "blog-api/pkg/flag"
+	log "blog-api/pkg/rollinglog"
 	"blog-api/pkg/version/verflag"
 	"github.com/fatih/color"
 	"github.com/spf13/cobra"
@@ -224,6 +225,5 @@ func (a App) Command() *cobra.Command {
 
 func printWorkingDir() {
 	wd, _ := os.Getwd()
-	fmt.Println(color.GreenString("\n%s\n", "======== WorkingDir ========"))
-	fmt.Println(wd)
+	log.Infof("%v WorkingDir: %s", progressMessage, wd)
 }

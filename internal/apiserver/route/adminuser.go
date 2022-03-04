@@ -15,11 +15,15 @@ func AdminUser(e *gin.Engine) {
 	v1 := e.Group(V1)
 	{
 		adminUserController := adminuser.NewController()
-		adminUserV1 := v1.Group("/admin_user")
+		adminUserV1 := v1.Group("/admin-user")
 		{
 			adminUserV1.POST("", adminUserController.Create)
-			adminUserV1.DELETE("", adminUserController.Delete)
-			adminUserV1.DELETE(":account", adminUserController.Create)
+			adminUserV1.DELETE("", adminUserController.DeleteCollection)
+			adminUserV1.DELETE(":username", adminUserController.Delete)
+			adminUserV1.PUT(":username", adminUserController.Update)
+			adminUserV1.PUT(":username/change-password", adminUserController.ChangePassword)
+			adminUserV1.GET("", adminUserController.List)
+			adminUserV1.GET(":username", adminUserController.Get)
 		}
 	}
 }

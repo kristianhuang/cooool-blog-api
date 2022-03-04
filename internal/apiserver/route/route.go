@@ -7,10 +7,8 @@
 package route
 
 import (
-	"sync"
-
-	"blog-api/internal/apiserver"
-	"blog-api/internal/pkg/middleware/auth"
+	"blog-api/internal/pkg/middleware"
+	middlewareauth "blog-api/internal/pkg/middleware/auth"
 )
 
 const (
@@ -18,13 +16,18 @@ const (
 	// If you need more version...
 )
 
+type auth struct {
+	jwt  middlewareauth.JWTStrategy
+	auto middleware.AuthStrategy
+}
+
 var (
-	once        sync.Once
-	jwtStrategy auth.JWTStrategy
+	authStrategy auth
 )
 
-func init() {
-	once.Do(func() {
-		jwtStrategy, _ = apiserver.NewJWTAuth().(auth.JWTStrategy)
-	})
+func WithAuth(jwt middlewareauth.JWTStrategy, auto middleware.AuthStrategy) {
+	authStrategy = auth{
+		jwt:  jwt,
+		auto: auto,
+	}
 }

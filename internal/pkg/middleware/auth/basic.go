@@ -18,12 +18,12 @@ import (
 )
 
 type BasicStrategy struct {
-	compare func(account, password string) bool
+	compare func(username, password string) bool
 }
 
 var _ middleware.AuthStrategy = &BasicStrategy{}
 
-func NewBasicStrategy(compare func(account, password string) bool) BasicStrategy {
+func NewBasicStrategy(compare func(username, password string) bool) BasicStrategy {
 	return BasicStrategy{compare: compare}
 }
 

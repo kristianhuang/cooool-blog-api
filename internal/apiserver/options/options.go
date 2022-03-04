@@ -7,23 +7,25 @@
 package options
 
 import (
-	"encoding/json"
-
 	genericoptions "blog-api/internal/pkg/options"
 	"blog-api/internal/pkg/server"
 	"blog-api/pkg/flag"
+	"blog-api/pkg/json"
 	"blog-api/pkg/rollinglog"
+	"blog-api/pkg/util/idutil"
 	"blog-api/pkg/validator"
 )
 
+// TODO https options
 type Options struct {
 	ServerRunOptions       *genericoptions.ServerRunOptions       `json:"server" mapstructure:"server"`
 	InsecureServingOptions *genericoptions.InsecureServingOptions `json:"insecure" mapstructure:"insecure"`
 	FeatureOptions         *genericoptions.FeatureOptions         `json:"feature" mapstructure:"feature"`
 	MySQLOptions           *genericoptions.MySQLOptions           `json:"mysql" mapstructure:"mysql"`
 	RedisOptions           *genericoptions.RedisOptions           `json:"redis" mapstructure:"redis"`
-	Log                    *rollinglog.Options                    `json:"log" mapstructure:"log"`
-	Validator              *validator.Options                     `json:"validator" mapstructure:"validator"`
+	JwtOptions             *genericoptions.JwtOptions
+	Log                    *rollinglog.Options `json:"log" mapstructure:"log"`
+	Validator              *validator.Options  `json:"validator" mapstructure:"validator"`
 }
 
 func NewOptions() *Options {
@@ -33,6 +35,7 @@ func NewOptions() *Options {
 		FeatureOptions:         genericoptions.NewFeatureOptions(),
 		MySQLOptions:           genericoptions.NewMySQLOptions(),
 		RedisOptions:           genericoptions.NewRedisOptions(),
+		JwtOptions:             genericoptions.NewJwtOptions(),
 		Log:                    rollinglog.NewOptions(),
 		Validator:              validator.NewOptions(),
 	}
@@ -46,12 +49,17 @@ func (o *Options) Flags() (fss flag.NamedFlagSets) {
 	o.RedisOptions.AddFlags(fss.FlagSet("redis"))
 	o.Log.AddFlags(fss.FlagSet("log"))
 	o.Validator.AddFlags(fss.FlagSet("validator"))
+	o.JwtOptions.AddFlags(fss.FlagSet("jwt"))
 
 	return fss
 }
 
 // Complete 设置需要默认值的选项
-func (o Options) Complete() error {
+func (o *Options) Complete() error {
+	if o.JwtOptions.Key == "" {
+		o.JwtOptions.Key = idutil.NewSecretKey()
+	}
+
 	return nil
 }
 

@@ -1,0 +1,25 @@
+/*
+ * Copyright 2021 Kristian Huang <kristianhuang@gmail.com>. All rights reserved.
+ * Use of this source code is governed by a MIT style
+ * license that can be found in the LICENSE file.
+ */
+
+package error
+
+import (
+	"blog-api/internal/pkg/code"
+	"blog-api/internal/pkg/response"
+	"blog-api/pkg/errors"
+	"github.com/gin-gonic/gin"
+)
+
+type ErrorController struct {
+}
+
+func NewErrorController() *ErrorController {
+	return &ErrorController{}
+}
+
+func (ec *ErrorController) PageNotFound(c *gin.Context) {
+	response.Write(c, errors.WithCode(code.ErrPageNotFound, "Page not found."), nil)
+}

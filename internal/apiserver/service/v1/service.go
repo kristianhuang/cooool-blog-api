@@ -7,12 +7,13 @@
 package v1
 
 import (
-	"blog-api/internal/apiserver/service/v1/adminuser"
 	"blog-api/internal/apiserver/store"
 )
 
 type Service interface {
-	AdminUser() adminuser.AdminUserService
+	AdminUser() AdminUserService
+	Policy() PolicyService
+	Secrets() SecretService
 }
 
 type service struct {
@@ -25,6 +26,14 @@ func NewService() Service {
 	}
 }
 
-func (s *service) AdminUser() adminuser.AdminUserService {
-	return adminuser.NewAdminUserService(s.store)
+func (s *service) AdminUser() AdminUserService {
+	return newAdminUserService(s.store)
+}
+
+func (s *service) Policy() PolicyService {
+	return newPolicies(s.store)
+}
+
+func (s *service) Secrets() SecretService {
+	return newSecrets(s)
 }

@@ -27,7 +27,6 @@ func newAdminUser(ds *dataStore) *adminUser {
 }
 
 func (u *adminUser) Create(ctx context.Context, adminUserModel *model.AdminUser, opts metav1.CreateOptions) error {
-
 	return u.db.Create(adminUserModel).Error
 }
 
@@ -38,10 +37,9 @@ func (u *adminUser) Update(ctx context.Context, adminUserModel *model.AdminUser,
 func (u *adminUser) List(cxt context.Context, opts metav1.ListOptions) (*model.AdminUserList, error) {
 	userList := &model.AdminUserList{}
 	ol := gormutil.Unpointer(opts.Offset, opts.Limit)
-
 	selector, _ := fields.ParseSelector(opts.FieldSelector)
-	name, _ := selector.RequiresExactMatch("name")
-	d := u.db.Where("name like ? and status = 1", "%"+name+"%").
+	username, _ := selector.RequiresExactMatch("name")
+	d := u.db.Where("name like ?", "%"+username+"%").
 		Offset(ol.Offset).
 		Limit(ol.Limit).
 		Order("id desc").
@@ -53,25 +51,48 @@ func (u *adminUser) List(cxt context.Context, opts metav1.ListOptions) (*model.A
 	return userList, d.Error
 }
 
-func (u *adminUser) Delete(ctx context.Context, account string, opts metav1.DeleteOptions) error {
+func (u *adminUser) Delete(ctx context.Context, username string, opts metav1.DeleteOptions) error {
+	pol := newPolicy(&dataStore{u.db})
+	if err := pol.DeleteByAdminUser(ctx, username, opts); err != nil {
+		return err
+	}
+
+	if opts.Unscoped {
+		u.db = u.db.Unscoped()
+	}
+
+	err := u.db.Where("name = ?", username).Delete(&model.AdminUser{}).Error
+
+	if err != nil && errors.Is(err, gorm.ErrRecordNotFound) {
+		return errors.WithCode(code.ErrDatabase, err.Error())
+	}
+
 	return nil
 }
 
 func (u *adminUser) Get(ctx context.Context, username string, opts metav1.GetOptions) (*model.AdminUser, error) {
-	user := &model.AdminUser{}
-
-	err := u.db.Where("name = ? and status = 1", username).First(&user).Error
+	au := &model.AdminUser{}
+	err := u.db.Where("name = ?", username).First(&au).Error
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return nil, errors.WithCode(code.ErrUserNotFound, err.Error())
 		}
+
+		return nil, errors.WithCode(code.ErrDatabase, err.Error())
 	}
 
-	return user, nil
+	return au, nil
 }
 
-func (u *adminUser) DeleteCollection(ctx context.Context, accounts []string, opts metav1.DeleteOptions) error {
+func (u *adminUser) DeleteCollection(ctx context.Context, usernames []string, opts metav1.DeleteOptions) error {
 	// pol := newPolicy(&dataStore{u.db})
-	// TODO
-	return nil
+	// if err := pol.DeleteCollectionByAdminUser(ctx, usernames, opts); err != nil {
+	// 	return err
+	// }
+
+	if opts.Unscoped {
+		u.db = u.db.Unscoped()
+	}
+
+	return u.db.Where("username in (?)", usernames).Delete(&model.AdminUser{}).Error
 }

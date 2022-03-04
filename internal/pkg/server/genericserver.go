@@ -30,7 +30,9 @@ type GenericAPIServer struct {
 
 	// InsecureServingInfo holds configuration of the insecure HTTP server.
 	InsecureServingInfo *InsecureServingInfo
-	// ShutdownTimeout     time.Duration
+	// ShutdownTimeout is the timeout used for server shutdown. This specifies the timeout before server
+	// gracefully shutdown returns.
+	ShutdownTimeout time.Duration
 
 	middlewares     []string
 	mode            string
@@ -54,7 +56,6 @@ func (s *GenericAPIServer) Setup() {
 	gin.SetMode(s.mode)
 
 	gin.DebugPrintRouteFunc = func(httpMethod, absolutePath, handlerName string, nuHandlers int) {
-
 		log.Infow("%-6s %-s --> %s (%d handlers)", httpMethod, absolutePath, handlerName, nuHandlers)
 	}
 }
@@ -110,7 +111,7 @@ func (s *GenericAPIServer) Run() error {
 
 	// TODO https server
 	// s.secureServer = &http.Server{
-	// 	Addr:    s.SecureServingInfo.Host(),
+	// 	Addr:    s.SecureServingInfo.BindAddress(),
 	// 	Handler: s,
 	// }
 
@@ -141,9 +142,9 @@ func (s *GenericAPIServer) Run() error {
 }
 
 func (s *GenericAPIServer) ping(ctx context.Context) error {
-	url := fmt.Sprintf("http://%s/healthz", s.InsecureServingInfo.Host)
-	if strings.Contains(s.InsecureServingInfo.Host, "0.0.0.0") {
-		url = fmt.Sprintf("http://127.0.0.1:%s/healthz", strings.Split(s.InsecureServingInfo.Host, ":")[1])
+	url := fmt.Sprintf("http://%s/healthz", s.InsecureServingInfo.BindAddress)
+	if strings.Contains(s.InsecureServingInfo.BindAddress, "0.0.0.0") {
+		url = fmt.Sprintf("http://127.0.0.1:%s/healthz", strings.Split(s.InsecureServingInfo.BindAddress, ":")[1])
 	}
 
 	for {

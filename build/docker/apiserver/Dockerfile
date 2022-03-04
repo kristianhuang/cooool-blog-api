@@ -17,7 +17,8 @@ RUN go build -ldflags="-w -s" -a -installsuffix cgo -o blog-apiserver ./cmd/apis
 
 FROM scratch
 
-ENV APISERVERPORT=8080
+ENV APISERVERPORT=8080 \
+    TZ=Asia/Shanghai
 
 WORKDIR /blog
 

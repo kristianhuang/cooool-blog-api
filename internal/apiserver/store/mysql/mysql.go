@@ -26,8 +26,12 @@ func (s *dataStore) AdminUser() store.AdminUserStore {
 	return newAdminUser(s)
 }
 
-func (s *dataStore) Policy() store.PolicyStore {
+func (s *dataStore) Policies() store.PolicyStore {
 	return newPolicy(s)
+}
+
+func (s *dataStore) Secrets() store.SecretStore {
+	return newSecrets(s)
 }
 
 func (s *dataStore) Close() error {
@@ -90,6 +94,14 @@ func cleanDatabases(db *gorm.DB) error {
 
 func MigrateDatabase(db *gorm.DB) error {
 	if err := db.AutoMigrate(&model.AdminUser{}); err != nil {
+		return err
+	}
+
+	if err := db.AutoMigrate(&model.Policy{}); err != nil {
+		return err
+	}
+
+	if err := db.AutoMigrate(&model.Secret{}); err != nil {
 		return err
 	}
 

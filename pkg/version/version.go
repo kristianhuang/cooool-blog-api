@@ -7,10 +7,10 @@
 package version
 
 import (
-	"encoding/json"
 	"fmt"
 	"runtime"
 
+	"blog-api/pkg/json"
 	"github.com/gosuri/uitable"
 )
 

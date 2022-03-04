@@ -4,10 +4,10 @@
  * license that can be found in the LICENSE file.
  */
 
-// Documentation of Blog SERVER API.
+// Package docs Documentation of Blog SERVER API.
 //
 //     Schemes: http, https
-//     Host: localhost
+//     BindAddress: localhost
 //     BasePath: /
 //     Version: 0.0.1
 //
@@ -28,6 +28,6 @@
 //      type: apiKey
 //      name: Authorization
 //      in: header
+//
 // swagger:meta
-
 package docs

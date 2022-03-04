@@ -48,24 +48,33 @@ type JwtInfo struct {
 }
 
 type SecureServingInfo struct {
-	Host string
-	Port int
+	BindAddress string
+	BindPort    int
+	CertKey     CertKey
 }
 
 type InsecureServingInfo struct {
-	Host string
-	Port int
+	BindAddress string
+	BindPort    int
+}
+
+// CertKey contains configuration items related to certificate.
+type CertKey struct {
+	// CertFile is a file containing a PEM-encoded certificate, and possibly the complete certificate chain
+	CertFile string
+	// KeyFile is a file containing a PEM-encoded private key for the certificate specified by CertFile
+	KeyFile string
 }
 
 // Address return host:port.
 func (s *SecureServingInfo) Address() string {
-	return ":" + strconv.Itoa(s.Port)
+	return ":" + strconv.Itoa(s.BindPort)
 }
 
 // Address return host:port.
 func (i *InsecureServingInfo) Address() string {
-	// return net.JoinHostPort(i.Host, strconv.Itoa(i.Port))
-	return ":" + strconv.Itoa(i.Port)
+	// return net.JoinHostPort(i.BindAddress, strconv.Itoa(i.BindPort))
+	return ":" + strconv.Itoa(i.BindPort)
 }
 
 func NewConfig() *Config {
@@ -76,11 +85,11 @@ func NewConfig() *Config {
 		EnableProfiling: true,
 		EnableMetrics:   true,
 		InsecureServing: &InsecureServingInfo{
-			Host: "127.0.0.1",
-			Port: 8080,
+			BindAddress: "127.0.0.1",
+			BindPort:    8080,
 		},
 		Jwt: &JwtInfo{
-			Realm:      "iam jwt",
+			Realm:      "api jwt",
 			Timeout:    1 * time.Hour,
 			MaxRefresh: 1 * time.Hour,
 		},

@@ -8,10 +8,8 @@ package flag
 
 import (
 	goflag "flag"
-	"fmt"
-	"log"
 
-	"github.com/fatih/color"
+	log "blog-api/pkg/rollinglog"
 	"github.com/spf13/pflag"
 )
 
@@ -49,11 +47,7 @@ func InitFlags(fs *pflag.FlagSet) {
 
 // PrintFlags logs the flags in the flagSet.
 func PrintFlags(flags *pflag.FlagSet) {
-
-	fmt.Println(color.GreenString("\n%s\n", "======== Flags ========"))
 	flags.VisitAll(func(flag *pflag.Flag) {
-		log.Printf("FLAG: --%s=%q", flag.Name, flag.Value)
+		log.Debug("Flag value has been parsed")
 	})
-
-	fmt.Println(color.GreenString("\n%s\n", "======== Flags End ========"))
 }

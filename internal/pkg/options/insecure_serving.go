@@ -26,8 +26,8 @@ func NewInsecureServingOptions() *InsecureServingOptions {
 }
 
 func (o *InsecureServingOptions) ApplyTo(c *server.Config) error {
-	c.InsecureServing.Host = o.Host
-	c.InsecureServing.Port = o.Port
+	c.InsecureServing.BindAddress = o.Host
+	c.InsecureServing.BindPort = o.Port
 	return nil
 }
 

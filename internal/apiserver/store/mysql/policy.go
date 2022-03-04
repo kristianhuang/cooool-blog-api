@@ -34,13 +34,12 @@ func (p *policies) Update(ctx context.Context, policyModel *model.Policy, opts m
 	return p.db.Save(&policyModel).Error
 }
 
-func (p *policies) Delete(ctx context.Context, account, name string, opts metav1.DeleteOptions) error {
+func (p *policies) Delete(ctx context.Context, name, username string, opts metav1.DeleteOptions) error {
 	if opts.Unscoped {
 		p.db = p.db.Unscoped()
 	}
 
-	err := p.db.Where("account = ? AND name = ?", account, name).Delete(&model.Policy{}).Error
-
+	err := p.db.Where("username = ? and name = ?", username, name).Delete(&model.Policy{}).Error
 	if err != nil && !errors.Is(err, gorm.ErrRecordNotFound) {
 		return errors.WithCode(code.ErrDatabase, err.Error())
 	}
@@ -48,45 +47,57 @@ func (p *policies) Delete(ctx context.Context, account, name string, opts metav1
 	return nil
 }
 
-func (p policies) DeleteByName(cxt context.Context, name string, opts metav1.DeleteOptions) error {
+func (p policies) DeleteByAdminUser(cxt context.Context, username string, opts metav1.DeleteOptions) error {
 	if opts.Unscoped {
 		p.db = p.db.Unscoped()
 	}
 
-	return p.db.Where("name = ?", name).Delete(&model.Policy{}).Error
+	return p.db.Where("username = ?", username).Delete(&model.Policy{}).Error
 }
 
-func (p *policies) DeleteCollection(ctx context.Context, name string, accounts []string, opts metav1.DeleteOptions) error {
+func (p *policies) DeleteCollection(ctx context.Context, username string, names []string, opts metav1.DeleteOptions) error {
 	if opts.Unscoped {
 		p.db = p.db.Unscoped()
 	}
 
-	return p.db.Where("name = ? AND account IN (?)", name, accounts).Delete(&model.Policy{}).Error
+	return p.db.Where("username = ? AND name IN (?)", username, names).Delete(&model.Policy{}).Error
 }
 
-func (p *policies) Get(ctx context.Context, name, account string, opts metav1.GetOptions) (*model.Policy, error) {
+func (p policies) DeleteCollectionByAdminUser(ctx context.Context, usernames []string, opts metav1.DeleteOptions) error {
+	if opts.Unscoped {
+		p.db = p.db.Unscoped()
+	}
+
+	return p.db.Where("user_name IN (?)", usernames).Delete(&model.Policy{}).Error
+}
+
+func (p *policies) Get(ctx context.Context, username, name string, opts metav1.GetOptions) (*model.Policy, error) {
 	policy := &model.Policy{}
-	if err := p.db.Where("name = ? AND account = ?", name, account).First(policy).Error; err != nil {
+
+	err := p.db.Where("username = ? AND name = ?", username, username).First(policy).Error
+	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return nil, errors.WithCode(code.ErrPolicyNotFound, err.Error())
+			return nil, errors.WithCode(code.ErrUserNotFound, err.Error())
 		}
+
+		return nil, errors.WithCode(code.ErrDatabase, err.Error())
 	}
 
 	return policy, nil
 }
 
-func (p *policies) List(ctx context.Context, account string, opts metav1.ListOptions) (*model.PolicyList, error) {
+func (p *policies) List(ctx context.Context, username string, opts metav1.ListOptions) (*model.PolicyList, error) {
 	ret := &model.PolicyList{}
 	ol := gormutil.Unpointer(opts.Limit, opts.Offset)
 
-	if account != "" {
-		p.db = p.db.Where("account = ?", account)
+	if username != "" {
+		p.db = p.db.Where("user_name = ?", username)
 	}
 
 	selector, _ := fields.ParseSelector(opts.FieldSelector)
 	name, _ := selector.RequiresExactMatch("name")
 
-	d := p.db.Where("name like ?", "%"+name+"%").
+	d := p.db.Where("username like ?", "%"+name+"%").
 		Offset(ol.Offset).
 		Limit(ol.Limit).
 		Order("id desc").

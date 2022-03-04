@@ -7,8 +7,7 @@
 package model
 
 import (
-	"encoding/json"
-
+	"blog-api/pkg/json"
 	metav1 "blog-api/pkg/meta/v1"
 	"blog-api/pkg/util/idutil"
 	"github.com/ory/ladon"
@@ -23,9 +22,7 @@ type AuthzPolicy struct {
 type Policy struct {
 	metav1.ObjectMeta `json:"metadata,omitempty"`
 
-	Account string `json:"account" gorm:"column:account;comment:账号"`
-
-	Name string `json:"name" gorm:"column:name;comment:姓名;"`
+	UserName string `json:"username" gorm:"not null;column:username;comment:账号;size:64;"`
 
 	Policy AuthzPolicy `json:"policy,omitempty" gorm:"-"`
 
@@ -43,7 +40,7 @@ func (p *Policy) TableName() string {
 	return "policy"
 }
 
-func (p AuthzPolicy) String() string {
+func (p *AuthzPolicy) String() string {
 	data, _ := json.Marshal(p)
 
 	return string(data)
@@ -68,7 +65,7 @@ func (p *Policy) AfterCreate(tx *gorm.DB) error {
 }
 
 // BeforeUpdate run before update database record.
-func (p Policy) BeforeUpdate(tx *gorm.DB) error {
+func (p *Policy) BeforeUpdate(tx *gorm.DB) error {
 	if err := p.ObjectMeta.BeforeUpdate(tx); err != nil {
 		return err
 	}
@@ -78,7 +75,7 @@ func (p Policy) BeforeUpdate(tx *gorm.DB) error {
 	return nil
 }
 
-func (p Policy) AfterFind(tx *gorm.DB) error {
+func (p *Policy) AfterFind(tx *gorm.DB) error {
 	if err := p.ObjectMeta.AfterFind(tx); err != nil {
 		return err
 	}
