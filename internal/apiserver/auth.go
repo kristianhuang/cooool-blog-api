@@ -9,16 +9,19 @@ package apiserver
 import (
 	"context"
 	"encoding/base64"
+	"net/http"
 	"strings"
 	"time"
 
 	"blog-api/internal/apiserver/store"
 	"blog-api/internal/pkg/middleware"
 	"blog-api/internal/pkg/middleware/auth"
+	"blog-api/internal/pkg/model"
 	metav1 "blog-api/pkg/meta/v1"
 	log "blog-api/pkg/rollinglog"
 	jwt "github.com/appleboy/gin-jwt/v2"
 	"github.com/gin-gonic/gin"
+	"github.com/spf13/viper"
 )
 
 const (
@@ -53,8 +56,41 @@ func newBasicAuth() middleware.AuthStrategy {
 }
 
 // TODO JWT Server
-func newJWTAuth() {
+func NewJWTAuth() middleware.AuthStrategy {
+	ginjwt, _ := jwt.New(&jwt.GinJWTMiddleware{
+		Realm:            viper.GetString("jwt.realm"),
+		SigningAlgorithm: "HS256",
+		Key:              []byte(viper.GetString("jwt.key")),
+		Timeout:          viper.GetDuration("jwt.timeout"),
+		MaxRefresh:       viper.GetDuration("jwt.max-refresh"),
+		Authenticator:    authenticator(),
+		LoginResponse:    loginResponse(),
+		LogoutResponse: func(c *gin.Context, code int) {
+			c.JSON(http.StatusOK, nil)
+		},
+		RefreshResponse: refreshResponse(),
+		PayloadFunc:     payloadFunc(),
+		IdentityHandler: func(c *gin.Context) interface{} {
+			claims := jwt.ExtractClaims(c)
+			return claims[jwt.IdentityKey]
+		},
+		Authorizator: authorizator(),
+		Unauthorized: func(c *gin.Context, code int, message string) {
+			c.JSON(code, gin.H{
+				"message": message,
+			})
+		},
+		TokenLookup:   "header: Authorization, query: token, cookie: jwt",
+		TokenHeadName: "Bearer",
+		SendCookie:    true,
+		TimeFunc:      time.Now,
+	})
 
+	return auth.NewJWTStrategy(*ginjwt)
+}
+
+func NewAutoAuth() middleware.AuthStrategy {
+	return auth.NewAutoStrategy(newBasicAuth().(auth.BasicStrategy), NewJWTAuth().(auth.JWTStrategy))
 }
 
 func authenticator() func(c *gin.Context) (interface{}, error) {
@@ -130,4 +166,49 @@ func parseWithBody(c *gin.Context) (loginInfo, error) {
 	}
 
 	return login, nil
+}
+
+func loginResponse() func(c *gin.Context, code int, token string, expire time.Time) {
+	return func(c *gin.Context, code int, token string, expire time.Time) {
+		c.JSON(http.StatusOK, gin.H{
+			"token":  token,
+			"expire": expire.Format(time.RFC3339),
+		})
+	}
+}
+
+func payloadFunc() func(data interface{}) jwt.MapClaims {
+	return func(data interface{}) jwt.MapClaims {
+		claims := jwt.MapClaims{
+			"iss": APIServerIssuer,
+			"aud": APIServerAudience,
+		}
+		if u, ok := data.(*model.AdminUser); ok {
+			claims[jwt.IdentityKey] = u.Account
+			claims["sub"] = u.Account
+		}
+
+		return claims
+	}
+}
+
+func refreshResponse() func(c *gin.Context, code int, token string, expire time.Time) {
+	return func(c *gin.Context, code int, token string, expire time.Time) {
+		c.JSON(http.StatusOK, gin.H{
+			"token":  token,
+			"expire": expire.Format(time.RFC3339),
+		})
+	}
+}
+
+func authorizator() func(data interface{}, c *gin.Context) bool {
+	return func(data interface{}, c *gin.Context) bool {
+		if v, ok := data.(string); ok {
+			log.L(c).Infof("user `%s` is authenticated.", v)
+
+			return true
+		}
+
+		return false
+	}
 }

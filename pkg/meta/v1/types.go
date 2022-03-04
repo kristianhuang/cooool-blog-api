@@ -39,7 +39,7 @@ type TypeMeta struct {
 }
 
 type ListMeta struct {
-	Total int64 `json:"total,omitempty"`
+	TotalCount int64 `json:"total_count,omitempty"`
 }
 
 type ListOptions struct {

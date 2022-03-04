@@ -16,8 +16,13 @@ import (
 
 type AdminUserService interface {
 	Create(ctx context.Context, au *model.AdminUser, options metav1.CreateOptions) error
-
+	Update(ctx context.Context, user *model.AdminUser, opts metav1.UpdateOptions) error
 	Delete(ctx context.Context, account string, opts metav1.DeleteOptions) error
+	DeleteCollection(ctx context.Context, accounts []string, opts metav1.DeleteOptions) error
+	Get(ctx context.Context, account string, opts metav1.GetOptions) (*model.AdminUser, error)
+	List(ctx context.Context, opts metav1.ListOptions) (*model.AdminUserList, error)
+	ListWithBadPerformance(ctx context.Context, opts metav1.ListOptions) (*model.AdminUserList, error)
+	ChangePassword(ctx context.Context, user *model.AdminUser) error
 }
 
 type adminUserService struct {

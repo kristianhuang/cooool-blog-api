@@ -23,7 +23,9 @@ type AuthzPolicy struct {
 type Policy struct {
 	metav1.ObjectMeta `json:"metadata,omitempty"`
 
-	Account string `json:"account" gorm:"column:account;"`
+	Account string `json:"account" gorm:"column:account;comment:账号"`
+
+	Name string `json:"name" gorm:"column:name;comment:姓名;"`
 
 	Policy AuthzPolicy `json:"policy,omitempty" gorm:"-"`
 

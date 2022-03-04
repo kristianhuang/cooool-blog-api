@@ -11,6 +11,7 @@ import (
 	"path/filepath"
 	"strconv"
 	"strings"
+	"time"
 
 	"blog-api/pkg/util/path/dir"
 	"github.com/gin-gonic/gin"
@@ -25,6 +26,7 @@ const (
 type Config struct {
 	SecureServing   *SecureServingInfo
 	InsecureServing *InsecureServingInfo
+	Jwt             *JwtInfo
 	Mode            string
 	Middlewares     []string
 	Health          bool
@@ -32,6 +34,17 @@ type Config struct {
 	EnableProfiling bool
 	// 启用统计
 	EnableMetrics bool
+}
+
+type JwtInfo struct {
+	// Defaults to "blog jwt"
+	Realm string
+	// Defaults to empty
+	Key string
+	// Defaults to one hour
+	Timeout time.Duration
+	// Defaults to one hour
+	MaxRefresh time.Duration
 }
 
 type SecureServingInfo struct {
@@ -65,6 +78,11 @@ func NewConfig() *Config {
 		InsecureServing: &InsecureServingInfo{
 			Host: "127.0.0.1",
 			Port: 8080,
+		},
+		Jwt: &JwtInfo{
+			Realm:      "iam jwt",
+			Timeout:    1 * time.Hour,
+			MaxRefresh: 1 * time.Hour,
 		},
 	}
 }

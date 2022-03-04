@@ -21,4 +21,8 @@ type AdminUserStore interface {
 	Update(ctx context.Context, adminUserModel *v1.AdminUser, opts metav1.UpdateOptions) error
 
 	Delete(ctx context.Context, account string, opts metav1.DeleteOptions) error
+
+	DeleteCollection(ctx context.Context, accounts []string, opts metav1.DeleteOptions) error
+
+	List(ctx context.Context, opts metav1.ListOptions) (*v1.AdminUserList, error)
 }

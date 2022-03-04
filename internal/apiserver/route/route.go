@@ -6,7 +6,25 @@
 
 package route
 
+import (
+	"sync"
+
+	"blog-api/internal/apiserver"
+	"blog-api/internal/pkg/middleware/auth"
+)
+
 const (
 	V1 = "/v1"
 	// If you need more version...
 )
+
+var (
+	once        sync.Once
+	jwtStrategy auth.JWTStrategy
+)
+
+func init() {
+	once.Do(func() {
+		jwtStrategy, _ = apiserver.NewJWTAuth().(auth.JWTStrategy)
+	})
+}

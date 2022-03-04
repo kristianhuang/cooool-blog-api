@@ -40,15 +40,15 @@ func (u *adminUser) List(cxt context.Context, opts metav1.ListOptions) (*model.A
 	ol := gormutil.Unpointer(opts.Offset, opts.Limit)
 
 	selector, _ := fields.ParseSelector(opts.FieldSelector)
-	username, _ := selector.RequiresExactMatch("name")
-	d := u.db.Where("name like ? and status = 1", "%"+username+"%").
+	name, _ := selector.RequiresExactMatch("name")
+	d := u.db.Where("name like ? and status = 1", "%"+name+"%").
 		Offset(ol.Offset).
 		Limit(ol.Limit).
 		Order("id desc").
 		Find(&userList.Items).
 		Offset(-1).
 		Limit(-1).
-		Count(&userList.Total)
+		Count(&userList.TotalCount)
 
 	return userList, d.Error
 }
@@ -68,4 +68,10 @@ func (u *adminUser) Get(ctx context.Context, username string, opts metav1.GetOpt
 	}
 
 	return user, nil
+}
+
+func (u *adminUser) DeleteCollection(ctx context.Context, accounts []string, opts metav1.DeleteOptions) error {
+	// pol := newPolicy(&dataStore{u.db})
+	// TODO
+	return nil
 }

@@ -19,6 +19,7 @@ func AdminUser(e *gin.Engine) {
 		{
 			adminUserV1.POST("", adminUserController.Create)
 			adminUserV1.DELETE("", adminUserController.Delete)
+			adminUserV1.DELETE(":account", adminUserController.Create)
 		}
 	}
 }
