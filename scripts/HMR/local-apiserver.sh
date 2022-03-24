@@ -7,8 +7,8 @@
 #
 
 CONFIG_PATH=$(dirname "${BASH_SOURCE[0]}")/../../config
-CONFIG=$CONFIG_PATH/blog-apiserver.yaml
-CONFIG_LOCAL=$CONFIG_PATH/local-blog-apiserver.yaml
+CONFIG=$CONFIG_PATH/cooool-blog-apiserver.yaml
+CONFIG_LOCAL=$CONFIG_PATH/local-cooool-blog-apiserver.yaml
 
 # If you need new config.
 # cp $CONFIG $CONFIG_LOCAL

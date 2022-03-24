@@ -6,7 +6,7 @@
 
 package config
 
-import "blog-api/internal/authzserver/options"
+import "cooool-blog-api/internal/authzserver/options"
 
 // Config is the running configuration structure of the IAM pump service.
 type Config struct {

@@ -7,8 +7,8 @@
 package route
 
 import (
-	"blog-api/internal/authzserver/load/cache"
-	"blog-api/internal/pkg/middleware"
+	"cooool-blog-api/internal/authzserver/load/cache"
+	"cooool-blog-api/internal/pkg/middleware"
 )
 
 const (

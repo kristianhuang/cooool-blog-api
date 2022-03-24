@@ -11,7 +11,8 @@ import (
 	"os"
 	"strconv"
 
-	"blog-api/pkg/version"
+	"cooool-blog-api/pkg/version"
+
 	flag "github.com/spf13/pflag"
 )
 

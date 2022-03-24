@@ -1,3 +1,9 @@
+/*
+ * Copyright 2021 Kristian Huang <kristianhuang@gmail.com>. All rights reserved.
+ * Use of this source code is governed by a MIT style
+ * license that can be found in the LICENSE file.
+ */
+
 package analytics
 
 import (
@@ -5,10 +11,11 @@ import (
 	"sync/atomic"
 	"time"
 
-	log "blog-api/pkg/rollinglog"
+	log "cooool-blog-api/pkg/rollinglog"
+
 	"gopkg.in/vmihailenco/msgpack.v2"
 
-	"blog-api/pkg/storage"
+	"cooool-blog-api/pkg/storage"
 )
 
 const (

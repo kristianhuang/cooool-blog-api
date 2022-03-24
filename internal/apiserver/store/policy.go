@@ -9,8 +9,8 @@ package store
 import (
 	"context"
 
-	v1 "blog-api/internal/pkg/model"
-	metav1 "blog-api/pkg/meta/v1"
+	v1 "cooool-blog-api/internal/pkg/model"
+	metav1 "cooool-blog-api/pkg/meta/v1"
 )
 
 type PolicyStore interface {

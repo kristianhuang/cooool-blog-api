@@ -13,7 +13,8 @@ import (
 	"strings"
 	"time"
 
-	"blog-api/pkg/util/path/dir"
+	"cooool-blog-api/pkg/util/path/dir"
+
 	"github.com/gin-gonic/gin"
 	"github.com/spf13/viper"
 )

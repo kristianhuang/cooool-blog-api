@@ -10,10 +10,11 @@ import (
 	"fmt"
 	"os"
 
-	"blog-api/pkg/errors"
-	cliflag "blog-api/pkg/flag"
-	log "blog-api/pkg/rollinglog"
-	"blog-api/pkg/version/verflag"
+	"cooool-blog-api/pkg/errors"
+	cliflag "cooool-blog-api/pkg/flag"
+	log "cooool-blog-api/pkg/rollinglog"
+	"cooool-blog-api/pkg/version/verflag"
+
 	"github.com/fatih/color"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"

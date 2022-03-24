@@ -19,7 +19,8 @@ func RequestID() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		rid := c.GetHeader(XRequestIDKey)
 		if rid == "" {
-			rid = uuid.NewV4().String()
+			uid, _ := uuid.NewV4()
+			rid = uid.String()
 			c.Request.Header.Set(XRequestIDKey, rid)
 			c.Set(XRequestIDKey, rid)
 		}

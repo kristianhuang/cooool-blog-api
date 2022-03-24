@@ -9,11 +9,11 @@ package v1
 import (
 	"context"
 
-	"blog-api/internal/apiserver/store"
-	"blog-api/internal/pkg/code"
-	v1 "blog-api/internal/pkg/model"
-	"blog-api/pkg/errors"
-	metav1 "blog-api/pkg/meta/v1"
+	"cooool-blog-api/internal/apiserver/store"
+	"cooool-blog-api/internal/pkg/code"
+	v1 "cooool-blog-api/internal/pkg/model"
+	"cooool-blog-api/pkg/errors"
+	metav1 "cooool-blog-api/pkg/meta/v1"
 )
 
 // PolicySrv defines functions used to handle policy request.

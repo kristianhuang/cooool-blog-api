@@ -9,8 +9,8 @@ package apiserver
 import (
 	"context"
 
-	"blog-api/pkg/shutdown"
-	"blog-api/pkg/storage"
+	"cooool-blog-api/pkg/shutdown"
+	"cooool-blog-api/pkg/storage"
 )
 
 func (s *apiServer) initRedisStore() {

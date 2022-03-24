@@ -9,7 +9,8 @@ package flag
 import (
 	goflag "flag"
 
-	log "blog-api/pkg/rollinglog"
+	log "cooool-blog-api/pkg/rollinglog"
+
 	"github.com/spf13/pflag"
 )
 

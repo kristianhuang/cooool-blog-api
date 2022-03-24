@@ -7,7 +7,8 @@
 package middleware
 
 import (
-	log "blog-api/pkg/rollinglog"
+	log "cooool-blog-api/pkg/rollinglog"
+
 	"github.com/gin-gonic/gin"
 )
 

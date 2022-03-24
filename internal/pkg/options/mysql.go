@@ -9,7 +9,8 @@ package options
 import (
 	"time"
 
-	"blog-api/pkg/db"
+	"cooool-blog-api/pkg/db"
+
 	"github.com/spf13/pflag"
 	"gorm.io/gorm"
 )

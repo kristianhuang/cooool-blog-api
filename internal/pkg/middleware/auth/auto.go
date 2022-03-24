@@ -9,10 +9,11 @@ package auth
 import (
 	"strings"
 
-	"blog-api/internal/pkg/code"
-	"blog-api/internal/pkg/middleware"
-	"blog-api/internal/pkg/response"
-	"blog-api/pkg/errors"
+	"cooool-blog-api/internal/pkg/code"
+	"cooool-blog-api/internal/pkg/middleware"
+	"cooool-blog-api/internal/pkg/response"
+	"cooool-blog-api/pkg/errors"
+
 	"github.com/gin-gonic/gin"
 )
 

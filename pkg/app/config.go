@@ -12,7 +12,8 @@ import (
 	"path/filepath"
 	"strings"
 
-	"blog-api/pkg/util/path/dir"
+	"cooool-blog-api/pkg/util/path/dir"
+
 	"github.com/gosuri/uitable"
 	"github.com/spf13/cobra"
 	"github.com/spf13/pflag"

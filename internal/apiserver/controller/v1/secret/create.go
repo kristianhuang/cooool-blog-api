@@ -7,13 +7,14 @@
 package secret
 
 import (
-	"blog-api/internal/pkg/code"
-	"blog-api/internal/pkg/middleware"
-	"blog-api/internal/pkg/model"
-	"blog-api/internal/pkg/response"
-	"blog-api/pkg/errors"
-	metav1 "blog-api/pkg/meta/v1"
-	"blog-api/pkg/util/idutil"
+	"cooool-blog-api/internal/pkg/code"
+	"cooool-blog-api/internal/pkg/middleware"
+	"cooool-blog-api/internal/pkg/model"
+	"cooool-blog-api/internal/pkg/response"
+	"cooool-blog-api/pkg/errors"
+	metav1 "cooool-blog-api/pkg/meta/v1"
+	"cooool-blog-api/pkg/util/idutil"
+
 	"github.com/gin-gonic/gin"
 )
 

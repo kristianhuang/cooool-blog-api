@@ -11,7 +11,7 @@ import (
 	"os/signal"
 	"syscall"
 
-	"blog-api/pkg/shutdown"
+	"cooool-blog-api/pkg/shutdown"
 )
 
 const Name = "PosixSignalManager"

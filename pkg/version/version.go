@@ -10,7 +10,8 @@ import (
 	"fmt"
 	"runtime"
 
-	"blog-api/pkg/json"
+	"cooool-blog-api/pkg/json"
+
 	"github.com/gosuri/uitable"
 )
 

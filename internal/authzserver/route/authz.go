@@ -7,7 +7,8 @@
 package route
 
 import (
-	"blog-api/internal/authzserver/controller/v1/authorize"
+	"cooool-blog-api/internal/authzserver/controller/v1/authorize"
+
 	"github.com/gin-gonic/gin"
 )
 

@@ -7,7 +7,8 @@
 package authorization
 
 import (
-	log "blog-api/pkg/rollinglog"
+	log "cooool-blog-api/pkg/rollinglog"
+
 	"github.com/ory/ladon"
 )
 

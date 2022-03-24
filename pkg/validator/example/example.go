@@ -10,7 +10,8 @@ import (
 	"fmt"
 	"log"
 
-	"blog-api/pkg/validator"
+	"cooool-blog-api/pkg/validator"
+
 	go_validator "github.com/go-playground/validator/v10"
 )
 

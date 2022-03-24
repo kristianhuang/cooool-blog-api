@@ -6,7 +6,7 @@
 
 package authz
 
-import "blog-api/pkg/scheme"
+import "cooool-blog-api/pkg/scheme"
 
 const GroupName = "blog.authz"
 

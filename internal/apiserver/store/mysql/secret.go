@@ -9,12 +9,13 @@ package mysql
 import (
 	"context"
 
-	"blog-api/internal/pkg/code"
-	"blog-api/internal/pkg/model"
-	"blog-api/internal/pkg/util/gormutil"
-	"blog-api/pkg/errors"
-	"blog-api/pkg/fields"
-	metav1 "blog-api/pkg/meta/v1"
+	"cooool-blog-api/internal/pkg/code"
+	"cooool-blog-api/internal/pkg/model"
+	"cooool-blog-api/internal/pkg/util/gormutil"
+	"cooool-blog-api/pkg/errors"
+	"cooool-blog-api/pkg/fields"
+	metav1 "cooool-blog-api/pkg/meta/v1"
+
 	"gorm.io/gorm"
 )
 

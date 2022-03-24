@@ -7,8 +7,9 @@
 package adminuser
 
 import (
-	"blog-api/internal/pkg/response"
-	metav1 "blog-api/pkg/meta/v1"
+	"cooool-blog-api/internal/pkg/response"
+	metav1 "cooool-blog-api/pkg/meta/v1"
+
 	"github.com/gin-gonic/gin"
 )
 

@@ -7,7 +7,8 @@
 package authorization
 
 import (
-	"blog-api/pkg/errors"
+	"cooool-blog-api/pkg/errors"
+
 	"github.com/ory/ladon"
 )
 

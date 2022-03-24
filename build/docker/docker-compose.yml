@@ -37,18 +37,18 @@ services:
       - "blog-mysql-data:/var/lib/mysql"
     container_name: blog-mysql
 
-  blog-apiserver:
+  cooool-blog-apiserver:
     build:
       context: ../..
       dockerfile: apiserver/Dockerfile
-    image: blog-apiserver
+    image: cooool-blog-apiserver
     networks:
       - blog
     ports:
       - "8080:8080"
     volumes:
-      - "blog-apiserver-log:/blog/log"
-    container_name: blog-apiserver
+      - "cooool-blog-apiserver-log:/blog/log"
+    container_name: cooool-blog-apiserver
     depends_on:
       - mysql
       - nginx
@@ -65,8 +65,8 @@ volumes:
     name: "blog-mysql-conf"
   blog-mysql-data:
     name: "blog-mysql-data"
-  blog-apiserver-log:
-    name: "blog-apiserver-log"
+  cooool-blog-apiserver-log:
+    name: "cooool-blog-apiserver-log"
 
 networks:
   blog:

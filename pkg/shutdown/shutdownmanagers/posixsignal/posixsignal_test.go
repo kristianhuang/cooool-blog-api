@@ -11,7 +11,7 @@ import (
 	"testing"
 	"time"
 
-	"blog-api/pkg/shutdown"
+	"cooool-blog-api/pkg/shutdown"
 )
 
 type startShutdownFunc func(sm shutdown.ShutdownManager)

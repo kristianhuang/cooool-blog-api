@@ -7,8 +7,9 @@
 package apiserver
 
 import (
-	"blog-api/internal/apiserver/route"
-	"blog-api/internal/pkg/middleware/auth"
+	"cooool-blog-api/internal/apiserver/route"
+	"cooool-blog-api/internal/pkg/middleware/auth"
+
 	"github.com/gin-gonic/gin"
 )
 

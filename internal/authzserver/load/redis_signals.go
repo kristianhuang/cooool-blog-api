@@ -11,10 +11,11 @@ import (
 	"crypto/sha256"
 	"encoding/hex"
 
-	"blog-api/pkg/errors"
-	"blog-api/pkg/json"
-	log "blog-api/pkg/rollinglog"
-	"blog-api/pkg/storage"
+	"cooool-blog-api/pkg/errors"
+	"cooool-blog-api/pkg/json"
+	log "cooool-blog-api/pkg/rollinglog"
+	"cooool-blog-api/pkg/storage"
+
 	"github.com/go-redis/redis/v7"
 )
 

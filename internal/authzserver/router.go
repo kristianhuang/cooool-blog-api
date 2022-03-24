@@ -7,9 +7,10 @@
 package authzserver
 
 import (
-	"blog-api/internal/authzserver/load/cache"
-	"blog-api/internal/authzserver/route"
-	log "blog-api/pkg/rollinglog"
+	"cooool-blog-api/internal/authzserver/load/cache"
+	"cooool-blog-api/internal/authzserver/route"
+	log "cooool-blog-api/pkg/rollinglog"
+
 	"github.com/gin-gonic/gin"
 )
 

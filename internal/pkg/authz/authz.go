@@ -6,7 +6,7 @@
 
 package authz
 
-import "blog-api/pkg/json"
+import "cooool-blog-api/pkg/json"
 
 type Response struct {
 	Allowed bool   `json:"allowed"`

@@ -7,8 +7,8 @@
 package route
 
 import (
-	"blog-api/internal/pkg/middleware"
-	middlewareauth "blog-api/internal/pkg/middleware/auth"
+	"cooool-blog-api/internal/pkg/middleware"
+	middlewareauth "cooool-blog-api/internal/pkg/middleware/auth"
 )
 
 const (

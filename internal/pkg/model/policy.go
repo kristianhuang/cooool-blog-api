@@ -7,9 +7,10 @@
 package model
 
 import (
-	"blog-api/pkg/json"
-	metav1 "blog-api/pkg/meta/v1"
-	"blog-api/pkg/util/idutil"
+	"cooool-blog-api/pkg/json"
+	metav1 "cooool-blog-api/pkg/meta/v1"
+	"cooool-blog-api/pkg/util/idutil"
+
 	"github.com/ory/ladon"
 	"gorm.io/gorm"
 )

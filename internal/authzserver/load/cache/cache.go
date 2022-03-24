@@ -9,13 +9,14 @@ package cache
 import (
 	"sync"
 
-	"blog-api/pkg/errors"
+	"cooool-blog-api/pkg/errors"
+
 	"github.com/dgraph-io/ristretto"
 	"github.com/ory/ladon"
 
-	pb "blog-api/internal/pkg/proto/apiserver/v1"
+	pb "cooool-blog-api/internal/pkg/proto/apiserver/v1"
 
-	"blog-api/internal/authzserver/store"
+	"cooool-blog-api/internal/authzserver/store"
 )
 
 type Cache struct {

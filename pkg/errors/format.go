@@ -11,7 +11,7 @@ import (
 	"fmt"
 	"strings"
 
-	"blog-api/pkg/json"
+	"cooool-blog-api/pkg/json"
 )
 
 // formatInfo contains all the error information.

@@ -9,7 +9,7 @@ package main
 import (
 	"flag"
 
-	"blog-api/pkg/log"
+	"cooool-blog-api/pkg/log"
 )
 
 var (

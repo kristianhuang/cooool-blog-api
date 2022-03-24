@@ -12,7 +12,7 @@ import (
 	"runtime"
 	"time"
 
-	"blog-api/internal/authzserver"
+	"cooool-blog-api/internal/authzserver"
 )
 
 func main() {

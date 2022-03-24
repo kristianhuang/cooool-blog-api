@@ -7,7 +7,7 @@
 package main
 
 import (
-	"blog-api/pkg/rollinglog"
+	"cooool-blog-api/pkg/rollinglog"
 )
 
 func main() {

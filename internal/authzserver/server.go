@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 Kristian Huang <kristianhuang@gmail.com>. All rights reserved.
+ * Copyright 2021 Kris Huang <krishuang007@gmail.com>. All rights reserved.
  * Use of this source code is governed by a MIT style
  * license that can be found in the LICENSE file.
  */
@@ -9,18 +9,18 @@ package authzserver
 import (
 	"context"
 
-	"blog-api/internal/authzserver/analytics"
-	"blog-api/internal/authzserver/config"
-	"blog-api/internal/authzserver/load"
-	"blog-api/internal/authzserver/load/cache"
-	"blog-api/internal/authzserver/store/apiserver"
-	genericoptions "blog-api/internal/pkg/options"
-	genericapiserver "blog-api/internal/pkg/server"
-	"blog-api/pkg/errors"
-	log "blog-api/pkg/rollinglog"
-	"blog-api/pkg/shutdown"
-	"blog-api/pkg/shutdown/shutdownmanagers/posixsignal"
-	"blog-api/pkg/storage"
+	"cooool-blog-api/internal/authzserver/analytics"
+	"cooool-blog-api/internal/authzserver/config"
+	"cooool-blog-api/internal/authzserver/load"
+	"cooool-blog-api/internal/authzserver/load/cache"
+	"cooool-blog-api/internal/authzserver/store/apiserver"
+	genericoptions "cooool-blog-api/internal/pkg/options"
+	genericapiserver "cooool-blog-api/internal/pkg/server"
+	"cooool-blog-api/pkg/errors"
+	log "cooool-blog-api/pkg/rollinglog"
+	"cooool-blog-api/pkg/shutdown"
+	"cooool-blog-api/pkg/shutdown/shutdownmanagers/posixsignal"
+	"cooool-blog-api/pkg/storage"
 )
 
 const RedisKeyPrefix = "analytics-"
@@ -66,7 +66,7 @@ func createAuthzServer(cfg *config.Config) (*authzServer, error) {
 	return server, nil
 }
 
-func (s *authzServer) PrepareRun() preparedAuthzServer {
+func (s *authzServer) BeforeRun() preparedAuthzServer {
 	_ = s.initialize()
 
 	initRouter(s.genericAPIServer.Engine)
@@ -150,7 +150,7 @@ func (s *authzServer) initialize() error {
 	// keep redis connected
 	go storage.ConnectToRedis(ctx, s.buildStorageConfig())
 
-	// cron to reload all secrets and policies from iam-apiserver
+	// cron to reload all secrets and policies from apiserver
 	cacheIns, err := cache.GetCacheInsOr(apiserver.GetAPIServerFactoryOrDie(s.rpcServer, s.clientCA))
 	if err != nil {
 		return errors.Wrap(err, "get cache instance failed")

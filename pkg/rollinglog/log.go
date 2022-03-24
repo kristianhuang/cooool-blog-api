@@ -12,7 +12,8 @@ import (
 	"log"
 	"sync"
 
-	"blog-api/pkg/rollinglog/klog"
+	"cooool-blog-api/pkg/rollinglog/klog"
+
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
 )

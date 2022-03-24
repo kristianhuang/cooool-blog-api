@@ -15,9 +15,10 @@ import (
 	"sync/atomic"
 	"time"
 
-	"blog-api/pkg/errors"
-	log "blog-api/pkg/rollinglog"
-	redis "github.com/go-redis/redis/v7"
+	"cooool-blog-api/pkg/errors"
+	log "cooool-blog-api/pkg/rollinglog"
+
+	"github.com/go-redis/redis/v7"
 	uuid "github.com/satori/go.uuid"
 	"github.com/spf13/viper"
 )
@@ -121,7 +122,9 @@ type RedisCluster struct {
 
 func clusterConnectionIsOpen(cluster RedisCluster) bool {
 	c := singleton(cluster.IsCache)
-	testKey := "redis-test-" + uuid.NewV4().String()
+
+	uid, _ := uuid.NewV4()
+	testKey := "redis-test-" + uid.String()
 	if err := c.Set(testKey, "test", time.Second).Err(); err != nil {
 		log.Warnf("Error trying to set test key: %s", err.Error())
 

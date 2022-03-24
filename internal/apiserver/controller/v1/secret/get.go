@@ -7,9 +7,10 @@
 package secret
 
 import (
-	"blog-api/internal/pkg/middleware"
-	"blog-api/internal/pkg/response"
-	metav1 "blog-api/pkg/meta/v1"
+	"cooool-blog-api/internal/pkg/middleware"
+	"cooool-blog-api/internal/pkg/response"
+	metav1 "cooool-blog-api/pkg/meta/v1"
+
 	"github.com/gin-gonic/gin"
 )
 

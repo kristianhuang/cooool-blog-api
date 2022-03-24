@@ -9,7 +9,8 @@ package code
 import (
 	"net/http"
 
-	"blog-api/pkg/errors"
+	"cooool-blog-api/pkg/errors"
+
 	"github.com/novalagung/gubrak"
 )
 

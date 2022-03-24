@@ -14,10 +14,11 @@ import (
 	"strings"
 	"time"
 
-	"blog-api/internal/pkg/middleware"
-	"blog-api/internal/pkg/response"
-	log "blog-api/pkg/rollinglog"
-	"blog-api/pkg/version"
+	"cooool-blog-api/internal/pkg/middleware"
+	"cooool-blog-api/internal/pkg/response"
+	log "cooool-blog-api/pkg/rollinglog"
+	"cooool-blog-api/pkg/version"
+
 	"github.com/gin-contrib/pprof"
 	"github.com/gin-gonic/gin"
 	promethium "github.com/zsais/go-gin-prometheus"

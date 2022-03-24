@@ -7,9 +7,10 @@
 package bind
 
 import (
-	"blog-api/internal/pkg/code"
-	"blog-api/pkg/errors"
-	"blog-api/pkg/validator"
+	"cooool-blog-api/internal/pkg/code"
+	"cooool-blog-api/pkg/errors"
+	"cooool-blog-api/pkg/validator"
+
 	"github.com/gin-gonic/gin"
 )
 

@@ -11,12 +11,12 @@ import (
 	"regexp"
 	"sync"
 
-	"blog-api/internal/apiserver/store"
-	"blog-api/internal/pkg/code"
-	"blog-api/internal/pkg/model"
-	"blog-api/pkg/errors"
-	metav1 "blog-api/pkg/meta/v1"
-	log "blog-api/pkg/rollinglog"
+	"cooool-blog-api/internal/apiserver/store"
+	"cooool-blog-api/internal/pkg/code"
+	"cooool-blog-api/internal/pkg/model"
+	"cooool-blog-api/pkg/errors"
+	metav1 "cooool-blog-api/pkg/meta/v1"
+	log "cooool-blog-api/pkg/rollinglog"
 )
 
 type AdminUserService interface {

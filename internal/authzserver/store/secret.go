@@ -6,7 +6,7 @@
 
 package store
 
-import pb "blog-api/internal/pkg/proto/apiserver/v1"
+import pb "cooool-blog-api/internal/pkg/proto/apiserver/v1"
 
 // SecretStore defines the secret storage interface.
 type SecretStore interface {

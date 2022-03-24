@@ -7,7 +7,8 @@
 package auth
 
 import (
-	"blog-api/internal/pkg/middleware"
+	"cooool-blog-api/internal/pkg/middleware"
+
 	ginjwt "github.com/appleboy/gin-jwt/v2"
 	"github.com/gin-gonic/gin"
 )

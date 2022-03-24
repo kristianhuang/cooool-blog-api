@@ -7,13 +7,15 @@
 package authorizer
 
 import (
-	"blog-api/internal/authzserver/analytics"
-	"blog-api/internal/authzserver/authorization"
-	"blog-api/pkg/json"
 	"fmt"
-	"github.com/ory/ladon"
 	"strings"
 	"time"
+
+	"cooool-blog-api/internal/authzserver/analytics"
+	"cooool-blog-api/internal/authzserver/authorization"
+	"cooool-blog-api/pkg/json"
+
+	"github.com/ory/ladon"
 )
 
 // PolicyGetter defines function to get policy for a given user.

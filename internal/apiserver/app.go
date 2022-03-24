@@ -7,13 +7,13 @@
 package apiserver
 
 import (
-	"blog-api/internal/apiserver/config"
-	"blog-api/internal/apiserver/options"
-	"blog-api/pkg/app"
-	log "blog-api/pkg/rollinglog"
+	"cooool-blog-api/internal/apiserver/config"
+	"cooool-blog-api/internal/apiserver/options"
+	"cooool-blog-api/pkg/app"
+	log "cooool-blog-api/pkg/rollinglog"
 )
 
-const commandDesc = `Welcome to use Blog-API-SERVER`
+const commandDesc = `Welcome to use cooool-blog-api-server`
 
 func NewApp(use string) *app.App {
 	opts := options.NewOptions()

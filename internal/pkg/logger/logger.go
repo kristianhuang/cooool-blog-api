@@ -15,7 +15,8 @@ import (
 	"strings"
 	"time"
 
-	log "blog-api/pkg/rollinglog"
+	log "cooool-blog-api/pkg/rollinglog"
+
 	gormlogger "gorm.io/gorm/logger"
 )
 

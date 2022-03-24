@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 Kristian Huang <kristianhuang007@gmail.com>. All rights reserved.
+ * Copyright 2021 Kris Huang <krishuang007@gmail.com>. All rights reserved.
  * Use of this source code is governed by a MIT style
  * license that can be found in the LICENSE file.
  */
@@ -10,11 +10,12 @@ import (
 	"fmt"
 	"sync"
 
-	"blog-api/internal/apiserver/store"
-	"blog-api/internal/pkg/logger"
-	"blog-api/internal/pkg/model"
-	genericoptions "blog-api/internal/pkg/options"
-	"blog-api/pkg/db"
+	"cooool-blog-api/internal/apiserver/store"
+	"cooool-blog-api/internal/pkg/logger"
+	"cooool-blog-api/internal/pkg/model"
+	genericoptions "cooool-blog-api/internal/pkg/options"
+	"cooool-blog-api/pkg/db"
+
 	"gorm.io/gorm"
 )
 
@@ -22,26 +23,30 @@ type dataStore struct {
 	db *gorm.DB
 }
 
-func (s *dataStore) AdminUser() store.AdminUserStore {
-	return newAdminUser(s)
+func (ds *dataStore) AdminUser() store.AdminUserStore {
+	return newAdminUser(ds)
 }
 
-func (s *dataStore) Policies() store.PolicyStore {
-	return newPolicy(s)
+func (ds *dataStore) Policies() store.PolicyStore {
+	return newPolicy(ds)
 }
 
-func (s *dataStore) Secrets() store.SecretStore {
-	return newSecrets(s)
+func (ds *dataStore) PolicyAudits() store.PolicyAuditStore {
+	return newPolicyAudits(ds)
 }
 
-func (s *dataStore) Close() error {
-	ds, err := s.db.DB()
+func (ds *dataStore) Secrets() store.SecretStore {
+	return newSecrets(ds)
+}
+
+func (ds *dataStore) Close() error {
+	db, err := ds.db.DB()
 
 	if err != nil {
 		return err
 	}
 
-	return ds.Close()
+	return db.Close()
 }
 
 var (
@@ -49,7 +54,7 @@ var (
 	once         sync.Once
 )
 
-func GetMysqlFactory(opts *genericoptions.MySQLOptions) (store.Factory, error) {
+func GetMySQLFactoryOr(opts *genericoptions.MySQLOptions) (store.Factory, error) {
 	if opts == nil && mysqlFactory == nil {
 		return nil, fmt.Errorf("faailed to get db store factory")
 	}
@@ -98,6 +103,10 @@ func MigrateDatabase(db *gorm.DB) error {
 	}
 
 	if err := db.AutoMigrate(&model.Policy{}); err != nil {
+		return err
+	}
+
+	if err := db.AutoMigrate(&model.Secret{}); err != nil {
 		return err
 	}
 

@@ -13,12 +13,13 @@ import (
 	"strings"
 	"time"
 
-	"blog-api/internal/apiserver/store"
-	"blog-api/internal/pkg/middleware"
-	"blog-api/internal/pkg/middleware/auth"
-	"blog-api/internal/pkg/model"
-	metav1 "blog-api/pkg/meta/v1"
-	log "blog-api/pkg/rollinglog"
+	"cooool-blog-api/internal/apiserver/store"
+	"cooool-blog-api/internal/pkg/middleware"
+	"cooool-blog-api/internal/pkg/middleware/auth"
+	"cooool-blog-api/internal/pkg/model"
+	metav1 "cooool-blog-api/pkg/meta/v1"
+	log "cooool-blog-api/pkg/rollinglog"
+
 	jwt "github.com/appleboy/gin-jwt/v2"
 	"github.com/gin-gonic/gin"
 	"github.com/spf13/viper"
@@ -26,10 +27,10 @@ import (
 
 const (
 	// APIServerAudience defines the value of jwt audience field.
-	APIServerAudience = "blog-admin"
+	APIServerAudience = "cooool-blog-admin"
 
 	// APIServerIssuer defines the value of jwt issuer field.
-	APIServerIssuer = "blog-apiserver"
+	APIServerIssuer = "cooool-blog-apiserver"
 )
 
 type loginInfo struct {

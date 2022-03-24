@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 Kristian Huang <kristianhuang007@gmail.com>. All rights reserved.
+ * Copyright 2021 Kris Huang <krishuang007@gmail.com>. All rights reserved.
  * Use of this source code is governed by a MIT style
  * license that can be found in the LICENSE file.
  */
@@ -7,15 +7,15 @@
 package apiserver
 
 import (
-	"blog-api/internal/apiserver/config"
-	"blog-api/internal/apiserver/store"
-	"blog-api/internal/apiserver/store/mysql"
-	genericoptions "blog-api/internal/pkg/options"
-	genericapiserver "blog-api/internal/pkg/server"
-	log "blog-api/pkg/rollinglog"
-	"blog-api/pkg/shutdown"
-	"blog-api/pkg/shutdown/shutdownmanagers/posixsignal"
-	"blog-api/pkg/validator"
+	"cooool-blog-api/internal/apiserver/config"
+	"cooool-blog-api/internal/apiserver/store"
+	"cooool-blog-api/internal/apiserver/store/mysql"
+	genericoptions "cooool-blog-api/internal/pkg/options"
+	genericapiserver "cooool-blog-api/internal/pkg/server"
+	log "cooool-blog-api/pkg/rollinglog"
+	"cooool-blog-api/pkg/shutdown"
+	"cooool-blog-api/pkg/shutdown/shutdownmanagers/posixsignal"
+	"cooool-blog-api/pkg/validator"
 )
 
 type apiServer struct {
@@ -61,7 +61,7 @@ func createAPIServer(config *config.Config) (*apiServer, error) {
 	}
 
 	// init mysql store.
-	storeIns, err := mysql.GetMysqlFactory(config.MySQLOptions)
+	storeIns, err := mysql.GetMySQLFactoryOr(config.MySQLOptions)
 	if err != nil {
 		return nil, err
 	}
@@ -87,7 +87,7 @@ func (s *apiServer) BeforeRun() preparedAPIServer {
 	initRouter(s.genericServer.Engine)
 
 	s.gs.AddShutdownCallback(shutdown.ShutdownFunc(func(string) error {
-		mysqlStore, _ := mysql.GetMysqlFactory(nil)
+		mysqlStore, _ := mysql.GetMySQLFactoryOr(nil)
 		if mysqlStore != nil {
 			_ = mysqlStore.Close()
 		}

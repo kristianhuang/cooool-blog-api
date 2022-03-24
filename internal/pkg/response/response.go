@@ -9,9 +9,10 @@ package response
 import (
 	"net/http"
 
-	"blog-api/internal/pkg/code"
-	"blog-api/pkg/errors"
-	"blog-api/pkg/rollinglog"
+	"cooool-blog-api/internal/pkg/code"
+	"cooool-blog-api/pkg/errors"
+	"cooool-blog-api/pkg/rollinglog"
+
 	"github.com/gin-gonic/gin"
 )
 

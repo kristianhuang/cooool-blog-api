@@ -9,9 +9,10 @@ package model
 import (
 	"time"
 
-	"blog-api/pkg/auth"
-	metav1 "blog-api/pkg/meta/v1"
-	"blog-api/pkg/util/idutil"
+	"cooool-blog-api/pkg/auth"
+	metav1 "cooool-blog-api/pkg/meta/v1"
+	"cooool-blog-api/pkg/util/idutil"
+
 	"gorm.io/gorm"
 )
 

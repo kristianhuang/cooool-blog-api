@@ -9,8 +9,8 @@ package store
 import (
 	"context"
 
-	"blog-api/internal/pkg/model"
-	metav1 "blog-api/pkg/meta/v1"
+	"cooool-blog-api/internal/pkg/model"
+	metav1 "cooool-blog-api/pkg/meta/v1"
 )
 
 type SecretStore interface {

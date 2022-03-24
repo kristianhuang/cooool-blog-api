@@ -7,10 +7,10 @@
 package authzserver
 
 import (
-	"blog-api/internal/authzserver/load/cache"
-	"blog-api/internal/pkg/middleware"
-	"blog-api/internal/pkg/middleware/auth"
-	"blog-api/pkg/errors"
+	"cooool-blog-api/internal/authzserver/load/cache"
+	"cooool-blog-api/internal/pkg/middleware"
+	"cooool-blog-api/internal/pkg/middleware/auth"
+	"cooool-blog-api/pkg/errors"
 )
 
 func newCacheAuth() middleware.AuthStrategy {

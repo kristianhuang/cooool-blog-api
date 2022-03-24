@@ -7,7 +7,8 @@
 package route
 
 import (
-	"blog-api/internal/apiserver/controller/v1/policy"
+	"cooool-blog-api/internal/apiserver/controller/v1/policy"
+
 	"github.com/gin-gonic/gin"
 )
 

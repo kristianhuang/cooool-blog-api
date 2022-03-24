@@ -7,7 +7,8 @@
 package route
 
 import (
-	errorcontroller "blog-api/internal/authzserver/controller/v1/error"
+	errorcontroller "cooool-blog-api/internal/authzserver/controller/v1/error"
+
 	"github.com/gin-gonic/gin"
 )
 

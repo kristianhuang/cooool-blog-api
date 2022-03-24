@@ -7,11 +7,12 @@
 package adminuser
 
 import (
-	"blog-api/internal/pkg/code"
-	"blog-api/internal/pkg/response"
-	"blog-api/pkg/auth"
-	"blog-api/pkg/errors"
-	metav1 "blog-api/pkg/meta/v1"
+	"cooool-blog-api/internal/pkg/code"
+	"cooool-blog-api/internal/pkg/response"
+	"cooool-blog-api/pkg/auth"
+	"cooool-blog-api/pkg/errors"
+	metav1 "cooool-blog-api/pkg/meta/v1"
+
 	"github.com/gin-gonic/gin"
 )
 

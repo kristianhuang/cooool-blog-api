@@ -6,7 +6,7 @@
 
 package docs
 
-import metav1 "blog-api/pkg/meta/v1"
+import metav1 "cooool-blog-api/pkg/meta/v1"
 
 //	swagger:route GET /admin_users adminUserList
 //

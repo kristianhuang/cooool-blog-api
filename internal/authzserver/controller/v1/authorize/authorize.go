@@ -7,10 +7,11 @@
 package authorize
 
 import (
-	"blog-api/internal/authzserver/authorization"
-	"blog-api/internal/authzserver/authorization/authorizer"
-	"blog-api/internal/pkg/bind"
-	"blog-api/internal/pkg/response"
+	"cooool-blog-api/internal/authzserver/authorization"
+	"cooool-blog-api/internal/authzserver/authorization/authorizer"
+	"cooool-blog-api/internal/pkg/bind"
+	"cooool-blog-api/internal/pkg/response"
+
 	"github.com/gin-gonic/gin"
 	"github.com/ory/ladon"
 )

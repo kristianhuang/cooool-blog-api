@@ -11,9 +11,9 @@ import (
 	"sync"
 	"time"
 
-	"blog-api/pkg/errors"
-	log "blog-api/pkg/rollinglog"
-	"blog-api/pkg/storage"
+	"cooool-blog-api/pkg/errors"
+	log "cooool-blog-api/pkg/rollinglog"
+	"cooool-blog-api/pkg/storage"
 )
 
 type Loader interface {

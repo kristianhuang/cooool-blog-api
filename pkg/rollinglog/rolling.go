@@ -9,7 +9,8 @@ package rollinglog
 import (
 	"os"
 
-	"blog-api/pkg/rollinglog/rolling"
+	"cooool-blog-api/pkg/rollinglog/rolling"
+
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
 )

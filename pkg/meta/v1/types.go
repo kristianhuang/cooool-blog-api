@@ -7,7 +7,8 @@
 package v1
 
 import (
-	"blog-api/pkg/json"
+	"cooool-blog-api/pkg/json"
+
 	"gorm.io/gorm"
 	"gorm.io/plugin/soft_delete"
 )

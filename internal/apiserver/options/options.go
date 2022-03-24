@@ -7,13 +7,13 @@
 package options
 
 import (
-	genericoptions "blog-api/internal/pkg/options"
-	"blog-api/internal/pkg/server"
-	"blog-api/pkg/flag"
-	"blog-api/pkg/json"
-	"blog-api/pkg/rollinglog"
-	"blog-api/pkg/util/idutil"
-	"blog-api/pkg/validator"
+	genericoptions "cooool-blog-api/internal/pkg/options"
+	"cooool-blog-api/internal/pkg/server"
+	"cooool-blog-api/pkg/flag"
+	"cooool-blog-api/pkg/json"
+	"cooool-blog-api/pkg/rollinglog"
+	"cooool-blog-api/pkg/util/idutil"
+	"cooool-blog-api/pkg/validator"
 )
 
 // TODO https options

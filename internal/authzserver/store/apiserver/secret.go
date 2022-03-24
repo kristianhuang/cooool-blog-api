@@ -9,9 +9,10 @@ package apiserver
 import (
 	"context"
 
-	pb "blog-api/internal/pkg/proto/apiserver/v1"
-	"blog-api/pkg/errors"
-	log "blog-api/pkg/rollinglog"
+	pb "cooool-blog-api/internal/pkg/proto/apiserver/v1"
+	"cooool-blog-api/pkg/errors"
+	log "cooool-blog-api/pkg/rollinglog"
+
 	"github.com/AlekSi/pointer"
 	"github.com/avast/retry-go"
 )

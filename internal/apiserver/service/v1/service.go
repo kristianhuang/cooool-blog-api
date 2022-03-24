@@ -7,7 +7,7 @@
 package v1
 
 import (
-	"blog-api/internal/apiserver/store"
+	"cooool-blog-api/internal/apiserver/store"
 )
 
 type Service interface {

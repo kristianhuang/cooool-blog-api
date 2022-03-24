@@ -7,12 +7,12 @@
 package options
 
 import (
-	"blog-api/internal/authzserver/analytics"
-	genericoptions "blog-api/internal/pkg/options"
-	"blog-api/internal/pkg/server"
-	cliflag "blog-api/pkg/flag"
-	"blog-api/pkg/json"
-	"blog-api/pkg/rollinglog"
+	"cooool-blog-api/internal/authzserver/analytics"
+	genericoptions "cooool-blog-api/internal/pkg/options"
+	"cooool-blog-api/internal/pkg/server"
+	cliflag "cooool-blog-api/pkg/flag"
+	"cooool-blog-api/pkg/json"
+	"cooool-blog-api/pkg/rollinglog"
 )
 
 type Options struct {

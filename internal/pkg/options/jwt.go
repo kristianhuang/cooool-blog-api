@@ -10,7 +10,8 @@ import (
 	"fmt"
 	"time"
 
-	"blog-api/internal/pkg/server"
+	"cooool-blog-api/internal/pkg/server"
+
 	"github.com/asaskevich/govalidator"
 	"github.com/spf13/pflag"
 )

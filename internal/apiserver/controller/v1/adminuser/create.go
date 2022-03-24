@@ -7,16 +7,17 @@
 package adminuser
 
 import (
-	"blog-api/internal/pkg/code"
-	"blog-api/internal/pkg/model"
-	"blog-api/internal/pkg/response"
-	"blog-api/pkg/auth"
-	"blog-api/pkg/errors"
-	metav1 "blog-api/pkg/meta/v1"
-	"blog-api/pkg/validator"
+	"cooool-blog-api/internal/pkg/code"
+	"cooool-blog-api/internal/pkg/model"
+	"cooool-blog-api/internal/pkg/response"
+	"cooool-blog-api/pkg/auth"
+	"cooool-blog-api/pkg/errors"
+	metav1 "cooool-blog-api/pkg/meta/v1"
+	"cooool-blog-api/pkg/validator"
+
 	"github.com/gin-gonic/gin"
 
-	validationutil "blog-api/pkg/validator/util"
+	validationutil "cooool-blog-api/pkg/validator/util"
 )
 
 type createForm struct {

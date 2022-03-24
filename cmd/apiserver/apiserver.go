@@ -12,7 +12,7 @@ import (
 	"runtime"
 	"time"
 
-	"blog-api/internal/apiserver"
+	"cooool-blog-api/internal/apiserver"
 )
 
 func main() {
@@ -21,5 +21,5 @@ func main() {
 		runtime.GOMAXPROCS(runtime.NumCPU())
 	}
 
-	apiserver.NewApp("blog-apiserver").Run()
+	apiserver.NewApp("cooool-blog-apiserver").Run()
 }

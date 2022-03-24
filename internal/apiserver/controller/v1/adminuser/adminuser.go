@@ -7,8 +7,8 @@
 package adminuser
 
 import (
-	srvv1 "blog-api/internal/apiserver/service/v1"
-	"blog-api/internal/pkg/bind"
+	srvv1 "cooool-blog-api/internal/apiserver/service/v1"
+	"cooool-blog-api/internal/pkg/bind"
 )
 
 type AdminUserController struct {

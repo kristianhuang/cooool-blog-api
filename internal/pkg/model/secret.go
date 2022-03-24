@@ -7,8 +7,9 @@
 package model
 
 import (
-	metav1 "blog-api/pkg/meta/v1"
-	"blog-api/pkg/util/idutil"
+	metav1 "cooool-blog-api/pkg/meta/v1"
+	"cooool-blog-api/pkg/util/idutil"
+
 	"gorm.io/gorm"
 )
 

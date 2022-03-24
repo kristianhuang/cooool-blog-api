@@ -9,13 +9,15 @@ package apiserver
 import (
 	"context"
 
-	"blog-api/pkg/errors"
-	"blog-api/pkg/json"
+	"cooool-blog-api/pkg/errors"
+	"cooool-blog-api/pkg/json"
+
 	"github.com/AlekSi/pointer"
 	"github.com/avast/retry-go"
 
-	pb "blog-api/internal/pkg/proto/apiserver/v1"
-	log "blog-api/pkg/rollinglog"
+	pb "cooool-blog-api/internal/pkg/proto/apiserver/v1"
+	log "cooool-blog-api/pkg/rollinglog"
+
 	"github.com/ory/ladon"
 )
 
